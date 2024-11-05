@@ -1,0 +1,98 @@
+/* Main container for content */
+.main-content1 {
+    width: 100%;
+    max-width: 1400px; /* Adjust as needed */
+    padding: 20px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin-right: 0; /* Adjusted to remove extra space on the right */
+  }
+  
+  /* Title styling */
+  .sidebar-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Grid container for friend cards */
+  .friend-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px;
+  }
+  
+  /* Styling for each friend card */
+  .friend-card {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    text-align: center;
+    width: 100%; /* Takes up full width of its grid column */
+    max-width: 400px; /* Default max-width */
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .friend-card {
+      max-width: 100%; /* Allow full width of grid column */
+    }
+  
+    .friend-card-img img {
+      width: 80%; /* Adjust image width for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .friend-card {
+      max-width: 100%; /* Allow full width of grid column */
+    }
+  
+    .friend-card-img img {
+      width: 90%; /* Adjust image width for very small screens */
+    }
+  }
+  
+  /* Image styling inside friend card */
+  .friend-card-img img {
+    width: 60%; /* Default image width */
+    height: auto;
+    border-radius: 50%;
+  }
+  
+  /* Additional info inside friend card */
+  .friend-card-info {
+    margin-top: 10px;
+  }
+  
+  /* Button styling */
+  .confirm-btn, .decline-btn {
+    margin: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Confirm button styling */
+  .confirm-btn {
+    background-color: #2176FF;
+    color: white;
+  }
+  
+  /* Decline button styling */
+  .decline-btn {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  /* Hover effect for decline button */
+  .decline-btn:hover {
+    background-color: #d32f2f; /* Slightly darker shade */
+    color: white;
+  }
+  

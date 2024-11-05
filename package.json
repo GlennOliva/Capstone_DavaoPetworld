@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@glidejs/glide": "^3.6.2",
+    "@tensorflow-models/mobilenet": "^2.1.1",
+    "@tensorflow/tfjs-converter": "^4.21.0",
+    "@types/glidejs__glide": "^3.6.5",
+    "chart.js": "^4.4.4",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "react-chartjs-2": "^5.2.0"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs": "^4.21.0"
+  }
+}

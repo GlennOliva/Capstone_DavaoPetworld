@@ -1,0 +1,330 @@
+* {
+    box-sizing: border-box;
+  }
+  
+  /* Position the image container (needed to position the left and right arrows) */
+  .container3 {
+    position: relative;
+  }
+  
+  /* Hide the images by default */
+  .mySlides {
+    display: none;
+  }
+  
+  /* Add a pointer when hovering over the thumbnail images */
+  .cursor {
+    cursor: pointer;
+  }
+  
+  /* Next & previous buttons */
+  .prev,
+  .next {
+    cursor: pointer;
+    position: absolute;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Position the "next button" to the right */
+  .next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+  }
+  
+  /* On hover, add a black background color with a little bit see-through */
+  .prev:hover,
+  .next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  /* Number text (1/3 etc) */
+  .numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+  }
+  
+  /* Container for image text */
+  .caption-container {
+    text-align: center;
+    background-color: #222;
+    padding: 2px 16px;
+    color: white;
+  }
+  
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+  
+  /* Six columns side by side */
+  .column {
+    float: left;
+    width: 16.66%;
+  }
+  
+  /* Add a transparency effect for thumbnail images */
+  .demo {
+    opacity: 0.6;
+  }
+  
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
+  
+  /* About Section */
+  .about-section {
+    background-color: #1876F2; /* Matches the blue background */
+    color: #000;
+    padding: 50px;
+    text-align: center;
+  }
+  
+  .about-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .about-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* Enable wrapping for smaller screens */
+  }
+  
+  .about-images {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .image-placeholder {
+    width: 300px;
+    height: 300px;
+    background-color: #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    color: #000;
+  }
+  
+  .about-paragraph {
+    flex: 2;
+    padding: 20px;
+    text-align: left;
+    color: black;
+  }
+  
+  .about-paragraph h3 {
+    font-size: 32px;
+  }
+  
+  .about-paragraph p {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: justify;
+  }
+  
+  /* Services Section */
+  .services-section {
+    text-align: center;
+    margin: 50px 0;
+  }
+  
+  .services-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .services-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap; /* Enable wrapping for smaller screens */
+  }
+  
+  .service-card {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 450px; /* Fixed width for larger screens */
+    max-width: 100%; /* Allow for responsiveness */
+    text-align: center;
+  }
+  
+  .service-card p {
+    text-align: justify;
+    font-size: 14px;
+  }
+  
+  .service-image {
+    width: 40%;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 15px;
+  }
+  
+  /* Clients Section */
+  .clients-section {
+    background-color: #1876F2; /* Blue background */
+    padding: 50px;
+    color: black;
+  }
+  
+  .clients-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: black;
+  }
+  
+  .clients-container {
+    display: flex;
+    flex-direction: column;
+    gap: 70px;
+  }
+  
+  .client {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    flex-direction: row; /* Ensure paragraph comes before image */
+  }
+  
+  /* Responsive client image */
+  .client-image {
+    width: 500px;
+    height: 400px;
+    background-color: #ccc; /* Placeholder background */
+    object-fit: cover;
+  }
+  
+  /* Responsive client details */
+  .client-details {
+    max-width: 800px;
+  }
+  
+  .client h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .client p {
+    font-size: 16px;
+    text-align: justify;
+  }
+  
+  /* Location Section */
+  .location-section {
+    text-align: center;
+    padding: 50px 0;
+  }
+  
+  .location {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .location-map {
+    text-align: center;
+  }
+  
+  .map-embed {
+    width: 100%; /* Make map responsive */
+    max-width: 600px; /* Set a maximum width */
+    height: 300px;
+    border: 0;
+  }
+  
+  h3 {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin: 3%;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media (max-width: 768px) {
+    .about-content {
+      flex-direction: column; /* Stack images and text vertically on smaller screens */
+      padding: 0 20px; /* Add some padding */
+    }
+    
+    .service-card {
+      width: 90%; /* Make service cards full width */
+    }
+    .service-card img{
+        width: 100%;
+        max-width: fit-content;
+
+    }
+  
+    .client {
+      flex-direction: column; /* Stack client image and details vertically */
+      align-items: center; /* Center align */
+    }
+    
+    .client-image {
+      width: 100%; /* Full width for images */
+      height: auto; /* Maintain aspect ratio */
+    }
+    
+    .clients-container {
+      gap: 40px; /* Reduce gap for smaller screens */
+    }
+    
+    h3 {
+      font-size: 16px; /* Smaller headings on mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about-title {
+      font-size: 20px; /* Smaller title on mobile */
+    }
+
+    .service-card {
+        width: 90%; /* Make service cards full width */
+      }
+      .service-card img{
+          width: 100%;
+      }
+    
+    .about-paragraph h3 {
+      font-size: 28px; /* Smaller subheading on mobile */
+    }
+    
+    .about-paragraph p {
+      font-size: 14px; /* Smaller paragraph text */
+    }
+    
+    .services-title {
+      font-size: 20px; /* Smaller services title */
+    }
+    
+    .clients-title {
+      font-size: 20px; /* Smaller clients title */
+    }
+  }
+  

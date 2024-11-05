@@ -1,0 +1,101 @@
+.checkout-form {
+  width: 70%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: auto; /* Change height to auto for flexibility */
+  margin-bottom: 10%;
+}
+
+h2 {
+  text-align: center;
+}
+
+.form1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns layout */
+  grid-gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  grid-column: span 2; /* Makes the Address input field span across two columns */
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px; /* Space between inputs */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.checkout-btn {
+  grid-column: span 2;
+  padding: 10px;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #0056b3;
+}
+
+.address-suggestions {
+  background-color: #fff; /* White background */
+  border: 1px solid #ddd; /* Light gray border */
+  max-height: 300px; /* Set maximum height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: absolute; /* Position it absolutely */
+  width: 100%; /* Full width for suggestions */
+  z-index: 2; /* Ensure it appears above other elements */
+  margin-top: 7%; /* Space between input and suggestions */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for better visibility */
+}
+
+.address-suggestions li {
+  padding: 10px; /* Padding for list items */
+  cursor: pointer; /* Change cursor on hover */
+  transition: background-color 0.2s; /* Smooth background transition */
+}
+
+.address-suggestions li:hover {
+  background-color: #f1f1f1; /* Highlight on hover */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+  .checkout-form {
+      width: 90%; /* Adjust width for smaller screens */
+      padding: 15px; /* Reduce padding */
+  }
+
+  .form1 {
+      grid-template-columns: 1fr; /* Stack elements in a single column */
+  }
+
+  .checkout-btn {
+      font-size: 1.25rem; /* Adjust button font size */
+  }
+
+  .address-suggestions {
+      width: 100%; /* Full width for suggestions */
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-btn {
+      font-size: 1rem; /* Further adjust button font size for smaller screens */
+  }
+}

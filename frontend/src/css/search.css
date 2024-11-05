@@ -1,0 +1,53 @@
+.search-results {
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margin */
+    border: 1px solid #ccc; /* Add border */
+    max-height: 200px; /* Set maximum height */
+    overflow-y: auto; /* Enable scrolling */
+    position: absolute; /* Position the results dropdown */
+    background: white; /* Set background color */
+    z-index: 1; /* Ensure it appears above other elements */
+    width: 345px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.search-results li {
+    padding: 15px; /* Add padding for each item */
+    font-size: 14px; /* Consistent font size */
+    color: #333; /* Text color */
+    transition: background-color 0.3s ease; /* Smooth background transition */
+}
+
+.search-results li:hover {
+    cursor: pointer; /* Change cursor to pointer */
+   
+}
+
+
+/* Flex container for each search item */
+.search-item {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+/* Style for the image */
+.search-item img {
+    width: 300px;        /* Set the width of the profile picture */
+    height: auto;       /* Set the height of the profile picture */
+    border-radius: 50%; /* Make the image circular */
+    margin-right: 15px; /* Add space between the image and text */
+}
+
+/* Style for the text */
+.search-item p {
+    margin: 0;          /* Remove any default margin from <p> */
+    font-size: 15px;    /* Set font size */
+    color: #333;        /* Text color */
+    display: flex;
+}

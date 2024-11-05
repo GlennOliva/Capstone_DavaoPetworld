@@ -1,0 +1,1555 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  
+}
+:root{
+    --body-color: #F0EEF6;
+    --nav-color: #1876f2;
+    --bg-color: #ffffff;
+}
+.dark-theme{
+    --body-color: #0a0a0a;
+    --nav-color: #000;
+    --bg-color: #000;
+}
+body{
+    background: var(--body-color) !important; 
+    
+}
+
+/* ----------------CSS for navbar start--------------- */
+.nav1{
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--nav-color);
+    padding: 5px 10%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    margin-bottom: 3%;
+    padding: 3%;
+}
+.navbar-left{
+    display: flex;
+    align-items: center;
+}
+.logo{
+    width: 110px;
+    margin-right: 20px;
+
+}
+.navbar-left ul li{
+    list-style: none;
+    display: inline-block;
+}
+.navbar-left ul li img{
+    width: 28px;
+    margin: 0 15px;
+}
+.navbar-right{
+    display: flex;
+    align-items: center;
+}
+.search-box{
+    display: flex;
+    align-items: center;
+    background: #efefef;
+    width: 350px;
+    border-radius: 20px;
+    padding: 0 15px;
+    height: 6vh;
+}
+.search-box img{
+    width: 18px;
+}
+.search-box input{
+    margin-top: 15px;
+    width: 100%;
+    background: transparent;
+    padding: 5px;
+    outline: none;
+    border: none;
+}
+.navbar-user-profile{
+    margin-left: 30px;
+}
+.navbar-user-profile img{
+    width: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+.online{
+    position: relative;
+}
+.online::after{
+    content: '';
+    width: 8px;
+    height: 8px;
+    border: 2px solid var(--body-color);
+    border-radius: 50%;
+    background: #41db51;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+/* -------------------------CSS for navbar end--------------------- */
+
+/* -------------------------CSS for content start--------------------- */
+.input-container {
+    display: flex;         /* Use flexbox to align elements */
+    align-items: center;   /* Center align vertically */
+    position: relative;    /* Positioning for absolute icon */
+    width: 100%;
+    margin-top: 30%;
+  }
+
+  .input-container1 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 90%;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for a modern look */
+    margin-left: -40%;
+  }
+
+  
+  .input-container2 {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 90%; /* Ensure the width fits the container */
+    margin: 10px 0; /* Vertical margin for spacing */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    padding: 5px; /* Reduce the padding for a more compact look */
+    margin-top: 10px; /* Reduced margin for better spacing */
+    margin-right: 50%;
+}
+
+  
+  .reply-input {
+    flex-grow: 1;
+    padding: 12px 45px 12px 15px; /* Add extra space for the send icon */
+    font-size: 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    height: 40px;
+    outline: none;
+    transition: border-color 0.3s ease-in-out;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05); /* Slight inner shadow */
+  }
+  
+  .reply-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+  }
+  
+  .send-icon {
+    position: absolute;
+    right: 20px; /* Place it inside the input area */
+    cursor: pointer;
+    font-size: 20px;
+    color: #007bff;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .send-icon:hover {
+    color: #0056b3; /* Darken the icon color on hover */
+  }
+  
+  
+  
+  .comment-user-icon {
+    width: 40px;           /* Adjust size of the image */
+    height: 40px;          /* Ensure the image is a square */
+    border-radius: 50%;    /* Makes the image circular */
+    margin-right: 10px;    /* Add some space between the image and input */
+  }
+  
+  .comment-input {
+    flex-grow: 1;          /* Takes up the remaining width */
+    padding-right: 40px;   /* Make space for the send icon */
+    padding-top: 8px;
+    padding-bottom: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    height: 10vh;
+  }
+  
+  .send-icon {
+    position: absolute;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;           /* You can change the color */
+    padding-bottom: 10px;
+  }
+
+  .comment-img {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    margin: 5% auto;
+    display: flex;
+    border-radius: 12px;
+    
+  }
+
+  .post-interaction {
+    display: flex;
+    justify-content: space-around;  /* Distribute items evenly */
+    align-items: center;             /* Center items vertically */
+    padding: 10px 0;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    margin-bottom: 5%;
+  }
+  
+  .interaction-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .interaction-item i {
+    margin-right: 5px;  /* Add space between icon and text */
+    font-size: 18px;
+  }
+  
+  .interaction-item span {
+    font-size: 14px;
+    color: #333;
+  }
+  
+
+  .comments-section {
+    margin-bottom: 20px;
+  }
+  
+  .comment-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+  
+  .comment-user-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .comment-details {
+    flex: 1;
+  }
+  
+  .comment-user-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  .comment-text {
+    font-size: 14px;
+    margin: 5px 0;
+  }
+  
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #888;
+  }
+  
+  .comment-actions small {
+    margin-right: 15px;
+  }
+  
+  .like-reply {
+    margin-right: 10px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .like-reply:hover {
+    text-decoration: underline;
+  }
+  
+  .like-reply {
+    display: flex;
+    align-items: center;
+  }
+  
+  .selected-emoji {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+    margin-right: 5px; /* Adjust space between emoji and text */
+  }
+  
+
+  
+  .parent-container {
+    width: 100%; /* Full width of the parent */
+    display: flex; /* Use flex to center the container */
+    justify-content: center; /* Center the container */
+    padding: 0 2%; /* Add some padding on the sides */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between; /* Space between child elements */
+    padding: 13px 5%; /* Padding inside the container */
+    background-color: #F0EEF6 !important; /* Background color */
+    max-width: 2500px; /* Maximum width */
+    width: 100%; /* Full width of the parent container */
+    box-sizing: border-box; /* Include padding in width calculation */
+    margin: 0 auto; /* Center the container */
+}
+
+/* Ensure that the parent container has a specific width */
+@media (max-width: 768px) {
+    .parent-container {
+        padding: 0 10%; /* Adjust padding for smaller screens */
+    }
+
+    .container {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        align-items: center; /* Center items horizontally */
+    }
+
+    .container > * {
+        width: 100%; /* Full width for child elements */
+        margin-bottom: 10px; /* Space between child elements */
+    }
+
+    .container > *:last-child {
+        margin-bottom: 0; /* No bottom margin for last child */
+    }
+}
+
+/* Optional: Tablet Styles */
+@media (max-width: 1024px) {
+    .parent-container {
+        padding: 0 5%; /* Adjust padding for tablet screens */
+    }
+}
+
+
+
+/* ----------------CSS for left sidebar start------------------------------- */
+.sidebar-left1{
+    align-self: flex-start;
+    position: sticky;
+    top: 100px;
+    flex-basis: 25%;
+    margin-left: -50% ;
+}
+.imp-links{
+    border-bottom: 1px solid #ccc;
+}
+.imp-links a, .shortcut-links a{
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    text-decoration: none;
+    color: #626262;
+    width: fit-content;
+}
+.imp-links a:last-child{
+    color: #1876f2;
+}
+.imp-links a img{
+    width: 25px;
+    margin-right: 15px;
+}
+.shortcut-links a img{
+    width: 40px;
+    border-radius: 4px;
+    margin-right: 15px;
+}
+.shortcut-links p{
+    margin: 25px 0;
+    color: #626262;
+    font-weight: 500;
+}
+/* ----------------CSS for left sidebar end------------------------------- */
+
+/* ----------------------------CSS for right sidebar start----------------------- */
+.sidebar-right{
+    align-self: flex-start;
+    position: sticky;
+    top: 70px;
+    flex-basis: 25%;
+    background: var(--body-color);
+    padding: 20px;
+    border-radius: 4px;
+    color: #626262;
+}
+.sidebar-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+.sidebar-right h4{
+    font-weight: 600;
+    font-size: 16px;
+}
+.sidebar-title a{
+    text-decoration: none;
+    color: #1876f2;
+    font-size: 12px;
+}
+.event{
+    display: flex;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+.left-event{
+    border-radius: 10px;
+    height: 65px;
+    width: 65px;
+    margin-right: 15px;
+    padding-top: 10px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.left-event span{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #1876f2;
+    color: #fff;
+    font: 10px;
+    padding: 4px 0;
+}
+.right-event p{
+    font-size: 12px;
+}
+.right-event a{
+    font-size: 12px;
+    text-decoration: none;
+    color: #1876f2;
+}
+.sidebar-ads{
+    width: 100%;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+.online-list{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+.online-list .online img{
+    width: 40px;
+    border-radius: 50%;
+}
+.online-list .online{
+    width: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+
+}
+.online-list .online::after{
+    top: unset;
+    bottom: 5px;
+}
+
+.profile-card {
+    text-align: center;
+    margin: auto;
+    height: 54vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.profile-header {
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+.profile-info .info-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.profile-info .info-item i {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+.edit-profile-container {
+    float: right;
+    margin-top: 20px;
+    width: 30%;
+}
+
+/* Button Style */
+.edit-profile-btn {
+    padding: 10px 20px;
+    background-color: #F0EEF6;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    color: #000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.edit-profile-btn:hover {
+    background-color: #f0f0f0;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+    .profile-card {
+        height: auto;
+    }
+
+    .profile-info .info-item {
+        flex-direction: column; /* Stack the icon and text vertically */
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .profile-info .info-item i {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+    .edit-profile-container {
+        width: 100%; /* Make the container full-width */
+        text-align: center; /* Center-align the button */
+        float: none; /* Remove the float */
+    }
+
+    .edit-profile-btn {
+        width: auto;
+        display: inline-block;
+        padding: 10px 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .profile-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-info .info-item i {
+        font-size: 18px;
+    }
+
+    .edit-profile-btn {
+        width: 100%; /* Make the button full-width */
+    }
+}
+
+
+
+/* ----------------------------CSS for right sidebar end----------------------- */
+
+/* ----------------------CSS for main content Start------------------------- */
+.main-content{
+    flex-basis: 45%;
+    margin-left: 12%;
+
+}
+.story-gellary{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.story{
+    flex-basis: 18%;
+    padding-top: 32%;
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    border-radius: 10px;
+}
+.story img{
+    position: absolute;
+    width: 45px;
+    border-radius: 50%;
+    top: 10px;
+    left: 10px;
+    border: 5px solid #1876f2;
+}
+.story p{
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    font-size: 14px;
+}
+.story1{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-1.png');
+}
+.story2{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-2.png');
+}
+.story3{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-3.png');
+}
+.story4{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-4.png');
+}
+.story5{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-5.png');
+}
+.story6{
+    background-image: linear-gradient(transparent,rgba(0,0,0,0.5)), url('/images/status-6.png');
+}
+.story.story1 img{
+    top: unset;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    border: 0;
+    width: 35px;
+}
+.write-post-container1{
+    width: 100%;
+    background: var(--bg-color);
+    border-radius: 6px;
+    padding: 20px;
+    color: #626262;
+    height: 80vh;
+}
+.write-post-container{
+    width: 100%;
+    background: var(--bg-color);
+    border-radius: 6px;
+    padding: 20px;
+    color: #626262;
+
+}
+.user-profile{
+    display: flex;
+    align-items: center;
+}
+.user-profile img{
+    width: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.user-profile p{
+    margin-bottom: -5px;
+    font-weight: 500;
+    color: #626262;
+}
+.user-profile small{
+    font-size: 12px;
+}
+.post-input-container{
+    padding-left: 55px;
+    padding-top: 20px;
+}
+.post-input-container textarea{
+    width: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid #ccc;
+    resize: none;
+}
+.add-post-links{
+    display: flex;
+    margin-top: 10px;
+}
+.add-post-links a{
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    color: #626262;
+    margin-right: 30px;
+    font-size: 13px;
+}
+.add-post-links img{
+    width: 20px;
+    margin-right: 10px;
+}
+.post-container{
+    width: 100%;
+    background: var(--bg-color);
+    border-radius: 6px;
+    padding: 20px;
+    color:#626262;
+    margin: 20px 0;
+
+
+}
+.user-profile span{
+    font-size: 13px;
+    color: #9a9a9a;
+}
+.post-text{
+    color: #9a9a9a;
+    margin: 15px 0;
+    font-size: 15px;
+}
+.post-text span{
+    color: #626262;
+    font-weight: 500;
+}
+.post-text a{
+    color: #1876f2;
+    text-decoration: none;
+}
+.post-img{
+    width: 100%;
+    border-radius: 4px;
+    margin: 5px 0;
+}
+post-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #3a3b3c; /* Border color to separate sections */
+  }
+  
+  .activity-icons {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  .like-button, .comment-button, .share-button {
+    flex: 1;
+    text-align: center;
+  }
+  
+
+  .post-engagement {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    color: #b0b3b8;
+    font-size: 14px;
+  }
+  
+  .engagement-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .engagement-item i {
+    margin-right: 5px;
+    font-size: 16px;
+  }
+  
+ .like-reply1 .comment-reply, .share-reply {
+    color: #000;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    flex: 1; /* Allow the elements to grow and fill available space */
+}
+
+.like-reply:hover, .comment-reply:hover, .share-reply:hover {
+    background-color: #F0EEF6;
+}
+
+.like-reply i, .comment-reply i, .share-reply i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .like-reply, .comment-reply, .share-reply {
+        padding: 8px; /* Decrease padding for smaller screens */
+        font-size: 16px; /* Adjust font size for readability */
+    }
+
+    .like-reply i, .comment-reply i, .share-reply i {
+        font-size: 16px; /* Adjust icon size for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .like-reply, .comment-reply, .share-reply {
+        padding: 6px; /* Further decrease padding for very small screens */
+        font-size: 10px; /* Adjust font size for smaller screens */
+    }
+
+    .like-reply i, .comment-reply i, .share-reply i {
+        font-size: 10px; /* Adjust icon size for smaller screens */
+        margin-right: 2px; /* Decrease space between icon and text */
+    }
+}
+
+.activity-icons div{
+    display: inline-flex;
+    align-items: center;
+    margin-right: 30px;
+}
+.activity-icons div img{
+    width: 18px;
+    margin-right: 10px;
+}
+.post-profile-icon{
+    display: flex;
+    align-items: center;
+}
+.post-profile-icon img{
+    width: 20px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+.load-more-btn{
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #9a9a9a;
+    color: #626262;
+    background: transparent;
+    border-radius: 4px;
+}
+.foot{
+    text-align: center;
+    color: #9a9a9a;
+    padding: 10px 0 20px;
+    font-size: 13px;
+}
+/* ---------------css for profile dropdown---------------- */
+.setting-menu {
+    position: absolute;
+    width: 90%;
+    max-width: 350px;
+    background: var(--bg-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    overflow: hidden;
+    top: 110%;
+    right: 5%;
+    max-height: 0;
+    transition: max-height 0.5s;
+    z-index: 1000;
+}
+.setting-menu-height {
+    max-height: 450px;
+}
+.user-profile a{
+    font-size: 12px;
+    color: #1876f2;
+    text-decoration: none;
+}
+.setting-menu-inner{
+    padding: 20px;
+}
+.setting-menu hr{
+    border: 0;
+    height: 1px;
+    background: #9a9a9a;
+    margin: 15px 0;
+}
+.settings-links{
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+.settings-links .settings-icon{
+    width: 38px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+.settings-links a{
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: #626262;
+}
+#dark-btn{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #ccc;
+    width: 45px;
+    border-radius: 15px;
+    padding: 2px 3px;
+    cursor: pointer;
+    display: flex;
+    transition: padding-left 0.5s, background 05s;
+}
+#dark-btn span{
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    border-radius: 50%;
+    display: inline-block;
+}
+#dark-btn.dark-btn-on{
+    padding-left: 23px;
+    background: #0a0a0a;
+
+}
+
+.sidebar-left {
+    position: fixed; /* Make it fixed to the left of the viewport */
+    left: 0;
+    top: 0;
+    width: 250px; /* Adjust the width according to your design */
+    height: 100%; /* Full height */
+    background: #fff; /* Background color */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Optional shadow for effect */
+    transform: translateX(-100%); /* Initially hide off-screen */
+    transition: transform 0.3s ease; /* Transition for smooth opening */
+    z-index: 1000; /* Ensure it's on top of other elements */
+  }
+  
+  /* When sidebar is open */
+  .sidebar-left.active {
+    transform: translateX(0); /* Bring it into view */
+  }
+  
+/* ----------------------CSS for main content end------------------------- */
+/* -------------------------CSS for content end--------------------- */
+
+/* --------------media query---------------------- */
+@media (max-width: 900px) {
+    .sidebar-left{
+        display: none;
+    }
+    .sidebar-right{
+        display: none;
+    }
+    nav{
+        flex-wrap: wrap;
+    }
+    .search-box{
+        display: none;
+    }
+    .logo{
+        width: 110px;
+        margin-right: 20px;
+    }
+    .navbar-left ul li img{
+        width: 20px;
+        margin: 0 8px;
+    }
+    .navbar-user-profile img{
+        width: 30px;
+        margin-right: 0;
+    }
+    .add-post-links{
+        flex-wrap: wrap;
+    }
+    .main-content{
+        flex-basis: 100%;
+    }
+    .story img{
+        width: 30px;
+        border-width: 3px;
+    }
+    
+    .add-post-links a{
+        margin-right: 12px;
+        font-size: 9px;
+    }
+    .add-post-links a img{
+        width: 16px;
+        margin-right: 5px;
+    }
+    .post-input-container{
+        padding-left: 0;
+    }
+}
+
+
+.sidebar-right {
+    width: 300px;
+    padding: 20px;
+    background-color: var(--bg-color);
+}
+
+.sidebar-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.friend-request {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.left-request {
+    margin-right: 10px;
+}
+
+.left-request img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.right-request {
+    flex: 1;
+}
+
+.right-request h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.right-request p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+.confirm-btn,
+.decline-btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: var(--nav-color);
+    color: white;
+    margin-right: 5px;
+}
+
+.decline-btn {
+    background-color: #f44336;
+    color: white;
+}
+/* Notification bell icon and counter */
+.navbar-notification {
+    position: relative; /* Correct positioning */
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+.navbar-notification .fa-bell {
+    font-size: 20px;
+    color: #000; /* Adjusted for better visibility */
+}
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 5px;
+}
+
+/* Notification dropdown menu */
+.notification-menu {
+    display: block !important; /* Always display as block */
+    position: absolute !important;
+    right: 5% !important; /* Keep it aligned to the right */
+    background-color: white !important;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 10px !important;
+    width: 300px !important; /* Fixed width for larger screens */
+    padding: 10px !important; /* Standard padding */
+    margin-top: 30% !important; /* Adjust margin for better spacing */
+    z-index: 1000 !important; /* Ensure visibility over other elements */
+    
+    max-height: 400px !important; /* Set a max height for scrollable area */
+    overflow-y: auto !important; /* Enable vertical scrolling */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .notification-menu {
+        width: 80vw !important; /* Set width to 80% of viewport for mobile */
+        right: 10% !important; /* Center it on mobile */
+        margin-top: 40% !important; /* Reduce top margin for mobile */
+        padding: 5px !important; /* Reduce padding for mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .notification-menu {
+        width: 90vw !important; /* Set width to 90% of viewport for smaller devices */
+        right: 5% !important; /* Slight adjustment for better centering */
+        padding: 5px !important; /* Consistent padding for small screens */
+        max-height: 300px !important; /* Reduce max height for smaller screens */
+        margin-top: 110% !important;
+    }
+
+    .notification-item img {
+        width: 30px; /* Smaller images for mobile */
+        height: 30px; /* Keep height consistent */
+    }
+
+    .notification-item p {
+        font-size: 0.9rem; /* Slightly smaller text for mobile */
+    }
+
+    .notification-time {
+        font-size: 0.8rem; /* Smaller time text */
+    }
+}
+
+
+.notification-row {
+    display: flex; /* Enables flexbox */
+    align-items: center; /* Vertically aligns image and text */
+}
+
+.notification-item img {
+    border-radius: 50%; /* Ensures the image is circular */
+    width: 40px; /* Set fixed width for the image */
+    height: 40px; /* Set fixed height for the image */
+    object-fit: cover; /* Makes sure the image is cropped properly */
+    margin-right: 10px; /* Adds spacing between the image and text */
+}
+
+.notification-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.notification-item p {
+    margin: 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.notification-time {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* Style for individual notification items */
+.notification-menu .notification-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.notification-menu .notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-menu .notification-item p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Styling notification content and time */
+.notification-menu .notification-item span {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* "See All Notifications" link */
+.notification-menu .see-all {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #f5f5f5;
+    color: #555;
+    text-decoration: none;
+}
+
+.notification-menu .see-all:hover {
+    background: #eee;
+}
+
+
+
+.add-post-links a {
+    display: inline-block;
+    margin-right: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.add-post-links img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Basic Modal Styling */
+
+#textPostContent{
+    width: 100%;
+}
+
+#photoVideoContent{
+    width: 100%;
+}
+.modal {
+    display: block !important;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding-top: 60px;
+}
+
+/* Modal Content Styling */
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Adjust to 80% for smaller screens */
+    max-width: 600px; /* Set a max-width for larger screens */
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 90%; /* Make the modal width 90% on smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 70%; /* Make the modal width 95% on very small screens */
+        padding: 10px; /* Reduce padding for very small screens */
+    }
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+button {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: var(--nav-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:hover {
+    background-color: var(--nav-color);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+
+/* Reaction Button and Emoji Options */
+.reaction-button {
+    position: relative; /* Important for positioning the emoji options */
+    display: inline-block;
+  }
+  
+  .reaction-button .emoji-options {
+    display: flex;
+    position: absolute;
+    top: -42px; /* Adjust depending on where you want the emojis to appear */
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1000;
+    gap: 2px;
+    visibility: hidden;
+    opacity: 0;
+    height: 6vh;
+    transition: visibility 0s, opacity 0.2s ease-in-out;
+  }
+  
+  .reaction-button:hover .emoji-options {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .emoji-options img {
+    width: 20px; /* Adjust size based on your design */
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .emoji-options img:hover {
+    transform: scale(1.2); /* Slightly increase size on hover */
+  }
+  
+  .selected-emoji {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .like-reply1 {
+    text-decoration: none;
+    color: #555; /* Adjust text color */
+    font-size: 14px; /* Adjust font size */
+  }
+  
+  .like-reply1:hover {
+    color: #000; /* Adjust hover color */
+  }
+  
+  .comment-actions .reaction-button {
+    margin-right: 10px; /* Space between like and reply buttons */
+  }
+  
+  .comment-actions .like-reply {
+    color: #555; /* Adjust reply button color */
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .comment-actions .like-reply:hover {
+    color: #000; /* Adjust hover color for reply button */
+  }
+  
+
+
+.activity-icons {
+    display: flex;
+    align-items: center;
+}
+
+.activity-icons div {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    position: relative;
+}
+
+.like-button:hover .emoji-options {
+    display: flex;
+}
+
+.like-button1 {
+    position: relative;
+  }
+  
+.emoji-options {
+    display: none;
+    position: absolute;
+    top: -30px; /* Adjusted to ensure the emoji options appear slightly above the like button */
+    left: 0;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    height: auto; /* Adjusted to make the height flexible */
+    width: fit-content; /* Adjusted to ensure the width wraps around the emoji options */
+    justify-content: space-between; /* Distribute space evenly between emojis */
+    z-index: 10; /* Ensure emoji options are above other elements */
+}
+
+.emoji-options img {
+    width: 30px; /* Reduced size for better layout */
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.like-button {
+    position: relative; /* Ensure emoji options position relative to like button */
+}
+
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4);
+    padding-top: 60px;
+}
+
+
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover, .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+
+.navbar-notification {
+    position: relative;
+    cursor: pointer;
+}
+
+.notification-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+}
+
+.navbar-user-profile {
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+/* Notification Menu Styling */
+.notification-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    width: 300px; /* Default width */
+    padding: 10px;
+    margin-top: 15px;
+    box-sizing: border-box; /* Ensure padding and border are included in width */
+}
+
+/* Notification Item Styling */
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .notification-menu {
+        width: 80%; /* Reduce width on tablets */
+        max-width: 400px; /* Set max-width for larger tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .notification-menu {
+        width: 50%; /* Further reduce width on mobile screens */
+        max-width: 300px; /* Set max-width for mobile screens */
+        margin-top: 30%; /* Reduce margin for smaller screens */
+    }
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+}
+
+.notification-reaction {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.notification-time {
+    color: gray;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.see-all {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    color: blue;
+    text-decoration: none;
+}

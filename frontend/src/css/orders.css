@@ -1,0 +1,140 @@
+.orders-container {
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    width: 90%;
+    margin: 5% auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.orders-container h1 {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scrolling */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #1876f2;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+th {
+    color: white;
+    font-weight: bold;
+}
+
+td {
+    color: #333;
+}
+
+.status-delivered {
+    color: green;
+    font-weight: bold;
+}
+
+.status-cancelled {
+    color: red;
+    font-weight: bold;
+}
+
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-ondelivery {
+    color: gold;
+    font-weight: bold;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .orders-container {
+        width: 95%;
+    }
+
+    .table-responsive {
+        width: 100%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    th, td {
+        padding: 10px 8px;
+    }
+
+    .orders-container h1 {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        width: 100%;
+        font-size: 14px;
+        display: block;
+    }
+
+    thead {
+        display: none; /* Hide table headers */
+    }
+
+    tr {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    td {
+        display: flex;
+        justify-content: space-between;
+        text-align: left;
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    td::before {
+        content: attr(data-label); /* Use data-label attribute as a label */
+        font-weight: bold;
+        color: #1876f2;
+        flex-basis: 80%;
+        padding-right: 10px;
+    }
+
+    /* Optional: If you want to adjust the size of the content next to the labels */
+    td span {
+        flex-basis: 50%;
+        text-align: right;
+    }
+}

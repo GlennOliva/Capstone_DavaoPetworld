@@ -1,0 +1,30 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .fish-identify-card {
+    max-width: 600px;
+  }
+  
+  #imageUpload {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  #fishImage {
+    display: none;
+    max-height: 400px;
+    margin-top: 20px;
+  }
+  
+  .identify-button {
+    width: 100%;
+  }
+  
+  img.img-fluid {
+    max-height: 300px;
+  }
+  

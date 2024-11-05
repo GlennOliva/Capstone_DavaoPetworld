@@ -1,0 +1,55 @@
+
+.form-container1 {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    text-align: left;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.text-input,
+.email-input,
+.file-input {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.file-input {
+    padding: 6px;
+}
+
+.create-btn {
+    width: 50%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    margin: 0 auto;
+}
+
+.create-btn:hover {
+    background-color: #0056b3;
+}
