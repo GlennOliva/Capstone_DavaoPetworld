@@ -1,11 +1,12 @@
-const mysql = require('mysql');
+require('dotenv').config(); // Load environment variables from .env file
+const mysql = require('mysql'); // Ensure mysql is required
 
 // Create the connection to the MySQL database
 const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "fishcom_db"
+    host: process.env.DB_HOST,       // Use the DB_HOST from .env
+    user: process.env.DB_USER,       // Use the DB_USER from .env
+    password: process.env.DB_PASSWORD,// Use the DB_PASSWORD from .env
+    database: process.env.DB_NAME     // Use the DB_NAME from .env
 });
 
 // Connect to the database
