@@ -9,7 +9,7 @@ const Manage_Seller: React.FC = () => {
     const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
-  
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as HTMLElement;

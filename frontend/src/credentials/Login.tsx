@@ -9,13 +9,19 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
+    const apiUrl = import.meta.env.VITE_API_URL;
+
+
 
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault(); // Prevent form from reloading the page
     
         try {
-            const url = role === 'admin' ? 'http://localhost:8081/admin/login' : 'http://localhost:8081/user/login';
+            const url = role === 'admin'
+            ? `${apiUrl}admin/login`
+            : `${apiUrl}user/login`;
             const response = await axios.post(url, { email, password });
+    
     
             // If login is successful, redirect based on the role
             if (response.status === 200) {
@@ -36,9 +42,12 @@ const Login = () => {
         }
     };
     
-    
+
+
 
     return (
+
+
         <div className="login-container">
             <div className="info">
                 <h1>Fishcom</h1>

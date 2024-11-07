@@ -13,7 +13,7 @@ const Edit_Order: React.FC = () => {
     const [orderDetails, setOrderDetails] = useState<any>(null); // To hold fetched order details
     const [orderStatus, setOrderStatus] = useState<string>(''); // To hold selected order status
     const { id } = useParams(); // Get order ID from URL params
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
@@ -24,7 +24,7 @@ const Edit_Order: React.FC = () => {
         const adminId = localStorage.getItem('admin_id');
 
         if (adminId) {
-            fetch(`http://localhost:8081/admin/${adminId}`)
+            fetch(`${apiUrl}admin/${adminId}`)
                 .then(res => res.json())
                 .then(data => setAdminProfile(data[0] || null))
                 .catch(err => console.log(err));
@@ -36,7 +36,7 @@ const Edit_Order: React.FC = () => {
     useEffect(() => {
         // Fetch order details when component mounts
         if (id) {
-            fetch(`http://localhost:8081/manage_order/${id}`)
+            fetch(`${apiUrl}manage_order/${id}`)
                 .then(res => res.json())
                 .then(data => {
                     setOrderDetails(data);
@@ -50,7 +50,7 @@ const Edit_Order: React.FC = () => {
         e.preventDefault();
 
         // Update the order status
-        fetch(`http://localhost:8081/edit_order/${id}`, {
+        fetch(`${apiUrl}edit_order/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const Edit_Order: React.FC = () => {
                         {adminProfile && (
                             <>
                                 <img
-                                    src={`http://localhost:8081/uploads/${adminProfile.image}`} 
+                                    src={`${apiUrl}uploads/${adminProfile.image}`} 
                                     alt="Profile"
                                     onClick={() => setProfileDropdownVisible(prev => !prev)}
                                 />

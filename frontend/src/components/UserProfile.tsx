@@ -30,6 +30,7 @@ const UserProfile = () => {
   const [commentInputValue, setCommentInputValue] = useState(''); // For main comment input
   const [replyInputValue, setReplyInputValue] = useState(''); // For reply input
   const [showReplyInput, setShowReplyInput] = useState<{ postId: number; commentId: number }| null>(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleReplyClick = (postId: number, commentId: number) => {
     // Toggle reply input visibility for the clicked comment
@@ -48,7 +49,7 @@ const UserProfile = () => {
     };
   
     // Call your API to submit the reply
-    axios.post('http://localhost:8081/insert_reply', replyData)
+    axios.post(`${apiUrl}insert_reply`, replyData)
         .then(response => {
             console.log(response.data.message);
             // Reset the reply input field and close the reply input
@@ -119,7 +120,7 @@ const PostchangeEmoji = async (emojiSrc: string, name: string, post: any) => {
 
   try {
     // Send the reaction to the server
-    await axios.post('http://localhost:8081/react', { userId, postId, reactionType: name });
+    await axios.post(`${apiUrl}react`, { userId, postId, reactionType: name });
     console.log('Reaction sent successfully');
   } catch (error) {
     console.error('Error sending reaction:', error);
@@ -154,7 +155,7 @@ const submitSharePost = (postId: number, shareDescription: string) => {
   console.log('Share Post Content:', shareDescription);
 
   // Send the share data to the server via a POST request
-  fetch('http://localhost:8081/share_post', {
+  fetch(`${apiUrl}share_post`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -203,7 +204,7 @@ useEffect(() => {
   
       if (userId) {
 
-          fetch(`http://localhost:8081/user/${userId}`) // Adjusted endpoint to fetch by ID
+          fetch(`${apiUrl}user/${userId}`) // Adjusted endpoint to fetch by ID
               .then(res => {
                   if (!res.ok) {
                       throw new Error('Network response was not ok');
@@ -243,7 +244,7 @@ useEffect(() => {
 
     try {
         // Send POST request to the backend
-        const response = await axios.post('http://localhost:8081/add_post', formData, {
+        const response = await axios.post(`${apiUrl}add_post`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         console.log(response.data);
@@ -294,7 +295,7 @@ const submitComment = async (comment: any) => {
   }
 
   try {
-    const response = await axios.post('http://localhost:8081/comment', {
+    const response = await axios.post(`${apiUrl}comment`, {
       userId,
       postId,
       commentDescription,
@@ -352,7 +353,7 @@ const [data, setData] = useState([]); // State to hold fetched posts
 useEffect(() => {
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:8081/fetch_post_profile?user_id=${id}`);
+            const response = await fetch(`${apiUrl}fetch_post_profile?user_id=${id}`);
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -373,7 +374,7 @@ const [totalReactions, setTotalReactions] = useState<{ [key: string]: number }>(
     useEffect(() => {
         const fetchReactions = async (postId: number) => { // Specify the type for postId
             try {
-                const response = await axios.get(`http://localhost:8081/reactions/${postId}`);
+                const response = await axios.get(`${apiUrl}reactions/${postId}`);
                 setTotalReactions(prev => ({ ...prev, [postId]: response.data.total })); // Update state with reaction count
             } catch (err) {
                 console.error('Error fetching reactions:', err);
@@ -393,7 +394,7 @@ const [totalReactions, setTotalReactions] = useState<{ [key: string]: number }>(
         const fetchComments = async () => {
             if (!currentPostId) return; // Exit if no post ID is provided
             try {
-                const response = await fetch(`http://localhost:8081/fetch_comment?post_id=${currentPostId}`);
+                const response = await fetch(`${apiUrl}fetch_comment?post_id=${currentPostId}`);
                 const data = await response.json();
                 setComments(data); // Set comments from the response
             } catch (error) {
@@ -412,7 +413,7 @@ const [totalReactions, setTotalReactions] = useState<{ [key: string]: number }>(
     useEffect(() => {
         const fetchComments = async (postId: number) => { // Specify the type for postId
             try {
-                const response = await axios.get(`http://localhost:8081/fetch_comment_count/${postId}`);
+                const response = await axios.get(`${apiUrl}fetch_comment_count/${postId}`);
                 setTotalComments(prev => ({ ...prev, [postId]: response.data.total })); // Update state with reaction count
             } catch (err) {
                 console.error('Error fetching reactions:', err);
@@ -431,7 +432,7 @@ const [totalReactions, setTotalReactions] = useState<{ [key: string]: number }>(
     useEffect(() => {
         const fetchShares = async (postId: number) => { // Specify the type for postId
             try {
-                const response = await axios.get(`http://localhost:8081/fetch_share_count/${postId}`);
+                const response = await axios.get(`${apiUrl}fetch_share_count/${postId}`);
                 setTotalShares(prev => ({ ...prev, [postId]: response.data.total })); // Update state with reaction count
             } catch (err) {
                 console.error('Error fetching reactions:', err);
@@ -449,7 +450,7 @@ const [totalReactions, setTotalReactions] = useState<{ [key: string]: number }>(
 
     // Fetch replies for a specific comment
 const fetchReplies = (comment_id: any) => {
-  axios.get('http://localhost:8081/fetch_replies', { params: { comment_id } })
+  axios.get(`${apiUrl}fetch_replies`, { params: { comment_id } })
     .then(response => {
       setReplies(prevReplies => ({
         ...prevReplies,
@@ -489,7 +490,7 @@ const [userData, setUserData] = useState<User | null>(null);
 useEffect(() => {
     const fetchUserData = async () => {
         try {
-            const response = await axios.get(`http://localhost:8081/user/${id}`);
+            const response = await axios.get(`${apiUrl}user/${id}`);
             setUserData(response.data[0]); // Assuming response is an array of objects
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -523,7 +524,7 @@ useEffect(() => {
         <div className="profile-header">
             {userProfile?.image ? (
           <img style={{width: '100px'}} alt="Profile" className="profile-image"
-            src={`http://localhost:8081/uploads/${userData?.image}`}
+            src={`${apiUrl}uploads/${userData?.image}`}
        
           />  
         ) : (
@@ -586,38 +587,7 @@ useEffect(() => {
 </Snackbar>
  
 
-        {/* <div className="write-post-container">
-          <div className="user-profile">
-           
-{userProfile?.image ? (
-    <img
-      src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
-      alt="Profile"
-    />
-  ) : (
-    <img
-      src={profile_pic} // Fallback image if userProfile.image is not available
-      alt="Default Profile"
-    />
-  )}
-            <div>
-            <p style={{   fontSize: '17px',color: 'black', }}>{userProfile?.first_name + ' ' + userProfile?.last_name}</p>
-            </div>
-          </div>
-
-          <div className="post-input-container">
-            <textarea
-              id="post-textarea"
-              cols={80}
-              rows={1}
-              placeholder={`What's on your mind, ${userProfile?.first_name}?`}
-              onClick={showTextPostModal}
-            ></textarea>
-          </div>
-          <div className="add-post-links">
-            <a href="#" onClick={showPhotoVideoModal}><img src={photo} alt="Photo/Video" />Photo</a>
-          </div>
-        </div> */}
+      
 
        {/* Text Post Modal */}
 {isTextPostModalOpen && (
@@ -628,7 +598,7 @@ useEffect(() => {
       <div className="user-profile" style={{ padding: '12px' }}>
         {userProfile?.image ? (
           <img
-            src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
+            src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
             alt="Profile"
           />
         ) : (
@@ -682,7 +652,7 @@ useEffect(() => {
       <div className="user-profile" style={{ padding: '12px' }}>
         {userProfile?.image ? (
           <img
-            src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
+            src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
             alt="Profile"
           />
         ) : (
@@ -746,7 +716,7 @@ useEffect(() => {
         <div className="post-row">
           <div className="user-profile">
             <img 
-              src={post['creator_image'] ? `http://localhost:8081/uploads/${post['creator_image']}` : profile_pic} 
+              src={post['creator_image'] ? `${apiUrl}uploads/${post['creator_image']}` : profile_pic} 
               alt="Profile" 
               style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
             />
@@ -772,7 +742,7 @@ useEffect(() => {
                   borderRadius: '10px',
                   boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                 }} 
-                src={`http://localhost:8081/uploads/${post['image']}`} 
+                src={`${apiUrl}uploads/${post['image']}`} 
                 alt="Post Image" 
               />
             )}
@@ -783,7 +753,7 @@ useEffect(() => {
   <div className="share-content" style={{ margin: '20px 0' }}>
     <div className="user-profile">
       <img 
-        src={post['sharer_image'] ? `http://localhost:8081/uploads/${post['sharer_image']}` : profile_pic} 
+        src={post['sharer_image'] ? `${apiUrl}uploads/${post['sharer_image']}` : profile_pic} 
         alt="Profile" 
         style={{ width: '50px', height: '50px', borderRadius: '50%' }} 
       />
@@ -812,7 +782,7 @@ useEffect(() => {
             borderRadius: '10px',
             boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
           }}
-          src={`http://localhost:8081/uploads/${post['share_image']}`}
+          src={`${apiUrl}uploads/${post['share_image']}`}
           alt="Shared Image"
         />
       )}
@@ -942,7 +912,7 @@ useEffect(() => {
             <div key={post['id']}>
               {/* User Profile Section */}
               <div className="user-profile" style={{ marginBottom: '2%' }}>
-              <img src={userProfile?.image ? `http://localhost:8081/uploads/${userProfile.image}` : profile_pic} alt="User Image" />
+              <img src={userProfile?.image ? `${apiUrl}uploads/${userProfile.image}` : profile_pic} alt="User Image" />
                 <div>
                   <p>{userProfile?.first_name + ' ' + userProfile?.last_name}</p>
                 </div>
@@ -958,7 +928,7 @@ useEffect(() => {
               ></textarea>
 
               {/* Post Image */}
-              <img src={post['image'] ? `http://localhost:8081/uploads/${post['image']}` : betta} alt="Post Image" className="post-img" />
+              <img src={post['image'] ? `${apiUrl}uploads/${post['image']}` : betta} alt="Post Image" className="post-img" />
 
               {/* Share Button */}
               <button 
@@ -996,7 +966,7 @@ useEffect(() => {
               {/* User Profile Section */}
               <div className="user-profile" style={{ marginBottom: '2%' }}>
                 {userData?.image ? (
-                  <img src={`http://localhost:8081/uploads/${userData?.image}`} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                  <img src={`${apiUrl}uploads/${userData?.image}`} alt="Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                 ) : (
                   <img src={profile_pic} alt="Default Profile" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
                 )}
@@ -1011,7 +981,7 @@ useEffect(() => {
               </div>
 
               {/* Post Image */}
-              <img src={`http://localhost:8081/uploads/${comment['image']}`} alt="Post Image" className="comment-img" />
+              <img src={`${apiUrl}uploads/${comment['image']}`} alt="Post Image" className="comment-img" />
 
               {/* Likes, Comments, and Shares Section */}
               <div className="post-interaction">
@@ -1031,7 +1001,7 @@ useEffect(() => {
 
     return (
       <div className="comment-item" key={comment['id']}>
-        <img src={`http://localhost:8081/uploads/${comment['user_image']}`} alt="User Icon" className="comment-user-icon" />
+        <img src={`${apiUrl}uploads/${comment['user_image']}`} alt="User Icon" className="comment-user-icon" />
         <div className="comment-details">
           <p className="comment-user-name">{`${comment['first_name']} ${comment['last_name']}`}</p>
           <p className="comment-text">{comment['comment_description']}</p>
@@ -1044,7 +1014,7 @@ useEffect(() => {
         {/* Conditionally Render Reply Input Section */}
         {showReplyInput?.commentId === comment['id'] && (
           <div className="input-container1" style={{ marginTop: '15%' }}>
-            <img src={`http://localhost:8081/uploads/${userProfile?.image}`} alt="User Icon" className="comment-user-icon" />
+            <img src={`${apiUrl}uploads/${userProfile?.image}`} alt="User Icon" className="comment-user-icon" />
             <input 
               type="text" 
               placeholder={`Reply as ${userProfile?.first_name}`}
@@ -1061,7 +1031,7 @@ useEffect(() => {
           <div className="replies-section">
             {replies[comment['id']]?.map(reply => (
               <div className="input-container2" key={reply['id']}>
-                <img src={`http://localhost:8081/uploads/${reply['user_image']}`} alt="User Icon" className="comment-user-icon" />
+                <img src={`${apiUrl}uploads/${reply['user_image']}`} alt="User Icon" className="comment-user-icon" />
                 <div className="reply-details">
                   <p className="reply-user-name">{`${reply['first_name']} ${reply['last_name']}`}</p>
                   <p className="reply-text">{reply['reply_description']}</p>
@@ -1082,7 +1052,7 @@ useEffect(() => {
                 <div className="input-container">
                   {userProfile?.image ? (
                     <img
-                      src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
+                      src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
                       alt="Profile"
                       className="comment-user-icon"
                     />

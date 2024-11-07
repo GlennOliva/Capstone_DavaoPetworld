@@ -11,7 +11,7 @@ import axios from 'axios';
 const Edit_Product: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [product, setProduct] = useState<any>(null);
   const [categories, setCategories] = useState<any[]>([]);
@@ -24,7 +24,7 @@ const Edit_Product: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/product/${id}`);
+        const response = await axios.get(`${apiUrl}product/${id}`);
         if (response.data.length > 0) {
           setProduct(response.data[0]);
         } else {
@@ -42,7 +42,7 @@ const Edit_Product: React.FC = () => {
 
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/category');
+        const response = await axios.get(`${apiUrl}category`);
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -80,7 +80,7 @@ const Edit_Product: React.FC = () => {
       });
 
       try {
-        const response = await axios.put(`http://localhost:8081/edit_product/${id}`, formData);
+        const response = await axios.put(`${apiUrl}edit_product/${id}`, formData);
         setSnackbarMessage(response.data.message);
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
@@ -127,7 +127,7 @@ useEffect(() => {
 
     if (adminId) {
         // Fetch admin profile data using the updated endpoint
-        fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+        fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -164,7 +164,7 @@ useEffect(() => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

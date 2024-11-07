@@ -16,7 +16,8 @@ const Checkout: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-  
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const Secretkey = import.meta.env.VITE_SECRETKEY;
   console.log("Received Products:", products); // Debugging line
 
   const addressOptions: string[] = [
@@ -67,7 +68,7 @@ const Checkout: React.FC = () => {
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
     if (userId) {
-      fetch(`http://localhost:8081/user/${userId}`)
+      fetch(`${apiUrl}user/${userId}`)
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -175,7 +176,7 @@ useEffect(() => {
     };
   
     try {
-      const response = await axios.post('http://localhost:8081/checkout', orderData);
+      const response = await axios.post(`${apiUrl}checkout`, orderData);
       console.log('Order submitted successfully:', response.data);
       // Update Snackbar state
       setSnackbarMessage('Thankyou for your order!');
@@ -212,7 +213,7 @@ useEffect(() => {
 
 
   const initialOptions: ReactPayPalScriptOptions = {
-    clientId: "AU1MiHvcLzwoMNYyOvEns_UyrEUGgU-4r6iq-NGvgDZZ_bER7VGsac0fc3HX_nX1mi9jauzlE12PMZ4o",
+    clientId: `${Secretkey}`,
   };
 
   return (
@@ -323,7 +324,7 @@ useEffect(() => {
                   };
             
                   // Send order data to the backend for insertion
-                  const response = await axios.post('http://localhost:8081/checkout', orderData);
+                  const response = await axios.post(`${apiUrl}checkout`, orderData);
                   console.log('Order inserted into database:', response.data);
                   // Update Snackbar state
       setSnackbarMessage('Thankyou for your order!');

@@ -12,6 +12,7 @@ export const Register = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const formik = useFormik<{ 
     firstName: string;
@@ -72,7 +73,7 @@ export const Register = () => {
         }
       });
   
-      fetch('http://localhost:8081/register_user', {
+      fetch(`${apiUrl}register_user`, {
         method: 'POST',
         body: formData,
       })

@@ -11,11 +11,11 @@ const Add_Product: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
   const [categories, setCategories] = useState<any[]>([]);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:8081/category');
+        const response = await fetch(`${apiUrl}category`);
         const data = await response.json();
         setCategories(data);
       } catch (error) {
@@ -56,7 +56,7 @@ const Add_Product: React.FC = () => {
     formData.append('image', values.image);
 
     try {
-        const response = await fetch('http://localhost:8081/add_product', {
+        const response = await fetch(`${apiUrl}add_product`, {
             method: 'POST',
             body: formData,
         });
@@ -100,7 +100,7 @@ useEffect(() => {
 
     if (adminId) {
         // Fetch admin profile data using the updated endpoint
-        fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+        fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -129,7 +129,7 @@ useEffect(() => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

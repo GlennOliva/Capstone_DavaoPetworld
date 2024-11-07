@@ -14,6 +14,7 @@ const Add_Category: React.FC = () => {
   const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
   const [adminId, setAdminId] = useState<number | null>(null); // State to hold admin_id
   const [image, setImage] = useState<File | null>(null);
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -86,7 +87,7 @@ const Add_Category: React.FC = () => {
       formData.append('admin_id', adminId.toString());
   
       // Send FormData to the server
-      fetch('http://localhost:8081/add_category', {
+      fetch(`${apiUrl}add_category`, {
         method: 'POST',
         body: formData, // Use FormData directly
       })
@@ -136,7 +137,7 @@ const Add_Category: React.FC = () => {
   
       if (adminId) {
           // Fetch admin profile data using the updated endpoint
-          fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+          fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
               .then(res => {
                   if (!res.ok) {
                       throw new Error('Network response was not ok');
@@ -179,7 +180,7 @@ const Add_Category: React.FC = () => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

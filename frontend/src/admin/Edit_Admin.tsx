@@ -15,6 +15,7 @@ const Edit_Admin: React.FC = () => {
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
     const [openSnackbar, setOpenSnackbar] = useState(false);
+    const apiUrl = import.meta.env.VITE_API_URL;
 const [snackbarMessage, setSnackbarMessage] = useState('');
 const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success'); // 'success' or 'error'
 
@@ -54,7 +55,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     
     useEffect(() => {
-      fetch(`http://localhost:8081/admin/${id}`)
+      fetch(`${apiUrl}admin/${id}`)
           .then((res) => res.json())
           .then((data) => {
               console.log("data: ", data);
@@ -95,7 +96,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
         formData.append('image', image);
     }
 
-    fetch(`http://localhost:8081/edit_admin/${id}`, {
+    fetch(`${apiUrl}edit_admin/${id}`, {
         method: 'PUT',
         body: formData,
     })
@@ -141,7 +142,7 @@ useEffect(() => {
 
     if (adminId) {
         // Fetch admin profile data using the updated endpoint
-        fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+        fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -185,7 +186,7 @@ useEffect(() => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />
@@ -241,7 +242,7 @@ useEffect(() => {
             <div className="image-placeholder">
     {/* Display the current image if available */}
     {image && (
-        <img src={`http://localhost:8081/uploads/${image}`} style={{width: '150px', height: 'auto', display: 'flex', margin: '0 auto'}} alt="Current" />
+        <img src={`${apiUrl}uploads/${image}`} style={{width: '150px', height: 'auto', display: 'flex', margin: '0 auto'}} alt="Current" />
     )}
 </div>
 

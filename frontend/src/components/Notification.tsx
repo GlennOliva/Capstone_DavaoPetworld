@@ -14,13 +14,14 @@ const Notification: React.FC = () => {
     // Use the Notification interface in the useState hook
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         // Fetch notifications when the component mounts
         const userId = localStorage.getItem('user_id');
         const fetchNotifications = async () => {
             try {
-                const response = await axios.get(`http://localhost:8081/notifications/${userId}`);
+                const response = await axios.get(`${apiUrl}notifications/${userId}`);
                 setNotifications(response.data);
             } catch (error) {
                 console.error('Error fetching notifications:', error);
@@ -49,7 +50,7 @@ const Notification: React.FC = () => {
                     <div className="notification-row">  {/* Added a wrapper with flexbox */}
                         {notification.image && (
                             <img
-                                src={`http://localhost:8081/uploads/${notification.image}`}
+                                src={`${apiUrl}uploads/${notification.image}`}
                                 style={{
                                     width: '40px',
                                     borderRadius: '50%',

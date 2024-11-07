@@ -12,7 +12,7 @@ const Home = () => {
   useEffect(() => {
     const initializeGlide = () => {
       const glideElement = document.querySelector('#glide_1') as HTMLElement | null;
-
+      
       if (glideElement) {
         try {
           new Glide(glideElement, {
@@ -40,12 +40,12 @@ const Home = () => {
 
 
   const [categories, setCategories] = useState([]);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch categories from the backend
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:8081/categories'); // Make sure this points to your correct backend route
+        const response = await axios.get(`${apiUrl}categories`); // Make sure this points to your correct backend route
         setCategories(response.data); // Set the categories from the response
       } catch (error) {
         console.error('Error fetching categories', error);
@@ -75,7 +75,7 @@ const Home = () => {
     const fetchProducts = async () => {
       setLoading(true); // Set loading true at the start
       try {
-        const response = await axios.get('http://localhost:8081/product');
+        const response = await axios.get(`${apiUrl}product`);
         console.log("Fetched products:", response.data); // Log the data to see if only 6 are fetched
         setProducts(response.data);
       } catch (err) {
@@ -157,7 +157,7 @@ const Home = () => {
             key={category['id']} 
             to={`/category/${category['id']}`} 
             className='cat'>
-            <img   src={`http://localhost:8081/uploads/${category['image']}`}  alt={category['category_name']} /> {/* Assuming you have an image_url field */}
+            <img   src={`${apiUrl}uploads/${category['image']}`}  alt={category['category_name']} /> {/* Assuming you have an image_url field */}
             <div>
             <p>{category['category_name']}</p>
 
@@ -182,7 +182,7 @@ const Home = () => {
               <div className="product-item">
                 <div className="overlay">
                   <Link to={`/product_details/${product.id}`} className="product-thumb">
-                    <img  src={`http://localhost:8081/uploads/${product.image}`} alt={product.product_name} />
+                    <img  src={`${apiUrl}uploads/${product.image}`} alt={product.product_name} />
                   </Link>
                 </div>
                 <div className="product-info" style={{ textAlign: 'justify', padding: '10px' }}>

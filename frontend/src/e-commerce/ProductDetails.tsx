@@ -17,11 +17,11 @@ const ProductDetails = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/product_details/${id}`);
+        const response = await axios.get(`${apiUrl}product_details/${id}`);
         setProduct(response.data);
       } catch (error) {
         setError('Error fetching product details');
@@ -38,7 +38,7 @@ const ProductDetails = () => {
     
     try {
       const userId = localStorage.getItem('user_id'); // Retrieve the user ID from local storage
-      const response = await axios.post('http://localhost:8081/addcart', {
+      const response = await axios.post(`${apiUrl}addcart`, {
         product_id: id,
         user_id: userId,
         quantity: quantity,
@@ -107,7 +107,7 @@ const ProductDetails = () => {
         <div className="details container" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)', width:'80%', padding:'5%' }}>
           <div className="left image-container">
             <div className="main">
-              <img src={`http://localhost:8081/uploads/${product.image}`} id="zoom" alt={product.product_name} />
+              <img src={`${apiUrl}uploads/${product.image}`} id="zoom" alt={product.product_name} />
             </div>
           </div>
           <div className="right">

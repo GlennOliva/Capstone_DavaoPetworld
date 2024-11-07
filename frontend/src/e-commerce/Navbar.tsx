@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   const [cartCount, setCartCount] = useState<number>(0); // State to hold cart count
   const [userProfile, setUserProfile] = useState<{ image: string; first_name: string; last_name: string; id: number; } | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // State to track menu visibility
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   // Toggle popup visibility
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
     if (userId) {
-      fetch(`http://localhost:8081/user/${userId}`)
+      fetch(`${apiUrl}user/${userId}`)
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
         return;
       }
   
-      const response = await axios.get(`http://localhost:8081/cart_count`, {
+      const response = await axios.get(`${apiUrl}cart_count`, {
         params: { user_id: userId },
       });
   

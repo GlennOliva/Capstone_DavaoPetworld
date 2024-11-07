@@ -12,13 +12,13 @@ const Manage_Order: React.FC = () => {
   const [data, setData] = useState<Order[]>([]); // Use Order interface here
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5; // Set how many items per page you want
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch admin profile data
   useEffect(() => {
     const adminId = localStorage.getItem('admin_id'); // Retrieve the admin ID from local storage
 
     if (adminId) {
-      fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+      fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -34,7 +34,7 @@ const Manage_Order: React.FC = () => {
 
   // Fetch order data
   useEffect(() => {
-    fetch("http://localhost:8081/manage_order")
+    fetch(`${apiUrl}manage_order`)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch data');
@@ -121,7 +121,7 @@ const Manage_Order: React.FC = () => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

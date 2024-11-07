@@ -15,7 +15,7 @@ const ProfileSettings = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
-  
+  const apiUrl = import.meta.env.VITE_API_URL;
   const formik = useFormik<{ 
     firstName: string;
     lastName: string;
@@ -75,7 +75,7 @@ const ProfileSettings = () => {
         }
       });
 
-      fetch(`http://localhost:8081/edit_profile/${id}`, {
+      fetch(`${apiUrl}edit_profile/${id}`, {
         method: 'PUT',
         body: formData,
       })
@@ -113,7 +113,7 @@ const ProfileSettings = () => {
       }
       
       try {
-        const response = await axios.get(`http://localhost:8081/user/${userId}`);
+        const response = await axios.get(`${apiUrl}user/${userId}`);
         const userData = response.data[0]; // Assuming data is an array
         console.log('User data:', userData); // Debug line
         

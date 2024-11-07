@@ -8,14 +8,14 @@ const Search = () => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [results, setResults] = useState<User[]>([]);
     const navigate = useNavigate();
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const term = e.target.value;
         setSearchTerm(term);
 
         if (term.length > 2) {
             try {
-                const response = await axios.get(`http://localhost:8081/search_users?query=${term}`);
+                const response = await axios.get(`${apiUrl}search_users?query=${term}`);
                 setResults(response.data);
             } catch (error) {
                 console.error('Error fetching search results:', error);
@@ -52,7 +52,7 @@ const Search = () => {
                     {results.map(user => (
                         <li key={user.id} onClick={() => handleResultClick(user.id)}>
                             {user.image && (
-                                <img src={`http://localhost:8081/uploads/${user.image}`}  style={{width: '10%', borderRadius:'50%', height: 'auto'}}  />
+                                <img src={`${apiUrl}uploads/${user.image}`}  style={{width: '10%', borderRadius:'50%', height: 'auto'}}  />
                             )}
                             {user.first_name} {user.last_name}
                         </li>

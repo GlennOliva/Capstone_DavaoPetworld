@@ -19,11 +19,11 @@ const Edit_Category: React.FC = () => {
   const [category, setCategory] = useState({});
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
   const [image, setImage] = useState<File | null>(null); // New state for the image
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const adminId = localStorage.getItem('admin_id');
     if (adminId) {
-      fetch(`http://localhost:8081/admin/${adminId}`)
+      fetch(`${apiUrl}admin/${adminId}`)
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -38,7 +38,7 @@ const Edit_Category: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8081/category/${id}`)
+    fetch(`${apiUrl}category/${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
@@ -72,7 +72,7 @@ const Edit_Category: React.FC = () => {
         formData.append('image', image); // Append the selected image to FormData
       }
 
-      fetch(`http://localhost:8081/edit_category/${id}`, {
+      fetch(`${apiUrl}edit_category/${id}`, {
         method: 'PUT',
         body: formData,
       })
@@ -127,7 +127,7 @@ const Edit_Category: React.FC = () => {
             {adminProfile && (
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`}
+                  src={`${apiUrl}uploads/${adminProfile.image}`}
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

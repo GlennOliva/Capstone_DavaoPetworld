@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
     const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
-
+    const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -65,7 +65,7 @@ const Dashboard: React.FC = () => {
 
   // Fetch data using useEffect
   useEffect(() => {
-    axios.get('http://localhost:8081/fetch_post')
+    axios.get(`${apiUrl}fetch_post`)
       .then((response) => {
         console.log("Response data:", response.data); // Debugging
         const data = response.data;
@@ -186,7 +186,7 @@ const chartOptionsRevenue: ChartOptions<'line'> = {
 useEffect(() => {
     const fetchRevenueData = async () => {
         try {
-            const response = await fetch('http://localhost:8081/revenue_sales'); // Adjust the URL based on your API path
+            const response = await fetch(`${apiUrl}revenue_sales`); // Adjust the URL based on your API path
             const data = await response.json();
 
             // Prepare the revenue data for the chart
@@ -225,7 +225,7 @@ useEffect(() => {
   });
 
   useEffect(() => {
-    axios.get('http://localhost:8081/no_products')
+    axios.get(`${apiUrl}no_products`)
       .then(response => {
         const labels = response.data.map((item: { category_name: any; }) => item.category_name);  // Extract category names
         const data = response.data.map((item: { count: any; }) => item.count);            // Extract counts
@@ -291,7 +291,7 @@ useEffect(() => {
   
       if (adminId) {
           // Fetch admin profile data using the updated endpoint
-          fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+          fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
               .then(res => {
                   if (!res.ok) {
                       throw new Error('Network response was not ok');
@@ -318,10 +318,10 @@ useEffect(() => {
     const fetchCounts = async () => {
       try {
         const [users, products, orders, categories] = await Promise.all([
-          axios.get('http://localhost:8081/no_user'),
-          axios.get('http://localhost:8081/no_product'),
-          axios.get('http://localhost:8081/no_order'),
-          axios.get('http://localhost:8081/no_category')
+          axios.get(`${apiUrl}no_user`),
+          axios.get(`${apiUrl}no_product`),
+          axios.get(`${apiUrl}no_order`),
+          axios.get(`${apiUrl}no_category`)
         ]);
         
         setCounts({
@@ -369,7 +369,7 @@ useEffect(() => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

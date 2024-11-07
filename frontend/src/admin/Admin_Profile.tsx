@@ -15,7 +15,7 @@ const Admin_Profile: React.FC = () =>{
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
   const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string; email: string; store_name: string; status: string; } | null>(null);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
@@ -45,7 +45,7 @@ const Admin_Profile: React.FC = () =>{
     const adminId = localStorage.getItem('admin_id'); // Retrieve the admin ID from local storage
 
     if (adminId) {
-      fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+      fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -90,7 +90,7 @@ const Admin_Profile: React.FC = () =>{
 
     const adminId = localStorage.getItem('admin_id');
 
-    fetch(`http://localhost:8081/edit_adminprofile/${adminId}`, {
+    fetch(`${apiUrl}edit_adminprofile/${adminId}`, {
       method: 'PUT',
       body: formData
     })
@@ -160,7 +160,7 @@ const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: stri
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />
@@ -223,7 +223,7 @@ const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: stri
   <div className="image-placeholder1">
     {adminProfile && (
       <img
-        src={`http://localhost:8081/uploads/${adminProfile.image}`}
+        src={`${apiUrl}uploads/${adminProfile.image}`}
         alt="Current"
         className="profile-image"
       />

@@ -24,7 +24,7 @@ const Cart: React.FC = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
    // Fetch products for the cart based on user_id
    const fetchCartProducts = async () => {
     try {
@@ -33,7 +33,7 @@ const Cart: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`http://localhost:8081/products_cart?user_id=${userId}`); // Pass user_id as query param
+      const response = await fetch(`${apiUrl}products_cart?user_id=${userId}`); // Pass user_id as query param
       const data = await response.json();
       if (Array.isArray(data)) {
         setProducts(data); // Only set products if the fetched data is an array
@@ -58,7 +58,7 @@ const Cart: React.FC = () => {
    // Handle product removal from the cart
 const handleRemove = async (cartId: number) => {
   try {
-    const response = await axios.post('http://localhost:8081/remove_cart_item', { id: cartId });
+    const response = await axios.post(`${apiUrl}remove_cart_item`, { id: cartId });
     
     if (response.data.success) {
       // Remove the product from the local state
@@ -181,7 +181,7 @@ const handleRemove = async (cartId: number) => {
             <td>
             <div className="cart-info">
   <img 
-    src={`http://localhost:8081/uploads/${product.image}`} 
+    src={`${apiUrl}uploads/${product.image}`} 
     alt={product.product_name} 
     className="product-image" 
   />

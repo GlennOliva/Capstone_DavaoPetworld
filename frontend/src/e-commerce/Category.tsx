@@ -10,7 +10,7 @@ const Category = () => {
   const [products, setProducts] = useState([]);  // State to hold the products
   const [loading, setLoading] = useState(true);  // State to manage loading state
   const [error, setError] = useState<string | null>(null); // State to handle errors
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6; // Set items per page
@@ -19,7 +19,7 @@ const Category = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:8081/fetch_product_category/${category_id}`);
+        const response = await axios.get(`${apiUrl}fetch_product_category/${category_id}`);
         setProducts(response.data);
         setLoading(false);
       } catch (error) {
@@ -88,7 +88,7 @@ const Category = () => {
               <div className="product-item">
                 <div className="overlay">
                   <Link to={`/product_details/${product.id}`} className="product-thumb">
-                    <img src={`http://localhost:8081/uploads/${product.image}`} alt={product.product_name} />
+                    <img src={`${apiUrl}uploads/${product.image}`} alt={product.product_name} />
                   </Link>
                 </div>
                 <div className="product-info" style={{ textAlign: 'justify', padding: '10px' }}>

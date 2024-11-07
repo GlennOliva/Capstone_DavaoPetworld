@@ -11,7 +11,7 @@ const Search = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   interface Product {
     id: number;
     product_name: string;
@@ -28,7 +28,7 @@ const Search = () => {
     const fetchProducts = async () => {
       setLoading(true); // Set loading true at the start
       try {
-        const response = await axios.get('http://localhost:8081/product');
+        const response = await axios.get(`${apiUrl}product`);
         setProducts(response.data);
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -93,7 +93,7 @@ const Search = () => {
               <div className="product-item">
                 <div className="overlay">
                   <Link to={`/product_details/${product.id}`} className="product-thumb">
-                    <img src={`http://localhost:8081/uploads/${product.image}`} alt={product.product_name} />
+                    <img src={`${apiUrl}uploads/${product.image}`} alt={product.product_name} />
                   </Link>
                 </div>
                 <div className="product-info" style={{ textAlign: 'justify', padding: '10px' }}>

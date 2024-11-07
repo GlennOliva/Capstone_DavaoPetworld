@@ -19,11 +19,12 @@ const Orders: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Set how many items per page you want
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:8081/api/orders');
+        const response = await fetch(`${apiUrl}api/orders`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {

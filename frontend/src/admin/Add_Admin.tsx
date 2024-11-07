@@ -13,7 +13,8 @@ const Add_Admin: React.FC = () =>{
     const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
-  
+    const apiUrl = import.meta.env.VITE_API_URL;
+    
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
@@ -68,7 +69,7 @@ const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     try {
         // Send POST request to the backend
-        const response = await axios.post('http://localhost:8081/add_admin', formData, {
+        const response = await axios.post(`${apiUrl}add_admin`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         console.log(response.data);
@@ -114,7 +115,7 @@ useEffect(() => {
 
     if (adminId) {
         // Fetch admin profile data using the updated endpoint
-        fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+        fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
             .then(res => {
                 if (!res.ok) {
                     throw new Error('Network response was not ok');
@@ -157,7 +158,7 @@ useEffect(() => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />

@@ -9,7 +9,7 @@ const Manage_User: React.FC = () => {
     const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
-  
+    const apiUrl = import.meta.env.VITE_API_URL;
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
@@ -35,7 +35,7 @@ const Manage_User: React.FC = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8081/user")
+    fetch(`${apiUrl}user`)
     .then((res) => res.json())
     .then((data) => setData(data))
     .then((err) => console.log(err));
@@ -50,7 +50,7 @@ const Manage_User: React.FC = () => {
   
       if (adminId) {
           // Fetch admin profile data using the updated endpoint
-          fetch(`http://localhost:8081/admin/${adminId}`) // Adjusted endpoint to fetch by ID
+          fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
               .then(res => {
                   if (!res.ok) {
                       throw new Error('Network response was not ok');
@@ -108,7 +108,7 @@ const Manage_User: React.FC = () => {
             {adminProfile && ( // Ensure adminProfile is not null
               <>
                 <img
-                  src={`http://localhost:8081/uploads/${adminProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${adminProfile.image}`} // Use dynamic image
                   alt="Profile"
                   onClick={() => setProfileDropdownVisible(prev => !prev)}
                 />
@@ -178,7 +178,7 @@ const Manage_User: React.FC = () => {
       <td>{data['gender']}</td>
       <td>
         <img 
-          src={`http://localhost:8081/uploads/${data['image']}`} 
+          src={`${apiUrl}uploads/${data['image']}`} 
           alt={`${data['first_name']} ${data['last_name']}`} // Use user’s name as alt text
           className="user-image"
           style={{ width: '80px', height: 'auto' }}

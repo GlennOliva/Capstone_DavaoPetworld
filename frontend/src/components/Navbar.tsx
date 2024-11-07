@@ -18,7 +18,7 @@ const Navbar = () => {
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
   const [darkTheme, setDarkTheme] = useState(localStorage.getItem('theme') === 'dark');
   const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar visibility
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const history = useNavigate();
 
   const handleLogout = () => {
@@ -50,7 +50,7 @@ const Navbar = () => {
     const userId = localStorage.getItem('user_id'); // Retrieve the admin ID from local storage
 
     if (userId) {
-      fetch(`http://localhost:8081/user/${userId}`) // Adjusted endpoint to fetch by ID
+      fetch(`${apiUrl}user/${userId}`) // Adjusted endpoint to fetch by ID
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -90,7 +90,7 @@ const Navbar = () => {
         <div className="navbar-user-profile online" onClick={handleSettingsMenuToggle}>
           {userProfile?.image ? (
             <img
-              src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
+              src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
               alt="Profile"
             />
           ) : (
@@ -110,7 +110,7 @@ const Navbar = () => {
             <div className="user-profile">
               {userProfile?.image ? (
                 <img
-                  src={`http://localhost:8081/uploads/${userProfile.image}`} // Use dynamic image
+                  src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
                   alt="Profile"
                 />
               ) : (
