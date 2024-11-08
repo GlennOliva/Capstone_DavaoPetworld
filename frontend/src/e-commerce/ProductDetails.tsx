@@ -36,32 +36,50 @@ const ProductDetails = () => {
     e.preventDefault();
     
     try {
-  
-      setSnackbarMessage('Product Added to Cart!');
-      setSnackbarSeverity('success');
-      setOpenSnackbar(true);
-  
-      setTimeout(() => {
-        navigate('/product'); // Navigate to the product page
-      }, 2000); // Delay in milliseconds (2000ms = 2 seconds)  
+        const userId = localStorage.getItem('user_id'); // Retrieve the user ID from local storage
+
+        // Send a request to add the product to the cart
+        const response = await axios.post(`${apiUrl}addcart`, {
+            product_id: id,
+            user_id: userId,
+            quantity: quantity,
+        });
+
+        // Check if the response indicates success
+        if (response.status === 200 && response.data.success) { // Adjust condition based on your API response format
+            // Show success Snackbar
+            setSnackbarMessage('Product Added to Cart!');
+            setSnackbarSeverity('success');
+            setOpenSnackbar(true);
+
+            // Delay navigation to product page
+            setTimeout(() => {
+                navigate('/product');
+            }, 2000); // 2 seconds delay
+        } else {
+            // Handle unexpected response with an error Snackbar
+            setSnackbarMessage('Unexpected response. Please try again.');
+            setSnackbarSeverity('error');
+            setOpenSnackbar(true);
+        }
     } catch (error: any) {
-      // Check if the error response is due to the product being out of stock
-      if (error.response && error.response.data.error === 'Product is out of stock!') {
-        setSnackbarMessage('This product is out of stock!');
+        // Check if the error response is due to the product being out of stock
+        if (error.response && error.response.data.error === 'Product is out of stock!') {
+            setSnackbarMessage('This product is out of stock!');
+        } else {
+            setSnackbarMessage('Failed to add product to cart');
+        }
+        
         setSnackbarSeverity('error');
-      } else {
-        setSnackbarMessage('Failed to add product to cart');
-        setSnackbarSeverity('error');
-      }
-      
-      setOpenSnackbar(true);
-      
-      // Delay navigation in case of error too, if needed
-      setTimeout(() => {
-        navigate(`/product_details/${id}`);
-      }, 2000);
+        setOpenSnackbar(true);
+
+        // Delay navigation to product details if needed
+        setTimeout(() => {
+            navigate(`/product_details/${id}`);
+        }, 2000); // 2 seconds delay
     }
-  };
+};
+
   
 
 
