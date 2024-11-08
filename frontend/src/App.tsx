@@ -1,8 +1,6 @@
-import React from 'react'
+
 import { Route, Routes } from 'react-router'
 
-import SellerDashboard from './seller/Dashboard'
-import AdminFooter from './admin/Footer'
 import Navbar from './components/Navbar'
 import Home from './components/Home'
 import Footer from './components/Footer'
