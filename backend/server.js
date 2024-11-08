@@ -194,39 +194,46 @@ app.get('/search_users', (req, res) => {
   
   app.post('/register_user', upload.single('image'), (req, res) => {
     try {
-      // Access form fields
-      const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms } = req.body;
-      const image = req.file; // For the uploaded image
+      // Access form fields from the request body
+      const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, status } = req.body;
+      const image = req.file;  // Image data from the uploaded file
       
       // Check if required fields are missing
       if (!first_name || !last_name || !email || !password || !terms) {
         return res.status(400).json({ message: 'Required fields missing' });
       }
   
+      // If an image is uploaded, get the image path
+      const imagePath = image ? image.path : null; // image.path should be available after upload
+  
+      // Format the birthdate to ensure it is valid (assuming birthdate is in yyyy-mm-dd format)
+      const formattedBirthdate = birthdate ? new Date(birthdate).toISOString().split('T')[0] : null;
+      
       // Insert user data into the database
       const query = `
-        INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, status, image)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
-      // Assuming `image.path` contains the path to the uploaded image (this will depend on how you set up the multer storage)
-      const imagePath = image ? image.path : null; // Store image path if available
-  
-      db.query(query, [first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, imagePath], (err, results) => {
+      // Perform the database query
+      db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, terms, status, imagePath], (err, results) => {
         if (err) {
-          console.error('Error inserting user data:', err);
-          return res.status(500).json({ message: 'Database Error' });
+          // Log the specific database error for debugging
+          console.error('Database error:', err);
+          return res.status(500).json({ message: 'Database Error', error: err.message });
         }
-        
-        // If the insertion is successful, send a success response
+  
+        // Success response
         res.status(200).json({ message: 'User registered successfully' });
       });
-      
+  
     } catch (err) {
+      // Log any unexpected errors
       console.error('Error:', err);
-      res.status(500).json({ message: 'Internal Server Error' });
+      res.status(500).json({ message: 'Internal Server Error', error: err.message });
     }
   });
+  
   
 
 
