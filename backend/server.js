@@ -195,9 +195,9 @@ app.get('/search_users', (req, res) => {
   app.post('/register_user', upload.single('image'), (req, res) => {
     try {
       // Access form fields from the request body
-      const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, status } = req.body;
+      const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms } = req.body;
       const image = req.file;  // Image data from the uploaded file
-      
+  
       // Check if required fields are missing
       if (!first_name || !last_name || !email || !password || !terms) {
         return res.status(400).json({ message: 'Required fields missing' });
@@ -208,13 +208,16 @@ app.get('/search_users', (req, res) => {
   
       // Format the birthdate to ensure it is valid (assuming birthdate is in yyyy-mm-dd format)
       const formattedBirthdate = birthdate ? new Date(birthdate).toISOString().split('T')[0] : null;
-      
+  
+      // Set status to 'Active' by default
+      const status = 'Active';
+  
       // Insert user data into the database
       const query = `
         INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, status, image)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      
+  
       // Perform the database query
       db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, status, imagePath], (err, results) => {
         if (err) {
@@ -233,6 +236,7 @@ app.get('/search_users', (req, res) => {
       res.status(500).json({ message: 'Internal Server Error', error: err.message });
     }
   });
+  
   
   
 
