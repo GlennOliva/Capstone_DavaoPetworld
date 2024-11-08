@@ -5,7 +5,7 @@ import logo from '../images/logo1.png';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import axios from 'axios';
-import { Alert, AlertColor, Snackbar } from '@mui/material';
+import { Alert, Snackbar } from '@mui/material';
 import profile_pic from '../images/feed-image-1.png'
 
 
@@ -95,7 +95,7 @@ const Manage_Category: React.FC = () => {
 }
 
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }
@@ -221,7 +221,7 @@ const [currentPage, setCurrentPage] = useState<number>(1);
                     </thead>
                     <tbody>
                     {currentOrders.length > 0 ? (
-    currentOrders.map((data, key) => ( // Add `key` here to ensure each row has a unique key
+    currentOrders.map((data, _key) => ( // Add `key` here to ensure each row has a unique key
       <tr key={data['id']}> {/* Use a unique identifier like id for the key */}
         <td>{data['id']}</td>
         <td>{data['category_name']}</td>

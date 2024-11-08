@@ -4,7 +4,7 @@ import '../css/add_category.css'
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
-import axios from 'axios';
+
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
@@ -51,7 +51,7 @@ const Add_Category: React.FC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -97,7 +97,7 @@ const Add_Category: React.FC = () => {
         }
         return response.json();
       })
-      .then(data => {
+      .then(() => {
         setSnackbarMessage('Category Successfully Created!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);

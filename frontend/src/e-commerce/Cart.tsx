@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Product {
   id: number;
@@ -23,7 +23,7 @@ const Cart: React.FC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [, setSnackbarOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
    // Fetch products for the cart based on user_id
    const fetchCartProducts = async () => {
@@ -94,7 +94,7 @@ const handleRemove = async (cartId: number) => {
 
 
 
-    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
           return;
       }

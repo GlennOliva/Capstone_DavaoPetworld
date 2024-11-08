@@ -3,7 +3,7 @@ import '../css/styles.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ProductDetails = () => {
   const { id } = useParams(); // Get the productId from URL parameters
@@ -11,12 +11,11 @@ const ProductDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [product, setProduct] = useState<any | null>(null);
   const [quantity, setQuantity] = useState<number>(1); // State to track selected quantity
-  const [message, setMessage] = useState<string | null>(null); // State to show success/error message
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [, setSnackbarOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -37,12 +36,6 @@ const ProductDetails = () => {
     e.preventDefault();
     
     try {
-      const userId = localStorage.getItem('user_id'); // Retrieve the user ID from local storage
-      const response = await axios.post(`${apiUrl}addcart`, {
-        product_id: id,
-        user_id: userId,
-        quantity: quantity,
-      });
   
       setSnackbarMessage('Product Added to Cart!');
       setSnackbarSeverity('success');
@@ -73,7 +66,7 @@ const ProductDetails = () => {
   
 
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
         return;
     }

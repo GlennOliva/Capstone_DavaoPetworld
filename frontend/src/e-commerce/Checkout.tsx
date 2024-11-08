@@ -9,13 +9,13 @@ import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 const Checkout: React.FC = () => {
   const location = useLocation();
-  const { products, totalPrice } = location.state || { products: [], totalPrice: 0 };
+  const { products } = location.state || { products: [], totalPrice: 0 };
 
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [, setSnackbarOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
   const Secretkey = import.meta.env.VITE_SECRETKEY;
   console.log("Received Products:", products); // Debugging line
@@ -203,7 +203,7 @@ useEffect(() => {
     
   };
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
         return;
     }
@@ -291,7 +291,7 @@ useEffect(() => {
       {showPaypalButton && (
         <PayPalScriptProvider options={{ clientId: initialOptions.clientId, currency: "PHP" }}>
           <PayPalButtons
-            createOrder={(data, actions) => {
+            createOrder={(_data, actions) => {
               const total_price = (parseFloat(formData.totalprice) + formData.shipfee).toFixed(2); // No need to parse shipfee
 
               return actions.order.create({
@@ -304,7 +304,7 @@ useEffect(() => {
                 intent: 'CAPTURE'
               });
             }}
-            onApprove={async (data, actions) => {
+            onApprove={async (_data, actions) => {
               if (actions.order) { // Check if actions.order is defined
                 try {
                   const order = await actions.order.capture();

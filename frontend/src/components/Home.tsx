@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import '../css/style.css'; // Import your CSS for styling
-import friends from '../images/friends.png';
+
 import news from '../images/news.png';
 import marketplace from '../images/marketplace.png';
 import profile_pic from '../images/profile-pic.png';
 import photo from '../images/photo.png';
-import member_2 from '../images/member-2.png';
-import member_1 from '../images/member-1.png';
+
 import haha from '../images/haha.png';
 import like from '../images/like-blue.png';
 import sad from '../images/sad.png';
@@ -14,9 +13,8 @@ import wow from '../images/wow.png';
 import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
-import feeling from '../images/feeling.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -30,8 +28,6 @@ const Home = () =>{
   const [isShareModalOpen, setShareModalOpen] = useState(false);
   const [isCommentModalOpen, setCommentModalOpen] = useState(false);
   const [currentPostId, setCurrentPostId] = useState(null);
-  const [comment, setComment] = useState('');
-  const [commentInputValue, setCommentInputValue] = useState(''); // For main comment input
   const [replyInputValue, setReplyInputValue] = useState(''); // For reply input
   const [showReplyInput, setShowReplyInput] = useState<{ postId: number; commentId: number }| null>(null);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -82,8 +78,7 @@ const Home = () =>{
 
   const [PostselectedEmojis, PostsetSelectedEmojis] = useState<{ [key: string]: { emojiSrc: string; emojiName: string } }>({});
 const [PostshowEmojis, PostsetShowEmojis] = useState(false);
-const [PostselectedEmoji, PostsetSelectedEmoji] = useState<string | null>(null);
-const [PostselectedEmojiName, PostsetSelectedEmojiName] = useState('');
+
 
 // Fetch emojis based on user_id from local storage
 useEffect(() => {
@@ -134,59 +129,23 @@ const PostchangeEmoji = async (emojiSrc: string, name: string, post: any) => {
   
 
 
-  const [CommentshowEmojis, CommentsetShowEmojis] = useState(false);
-  const [CommentselectedEmoji, CommentsetSelectedEmoji] =  useState<string | null>(null);
-  const [CommentselectedEmojiName, CommentsetSelectedEmojiName] = useState('');
+  // const [, CommentsetShowEmojis] = useState(false);
+  // const [, CommentsetSelectedEmoji] =  useState<string | null>(null);
+  // const [, CommentsetSelectedEmojiName] = useState('');
 
-  const CommentchangeEmoji = (emojiSrc: string , name: string) => {
-    CommentsetSelectedEmoji(emojiSrc); // Set the selected emoji
-    CommentsetSelectedEmojiName(name); 
-    CommentsetShowEmojis(false); // Hide the emoji options
-  };
+  // const CommentchangeEmoji = (emojiSrc: string , name: string) => {
+  //   CommentsetSelectedEmoji(emojiSrc); // Set the selected emoji
+  //   CommentsetSelectedEmojiName(name); 
+  //   CommentsetShowEmojis(false); // Hide the emoji options
+  // };
 
   const showTextPostModal = () => setTextPostModalOpen(true);
   const showPhotoVideoModal = () => setPhotoVideoModalOpen(true);
   const closeModal = (modalSetter: { (value: React.SetStateAction<boolean>): void; (value: React.SetStateAction<boolean>): void; (value: React.SetStateAction<boolean>): void; (value: React.SetStateAction<boolean>): void; (value: React.SetStateAction<boolean>): void; (value: React.SetStateAction<boolean>): void; (arg0: boolean): any; }) => modalSetter(false);
 
- const submitTextPost = () => {
-  const contentElement = document.getElementById('textPostContent') as HTMLTextAreaElement | null;
-  if (contentElement) {
-    const content = contentElement.value;
-    console.log('Text Post Content:', content);
-    closeModal(setTextPostModalOpen);
-  }
-};
 
-const submitPhotoVideoPost = () => {
-  const fileInputElement = document.getElementById('photoVideoUpload') as HTMLInputElement | null;
-  const contentElement = document.getElementById('photoVideoContent') as HTMLTextAreaElement | null;
-  if (fileInputElement && contentElement) {
-    const files = fileInputElement.files;
-    const content = contentElement.value;
 
-    console.log('Photo/Video Files:', files);
-    console.log('Post Content:', content);
-    closeModal(setPhotoVideoModalOpen);
-  }
-};
 
-const toggleDropdown = (dropdownId: string) => {
-  const dropdown = document.getElementById(dropdownId);
-  if (dropdown) {
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-  }
-};
-
-const setVisibility = (option: string, dropdownId: string) => {
-  const dropdown = document.getElementById(dropdownId);
-  if (dropdown) {
-    const visibilityText = dropdown.previousElementSibling as HTMLElement;
-    if (visibilityText) {
-      visibilityText.innerHTML = `${option} <i className="fa fa-caret-down"></i>`;
-    }
-    toggleDropdown(dropdownId);
-  }
-};
 
 const submitSharePost = (postId: number, shareDescription: string) => {
   // Retrieve the admin/user ID from local storage
@@ -375,10 +334,9 @@ const submitComment = async (comment: any) => {
 const [openSnackbar, setOpenSnackbar] = useState(false);
 const [snackbarMessage, setSnackbarMessage] = useState('');
 const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
-const navigate = useNavigate();
-const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [, setSnackbarOpen] = useState(false);
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }
@@ -683,7 +641,6 @@ useEffect(() => {
     const commentsCount = totalComments[post['id']] || 0;
     const sharesCount = totalShares[post['id']] || 0;
     const formattedTime = formatDistanceToNow(new Date(post['created_at']), { addSuffix: true });
-    const formattedTimeshare = formatDistanceToNow(new Date(post['share_created_at']), { addSuffix: true });
     return (
       <div key={key} className="single-post-container" style={{ marginBottom: '10px', border: '1px solid #ccc', padding: '15px', borderRadius: '10px' }}>
         
@@ -879,7 +836,6 @@ useEffect(() => {
           return uniquePosts; // Return the array of unique posts
         }, [])
         .map((post) => {
-          const formattedTime = formatDistanceToNow(new Date(post['created_at']), { addSuffix: true });
           let shareContent = ''; // Variable to store the textarea content
 
           return (

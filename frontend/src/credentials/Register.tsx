@@ -11,7 +11,7 @@ export const Register = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [, setSnackbarOpen] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const formik = useFormik<{ 
@@ -105,7 +105,7 @@ export const Register = () => {
     }
   });
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }

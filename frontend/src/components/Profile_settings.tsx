@@ -12,7 +12,6 @@ const ProfileSettings = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const navigate = useNavigate();
   const { id } = useParams();
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -140,20 +139,13 @@ const ProfileSettings = () => {
   
   
 
-  const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+  const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
     setOpenSnackbar(false);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.currentTarget.files?.[0];
-    if (file) {
-      formik.setFieldValue('profile_pic', file);
-      setImagePreview(URL.createObjectURL(file)); // Preview image
-    }
-  };
 
   return (
     <div className="container">

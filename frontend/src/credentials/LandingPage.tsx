@@ -6,7 +6,6 @@ import fish1 from '../credentials/images/hero1.jpg';
 import fish2 from '../credentials/images/hero2.jpg';
 import fish3 from '../credentials/images/hero3.jpg';
 import fish4 from '../credentials/images/hero4.jpg';
-import client1 from '../credentials/images/fishville.jpg'
 import client2 from '../credentials/images/petworld.jpg'
 import service1 from '../credentials/images/bullhorn.png'
 import service2 from '../credentials/images/online-store.png'
@@ -30,10 +29,7 @@ const LandingPage: React.FC = () => {
     setSlideIndex(newIndex);
   };
 
-  // Handle thumbnail image controls
-  const currentSlide = (n: number) => {
-    setSlideIndex(n);
-  };
+
 
   return (
     <div>

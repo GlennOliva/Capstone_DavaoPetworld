@@ -18,7 +18,7 @@ const Edit_Order: React.FC = () => {
     const [snackbarMessage, setSnackbarMessage] = useState('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const navigate = useNavigate();
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [, setSnackbarOpen] = useState(false);
 
     useEffect(() => {
         const adminId = localStorage.getItem('admin_id');
@@ -85,7 +85,7 @@ const Edit_Order: React.FC = () => {
         });
     };
 
-    const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+    const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
           return;
       }

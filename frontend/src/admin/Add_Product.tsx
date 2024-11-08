@@ -4,7 +4,7 @@ import '../css/add_admin.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import Sidebar from './Sidebar';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field,} from 'formik';
 import * as Yup from 'yup';
 
 const Add_Product: React.FC = () => {
@@ -29,7 +29,7 @@ const Add_Product: React.FC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  // const [snackbarOpen, setSnackbarOpen] = useState(false);
 
 
   // Validation schema with Yup
@@ -65,7 +65,6 @@ const Add_Product: React.FC = () => {
             throw new Error('Network response was not ok');
         }
 
-        const result = await response.json(); // Wait for the response to be parsed as JSON
 
         // Show success snackbar
         setSnackbarMessage('Product Successfully Created!');

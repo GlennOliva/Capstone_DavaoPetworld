@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import '../css/styles.css';
 import '../css/search1.css'
 import { Link } from 'react-router-dom';
-import product_1 from '../e-commerce/images/betta-blue.png';
-import product_2 from '../e-commerce/images/betta-siamese.png';
 import axios from 'axios';
 
 const Search = () => {

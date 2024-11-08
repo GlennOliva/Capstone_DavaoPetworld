@@ -40,13 +40,13 @@ const Add_Admin: React.FC = () =>{
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [storeName, setStoreName] = useState<string>('');
-    const [status, setStatus] = useState<string>('Active');
+    // const [status, setStatus] = useState<string>('Active');
     const [image, setImage] = useState<File | null>(null);
     const [openSnackbar, setOpenSnackbar] = useState(false);
 const [snackbarMessage, setSnackbarMessage] = useState('');
 const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
 const navigate = useNavigate();
-const [snackbarOpen, setSnackbarOpen] = useState(false);
+const [, setSnackbarOpen] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       if (e.target.files && e.target.files[0]) {
@@ -99,7 +99,7 @@ const [snackbarOpen, setSnackbarOpen] = useState(false);
     }
 };
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }

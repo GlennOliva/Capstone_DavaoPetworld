@@ -74,7 +74,7 @@ const Manage_Product: React.FC = () => {
 }
 
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }

@@ -77,7 +77,7 @@ const FishIdentify: React.FC = () => {
   const modelUrl = import.meta.env.VITE_MODEL_URL;
 
   const identifyFish = async () => {
-    const imageElement = imageRef.current;
+    // const imageElement = imageRef.current;
   
     if (!imageFileRef.current) {
       setResult(<p>No image uploaded!</p>);

@@ -50,9 +50,9 @@ const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
     const [password, setPassword] = useState("");
     const [store_name, setStoreName] = useState("");
     const [image, setImage] = useState<File | null>(null); // Correctly typed as File or null
-    const [admin, setAdmin] = useState({});
+    const [, setAdmin] = useState({});
     const [status, setStatus] = useState("");
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [, setSnackbarOpen] = useState(false);
     
     useEffect(() => {
       fetch(`${apiUrl}admin/${id}`)
@@ -126,7 +126,7 @@ const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
 };
 
 
-const handleSnackbarClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
+const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
   if (reason === 'clickaway') {
       return;
   }

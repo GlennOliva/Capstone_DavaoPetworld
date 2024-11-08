@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import '../css/style.css'; // Assuming you have a CSS file named style.css for styling
 
 // Importing images
@@ -16,8 +16,8 @@ import Notification from './Notification';
 const Navbar = () => {
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
-  const [darkTheme, setDarkTheme] = useState(localStorage.getItem('theme') === 'dark');
-  const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar visibility
+  const [darkTheme] = useState(localStorage.getItem('theme') === 'dark');
+  // const [sidebarOpen, setSidebarOpen] = useState(false); // State to control sidebar visibility
   const apiUrl = import.meta.env.VITE_API_URL;
   const history = useNavigate();
 
@@ -40,9 +40,9 @@ const Navbar = () => {
   };
   
  
-  const handleDarkThemeToggle = () => {
-    setDarkTheme(prev => !prev);
-  };
+  // const handleDarkThemeToggle = () => {
+  //   setDarkTheme(prev => !prev);
+  // };
 
   const [userProfile, setUserProfile] = useState<{ image: string; first_name: string; last_name: string; id:number; } | null>(null);
 
@@ -67,9 +67,9 @@ const Navbar = () => {
  
 
 
-  const toggleSidebar = () => {
-    setSidebarOpen(prev => !prev); // Toggle sidebar visibility
-  };
+  // const toggleSidebar = () => {
+  //   setSidebarOpen(prev => !prev); // Toggle sidebar visibility
+  // };
 
   return (
     <nav className='nav1'>

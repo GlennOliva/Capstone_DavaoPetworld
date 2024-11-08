@@ -10,13 +10,13 @@ import * as Yup from 'yup';
 const Edit_Category: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
-  const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
+  // const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const { id } = useParams();
   const navigate = useNavigate();
-  const [category, setCategory] = useState({});
+  const [, setCategory] = useState({});
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
   const [image, setImage] = useState<File | null>(null); // New state for the image
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -77,7 +77,7 @@ const Edit_Category: React.FC = () => {
         body: formData,
       })
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
           setSnackbarMessage('Category details updated successfully.');
           setSnackbarSeverity('success');
           setOpenSnackbar(true);
