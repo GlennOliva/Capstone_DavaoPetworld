@@ -190,26 +190,44 @@ app.get('/search_users', (req, res) => {
       res.json(results);
     });
   });
+ 
   
-
   app.post('/register_user', upload.single('image'), (req, res) => {
     try {
       // Access form fields
       const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms } = req.body;
       const image = req.file; // For the uploaded image
       
-      if (!first_name || !last_name || !email || !password) {
+      // Check if required fields are missing
+      if (!first_name || !last_name || !email || !password || !terms) {
         return res.status(400).json({ message: 'Required fields missing' });
       }
   
-      // Further logic to insert into the database, validate the data, etc.
+      // Insert user data into the database
+      const query = `
+        INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, profile_pic)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `;
+      
+      // Assuming `image.path` contains the path to the uploaded image (this will depend on how you set up the multer storage)
+      const imagePath = image ? image.path : null; // Store image path if available
   
-      res.status(200).json({ message: 'User registered successfully' });
+      db.query(query, [first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, imagePath], (err, results) => {
+        if (err) {
+          console.error('Error inserting user data:', err);
+          return res.status(500).json({ message: 'Database Error' });
+        }
+        
+        // If the insertion is successful, send a success response
+        res.status(200).json({ message: 'User registered successfully' });
+      });
+      
     } catch (err) {
       console.error('Error:', err);
       res.status(500).json({ message: 'Internal Server Error' });
     }
   });
+  
 
 
 
