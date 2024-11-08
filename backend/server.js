@@ -212,7 +212,7 @@ app.get('/search_users', (req, res) => {
       // Insert user data into the database
       const query = `
         INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, status, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
       // Perform the database query
