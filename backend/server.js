@@ -192,43 +192,24 @@ app.get('/search_users', (req, res) => {
   
 
   app.post('/register_user', upload.single('image'), async (request, response) => {
-    // Log the incoming request body to check the values being sent
-    console.log('Request body:', request.body);
-    console.log('Uploaded file:', request.file);
-
-    const { first_name, last_name, email, password, birthdate, gender, bio, age, address } = request.body;
+    const { first_name, last_name, email, password, birthdate, gender, bio, age , address } = request.body;
     const image = request.file ? request.file.filename : null;
 
     try {
-        // Log the data that will be inserted into the database
-        console.log('Data to be inserted:', {
-            first_name, last_name, email, password, birthdate, gender, bio, age, address, image
-        });
-
         // Directly use the plain password (not recommended for production)
-        const sql = "INSERT INTO tbl_user (first_name, last_name, email, birthdate, gender, image, password, bio, age, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Active')";
-        
-        // Debug the query being executed
-        console.log('Executing SQL:', sql);
-        
-        db.query(sql, [first_name, last_name, email, birthdate, gender, image, password, bio, age, address], (error, result) => {
+        const sql = "INSERT INTO tbl_user (first_name, last_name, email, birthdate, gender, image, password, bio, age, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?, ?, 'Active')";
+        db.query(sql, [first_name, last_name, email, birthdate, gender, image, password, bio,age,address], (error, result) => {
             if (error) {
-                // Log the database error
-                console.error('Database query error:', error);
+                console.error('Database error:', error);
                 return response.status(500).json({ message: 'Error creating user' }); // Return JSON response
             }
-            
-            // Log successful user creation
-            console.log('User successfully created, result:', result);
             response.json({ message: 'User Successfully Created!' });
         });
     } catch (error) {
-        // Log any unexpected errors
-        console.error('Error in user creation:', error);
+        console.error('Error creating user:', error);
         return response.status(500).json({ message: 'Error creating user' }); // Return JSON response
     }
 });
-
 
 
 

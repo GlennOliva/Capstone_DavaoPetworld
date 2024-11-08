@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
-import axios from 'axios';
 
 export const Register = () => {
 
@@ -73,26 +72,35 @@ export const Register = () => {
         }
       });
   
-      // Use axios.post to send the form data
-      axios.post('https://capstone-davaopetworld.onrender.com/register_user', formData)
-        .then((response) => {
+      fetch('https://capstone-davaopetworld.onrender.com/register_user', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+          if (!response.ok) {
+              throw new Error('Network response was not ok');
+          }
+          return response.json();
+      })
+      .then(data => {
           setSnackbarMessage('User Successfully Registered!');
           setSnackbarSeverity('success');
           setOpenSnackbar(true);
-          console.log(response.data); // Log the response data for debugging
+          console.log(data);          // Delay navigation to allow Snackbar to show
           setTimeout(() => {
-            navigate('/login');
-          }, 2000); // Delay navigation to allow Snackbar to show
-        })
-        .catch((error) => {
+              navigate('/login');
+          }, 2000); // 2 seconds delay
+      })
+      .catch((error) => {
           setSnackbarMessage('Failed to create user');
           setSnackbarSeverity('error');
           setOpenSnackbar(true);
-          console.error(error); // Log the error for debugging
+          console.log(error);  
+          // Delay navigation in case of error
           setTimeout(() => {
-            navigate('/register');
-          }, 2000); // Delay navigation in case of error
-        });
+              navigate('/register');
+          }, 2000); // 2 seconds delay
+      });
     }
   });
 
