@@ -34,10 +34,16 @@ const ProductDetails = () => {
 
   const handleAddToCart = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    try {
-        const userId = localStorage.getItem('user_id'); // Retrieve the user ID from local storage
 
+    const userId = localStorage.getItem('user_id');
+    if (!userId) {
+        setSnackbarMessage('User not logged in');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+        return; // Exit early if user is not logged in
+    }
+
+    try {
         // Send a request to add the product to the cart
         const response = await axios.post(`${apiUrl}addcart`, {
             product_id: id,
@@ -45,26 +51,20 @@ const ProductDetails = () => {
             quantity: quantity,
         });
 
-        // Check if the response indicates success
-        if (response.status === 200 && response.data.success) { // Adjust condition based on your API response format
-            // Show success Snackbar
-            setSnackbarMessage('Product Added to Cart!');
-            setSnackbarSeverity('success');
-            setOpenSnackbar(true);
+        console.log('Response:', response);
 
-            // Delay navigation to product page
-            setTimeout(() => {
-                navigate('/product');
-            }, 2000); // 2 seconds delay
-        } else {
-            // Handle unexpected response with an error Snackbar
-            setSnackbarMessage('Unexpected response. Please try again.');
-            setSnackbarSeverity('error');
-            setOpenSnackbar(true);
-        }
+        // Show success Snackbar
+        setSnackbarMessage('Product Added to Cart!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+
+        // Delay navigation to product page
+        setTimeout(() => {
+            navigate('/product');
+        }, 2000); // 2 seconds delay
     } catch (error: any) {
-        // Check if the error response is due to the product being out of stock
-        if (error.response && error.response.data.error === 'Product is out of stock!') {
+        // Check for specific error in response
+        if (error.response && error.response.data && error.response.data.error === 'Product is out of stock!') {
             setSnackbarMessage('This product is out of stock!');
         } else {
             setSnackbarMessage('Failed to add product to cart');
@@ -72,8 +72,8 @@ const ProductDetails = () => {
         
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
-
-        // Delay navigation to product details if needed
+        
+        // Optional: Delay navigation to product details if needed
         setTimeout(() => {
             navigate(`/product_details/${id}`);
         }, 2000); // 2 seconds delay
