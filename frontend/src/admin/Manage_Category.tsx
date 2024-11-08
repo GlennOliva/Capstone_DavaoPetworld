@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import logo from '../images/logo1.png';
 // import '../css/admin.css';
  import '../css/manage_admin.css'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import axios from 'axios';
 import { Alert, Snackbar } from '@mui/material';
@@ -68,30 +68,32 @@ const Manage_Category: React.FC = () => {
 }, []);
 
 
-  function handleDeleteItem(id: string) {
-    if (window.confirm("Are you sure you want to delete this category?")) {
-        // Show success Snackbar
-        setSnackbarMessage('Category deleted Successfully!');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
+function handleDeleteItem(id: string) {
+  const navigate = useNavigate(); // Add the useNavigate hook here
 
-        // Delay the deletion
-        setTimeout(() => {
-            axios.delete(`${apiUrl}category/${id}`)
-                .then((response) => {
-                    console.log("response: " + response.data);
-                    window.location.reload(); // Reload the page after deletion
-                })
-                .catch((error) => {
-                    console.error("There was an error deleting the admin!", error);
+  if (window.confirm("Are you sure you want to delete this category?")) {
+      // Show success Snackbar
+      setSnackbarMessage('Category deleted Successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
 
-                    // Show error Snackbar if deletion fails
-                    setSnackbarMessage('Error deleting admin!');
-                    setSnackbarSeverity('error');
-                    setSnackbarOpen(true);
-                });
-        }, 2000); // Delay in milliseconds (3000ms = 3 seconds)
-    }
+      // Delay the deletion
+      setTimeout(() => {
+          axios.delete(`${apiUrl}category/${id}`)
+              .then((response) => {
+                  console.log("response: " + response.data);
+                  navigate('/manage_category'); // Navigate to /manage_category after deletion
+              })
+              .catch((error) => {
+                  console.error("There was an error deleting the category!", error);
+
+                  // Show error Snackbar if deletion fails
+                  setSnackbarMessage('Error deleting category!');
+                  setSnackbarSeverity('error');
+                  setSnackbarOpen(true);
+              });
+      }, 2000); // Delay in milliseconds (2000ms = 2 seconds)
+  }
 }
 
 
