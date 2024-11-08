@@ -203,8 +203,8 @@ app.get('/search_users', (req, res) => {
         return res.status(400).json({ message: 'Required fields missing' });
       }
   
-      // If an image is uploaded, get the image path
-      const imagePath = image ? image.path : null; // image.path should be available after upload
+      // If an image is uploaded, get the image filename (not the full path)
+      const imageFilename = image ? image.filename : null; // Only the filename, not the path
   
       // Format the birthdate to ensure it is valid (assuming birthdate is in yyyy-mm-dd format)
       const formattedBirthdate = birthdate ? new Date(birthdate).toISOString().split('T')[0] : null;
@@ -219,7 +219,7 @@ app.get('/search_users', (req, res) => {
       `;
   
       // Perform the database query
-      db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, status, imagePath], (err, results) => {
+      db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, status, imageFilename], (err, results) => {
         if (err) {
           // Log the specific database error for debugging
           console.error('Database error:', err);
@@ -236,6 +236,7 @@ app.get('/search_users', (req, res) => {
       res.status(500).json({ message: 'Internal Server Error', error: err.message });
     }
   });
+  
   
   
   
