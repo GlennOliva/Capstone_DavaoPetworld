@@ -13,7 +13,7 @@ export const Register = () => {
   const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
   const navigate = useNavigate();
   const [, setSnackbarOpen] = useState(false);
-  const apiUrl = import.meta.env.VITE_API_URL;
+  // const apiUrl = import.meta.env.VITE_API_URL;
 
   const formik = useFormik<{ 
     firstName: string;
@@ -74,7 +74,7 @@ export const Register = () => {
         }
       });
     
-      axios.post(`${apiUrl}register_user`, formData)
+      axios.post('https://capstone-davaopetworld.onrender.com/register_user', formData)
         .then(response => {
           setSnackbarMessage('User Successfully Registered!');
           setSnackbarSeverity('success');
