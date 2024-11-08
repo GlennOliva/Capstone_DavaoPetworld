@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import friends from '../images/friends.png';
 import news from '../images/news.png';
@@ -26,7 +26,7 @@ const Friends = () => {
         </div>
 
         <div className="friend-cards-container">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8].map(( index) => (
             <div className="friend-card" key={index}>
               <div className="friend-card-img">
                 {/* <img src={index % 2 === 0 ? member_1 : member_1} alt="Profile Image" /> */}

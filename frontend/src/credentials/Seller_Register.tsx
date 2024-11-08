@@ -1,4 +1,4 @@
-import React from 'react';
+
 import '../credentials/register.css'
 import { Link } from 'react-router-dom';
 
