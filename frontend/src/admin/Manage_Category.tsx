@@ -47,6 +47,7 @@ const Manage_Category: React.FC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
+  const navigate = useNavigate(); // Add the useNavigate hook here
 
   useEffect(() => {
     const adminId = localStorage.getItem('admin_id'); // Retrieve the admin ID from local storage
@@ -69,7 +70,7 @@ const Manage_Category: React.FC = () => {
 
 
 function handleDeleteItem(id: string) {
-  const navigate = useNavigate(); // Add the useNavigate hook here
+ 
 
   if (window.confirm("Are you sure you want to delete this category?")) {
       // Show success Snackbar
