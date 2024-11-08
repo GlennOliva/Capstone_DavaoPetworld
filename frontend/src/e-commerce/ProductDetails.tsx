@@ -42,7 +42,6 @@ const ProductDetails = () => {
       setOpenSnackbar(true);
   
       setTimeout(() => {
-        window.location.reload(); // Reload the window
         navigate('/product'); // Navigate to the product page
       }, 2000); // Delay in milliseconds (2000ms = 2 seconds)  
     } catch (error: any) {
