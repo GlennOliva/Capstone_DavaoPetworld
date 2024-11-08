@@ -8,7 +8,8 @@ const { request } = require('http');
 const app = express();
 
 
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 const bcrypt = require('bcrypt');
@@ -191,25 +192,24 @@ app.get('/search_users', (req, res) => {
   });
   
 
-  app.post('/register_user', upload.single('image'), async (request, response) => {
-    const { first_name, last_name, email, password, birthdate, gender, bio, age , address } = request.body;
-    const image = request.file ? request.file.filename : null;
-
+  app.post('/register_user', upload.single('image'), (req, res) => {
     try {
-        // Directly use the plain password (not recommended for production)
-        const sql = "INSERT INTO tbl_user (first_name, last_name, email, birthdate, gender, image, password, bio, age, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ? , ?, ?, 'Active')";
-        db.query(sql, [first_name, last_name, email, birthdate, gender, image, password, bio,age,address], (error, result) => {
-            if (error) {
-                console.error('Database error:', error);
-                return response.status(500).json({ message: 'Error creating user' }); // Return JSON response
-            }
-            response.json({ message: 'User Successfully Created!' });
-        });
-    } catch (error) {
-        console.error('Error creating user:', error);
-        return response.status(500).json({ message: 'Error creating user' }); // Return JSON response
+      // Access form fields
+      const { first_name, last_name, email, password, birthdate, gender, bio, address, age, terms } = req.body;
+      const image = req.file; // For the uploaded image
+      
+      if (!first_name || !last_name || !email || !password) {
+        return res.status(400).json({ message: 'Required fields missing' });
+      }
+  
+      // Further logic to insert into the database, validate the data, etc.
+  
+      res.status(200).json({ message: 'User registered successfully' });
+    } catch (err) {
+      console.error('Error:', err);
+      res.status(500).json({ message: 'Internal Server Error' });
     }
-});
+  });
 
 
 

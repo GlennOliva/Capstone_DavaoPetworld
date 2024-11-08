@@ -60,7 +60,7 @@ export const Register = () => {
     }),
     onSubmit: (values) => {
       const formData = new FormData();
-  
+    
       Object.entries(values).forEach(([key, value]) => {
         if (value !== null && value !== undefined) {
           if (key === 'profile_pic' && value instanceof File) {
@@ -71,37 +71,45 @@ export const Register = () => {
           }
         }
       });
-  
+    
       fetch('https://capstone-davaopetworld.onrender.com/register_user', {
         method: 'POST',
         body: formData,
       })
       .then(response => {
-          if (!response.ok) {
-              throw new Error('Network response was not ok');
-          }
-          return response.json();
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse the response body to JSON
       })
       .then(data => {
-          setSnackbarMessage('User Successfully Registered!');
-          setSnackbarSeverity('success');
-          setOpenSnackbar(true);
-          console.log(data);          // Delay navigation to allow Snackbar to show
-          setTimeout(() => {
-              navigate('/login');
-          }, 2000); // 2 seconds delay
+        // Log the response data to check
+        console.log(data);
+    
+        // If registration is successful, show success message
+        setSnackbarMessage('User Successfully Registered!');
+        setSnackbarSeverity('success');
+        setOpenSnackbar(true);
+    
+        // Delay navigation to allow Snackbar to show
+        setTimeout(() => {
+          navigate('/login');
+        }, 2000); // 2 seconds delay
       })
       .catch((error) => {
-          setSnackbarMessage('Failed to create user');
-          setSnackbarSeverity('error');
-          setOpenSnackbar(true);
-          console.log(error);  
-          // Delay navigation in case of error
-          setTimeout(() => {
-              navigate('/register');
-          }, 2000); // 2 seconds delay
+        // Handle errors
+        setSnackbarMessage('Failed to create user');
+        setSnackbarSeverity('error');
+        setOpenSnackbar(true);
+        console.log(error);  // Log the error for debugging
+    
+        // Delay navigation in case of error
+        setTimeout(() => {
+          navigate('/register');
+        }, 2000); // 2 seconds delay
       });
     }
+    
   });
 
 const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
