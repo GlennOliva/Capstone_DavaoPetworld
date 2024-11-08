@@ -211,12 +211,12 @@ app.get('/search_users', (req, res) => {
       
       // Insert user data into the database
       const query = `
-        INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, terms, status, image)
+        INSERT INTO tbl_user (first_name, last_name, email, password, birthdate, gender, bio, address, age, status, image)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
       // Perform the database query
-      db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, terms, status, imagePath], (err, results) => {
+      db.query(query, [first_name, last_name, email, password, formattedBirthdate, gender, bio, address, age, status, imagePath], (err, results) => {
         if (err) {
           // Log the specific database error for debugging
           console.error('Database error:', err);
