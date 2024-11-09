@@ -527,7 +527,7 @@ useEffect(() => {
     <div className="container">
     <div className="sidebar-lef1">
     <div className="imp-links">
-      <a href="/home"><img src={news} alt="News" />Latest News</a>
+      <Link to="/home" className="popup-link"><img src={news} alt="" />Latest News</Link>
       <Link to={`/ecommerce/${userProfile?.id}`} className="link">
         <img src={marketplace} alt="Fish Shopping" />
         Store

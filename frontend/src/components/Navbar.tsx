@@ -11,6 +11,7 @@ import logo from '../images/davao-petworld-logo.png';
 import { Link,  useNavigate } from 'react-router-dom';
 import Search from './Search';
 import Notification from './Notification';
+import defaultprofile from '../images/userpng.png'
 
 
 const Navbar = () => {
@@ -95,7 +96,7 @@ const Navbar = () => {
             />
           ) : (
             <img
-              src="/path/to/default/profile/image.png" // Fallback image if userProfile.image is not available
+              src={defaultprofile}
               alt="Default Profile"
             />
           )}
@@ -115,13 +116,13 @@ const Navbar = () => {
                 />
               ) : (
                 <img
-                  src="/path/to/default/profile/image.png" // Fallback image if userProfile.image is not available
+                src={defaultprofile}
                   alt="Default Profile"
                 />
               )}
               <div>
                 <p>Hi: {userProfile?.first_name}</p>
-                <a href="/profile">See your profile</a>
+                <Link to="/profile" className="popup-link">See your Profile</Link>
               </div>
             </div>
             <hr />
