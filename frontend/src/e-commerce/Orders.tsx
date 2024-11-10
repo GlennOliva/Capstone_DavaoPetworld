@@ -18,7 +18,7 @@ const Orders: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const apiUrl = import.meta.env.VITE_API_URL;
-  const userId = 1; // Replace with dynamic user ID from authentication context or props
+  const userId = localStorage.getItem('user_id');
 
   useEffect(() => {
     const fetchOrders = async () => {
