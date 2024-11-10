@@ -1228,17 +1228,24 @@ app.post('/checkout', (req, res) => {
 
 
 app.get('/api/orders', (req, res) => {
-    const query = `
+    const { user_id } = req.query;
+    let query = `
       SELECT o.id, u.first_name, u.last_name, o.product_name, o.product_quantity, o.payment_method, o.total_price, o.status
       FROM tbl_order AS o
       JOIN tbl_user AS u ON o.user_id = u.id
     `;
-  
-    db.query(query, (err, results) => {
+
+    // Add a WHERE clause if user_id is provided
+    if (user_id) {
+        query += ` WHERE o.user_id = ?`;
+    }
+
+    db.query(query, [user_id], (err, results) => {
       if (err) throw err;
       res.json(results);
     });
-  });
+});
+
 
 
 

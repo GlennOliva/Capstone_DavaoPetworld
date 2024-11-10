@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/orders.css';
 
-// Define the Order interface
 interface Order {
   id: number;
   first_name: string;
@@ -15,16 +14,16 @@ interface Order {
 }
 
 const Orders: React.FC = () => {
-  // Use the Order interface in the useState hook
   const [orders, setOrders] = useState<Order[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5; // Set how many items per page you want
+  const itemsPerPage = 5;
   const apiUrl = import.meta.env.VITE_API_URL;
+  const userId = 1; // Replace with dynamic user ID from authentication context or props
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch(`${apiUrl}api/orders`);
+        const response = await fetch(`${apiUrl}api/orders?user_id=${userId}`);
         const data = await response.json();
         setOrders(data);
       } catch (error) {
@@ -33,17 +32,13 @@ const Orders: React.FC = () => {
     };
 
     fetchOrders();
-  }, []);
+  }, [userId]);
 
-  // Calculate total pages
   const totalPages = Math.ceil(orders.length / itemsPerPage);
-
-  // Get current orders to display
   const indexOfLastOrder = currentPage * itemsPerPage;
   const indexOfFirstOrder = indexOfLastOrder - itemsPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
 
-  // Handle page click
   const handlePageClick = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -76,24 +71,22 @@ const Orders: React.FC = () => {
                 <td data-label="Payment Method">{order.payment_method}</td>
                 <td data-label="Total Price">₱{order.total_price}</td>
                 <td data-label="Status">
-    {order.status === 'Delivered' ? (
-        <span className="status-delivered">{order.status}</span>
-    ) : order.status === 'Cancelled' ? (
-        <span className="status-cancelled">{order.status}</span>
-    ) : order.status === 'On delivery' ? (
-        <span className="status-ondelivery">{order.status}</span> // Correct class usage
-    ) : (
-        <span className="status-pending">{order.status}</span>
-    )}
-</td>
-
+                  {order.status === 'Delivered' ? (
+                    <span className="status-delivered">{order.status}</span>
+                  ) : order.status === 'Cancelled' ? (
+                    <span className="status-cancelled">{order.status}</span>
+                  ) : order.status === 'On delivery' ? (
+                    <span className="status-ondelivery">{order.status}</span>
+                  ) : (
+                    <span className="status-pending">{order.status}</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      {/* Pagination Section */}
       <section className="pagination">
         <div className="container1">
           {Array.from({ length: totalPages }, (_, index) => (
