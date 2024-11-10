@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
 import '../css/admin_profile.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';

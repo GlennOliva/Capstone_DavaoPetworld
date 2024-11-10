@@ -6,7 +6,7 @@ import Sidebar from './Sidebar';
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
 
 const Manage_Admin: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
  import '../css/admin.css';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, BarElement, LineElement, Title, Tooltip, Legend, TimeScale } from 'chart.js';

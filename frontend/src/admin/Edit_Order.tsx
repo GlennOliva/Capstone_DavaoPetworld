@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
 import '../css/edit_admin.css';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';

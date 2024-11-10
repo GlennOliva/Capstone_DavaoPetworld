@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
 // import '../css/admin.css';
 // import '../css/manage_admin.css'
 import { Link } from 'react-router-dom';

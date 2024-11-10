@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import logo from '../images/logo1.png';
+import logo from '../images/davao-petworld-logo.png';
 import '../css/edit_admin.css';
 import Sidebar from './Sidebar';
 import { Alert, Snackbar } from '@mui/material';
