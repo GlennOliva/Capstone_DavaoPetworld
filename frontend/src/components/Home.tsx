@@ -3,7 +3,7 @@ import '../css/style.css'; // Import your CSS for styling
 
 import news from '../images/news.png';
 import marketplace from '../images/marketplace.png';
-import profile_pic from '../images/profile-pic.png';
+import profile_pic from '../images/userpng.png';
 import photo from '../images/photo.png';
 
 import haha from '../images/haha.png';
