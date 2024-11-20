@@ -7,7 +7,7 @@ import fish2 from '../credentials/images/hero-bgnew2.png';
 import fish3 from '../credentials/images/hero-bgnew3.png';
 import fish4 from '../credentials/images/hero-bgnew4.png';
 import fish5 from '../credentials/images/hero-bgnew5.png';
-import client2 from '../credentials/images/petworld.png';
+import client2 from '../credentials/images/client1.jpg';
 import service1 from '../credentials/images/bullhorn.png'
 import service2 from '../credentials/images/online-store.png'
 import service3 from '../credentials/images/magnifying-glass-and-fish.png'
