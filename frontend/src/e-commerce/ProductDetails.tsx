@@ -59,8 +59,9 @@ const ProductDetails = () => {
         setOpenSnackbar(true);
 
         // Delay navigation to product page
+ 
         setTimeout(() => {
-            navigate('/product');
+          window.location.reload();
         }, 2000); // 2 seconds delay
     } catch (error: any) {
         // Check for specific error in response

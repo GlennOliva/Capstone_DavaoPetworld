@@ -82,6 +82,16 @@ const Sidebar = () => {
           </Link>
         </li>
 
+
+        <li>
+          <Link
+            to="/manage_income"
+            className={location.pathname === '/manage_income' ? 'active' : ''}
+          >
+            <i className='bx bxs-credit-card icon'></i> Income Analytics
+          </Link>
+        </li>
+
         {/* Logout Link */}
         <li>
           <Link

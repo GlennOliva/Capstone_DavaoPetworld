@@ -40,6 +40,10 @@ import LandingPage from './credentials/LandingPage'
 import Search from './e-commerce/Search'
 import Category from './e-commerce/Category'
 import Checkout from './e-commerce/Checkout'
+import ForgotPass from './credentials/ForgotPass'
+import ChangePassword from './credentials/ChangePassword'
+import Manage_IncomeAnalytics from './admin/Manage_IncomeAnalytics'
+import OrderReceipt from './e-commerce/OrderReceipt'
 
 
 
@@ -50,6 +54,24 @@ const App = () => {
    
     <div>
       <Routes>
+
+      <Route path="/forgotpass" element={
+          <>
+
+            <ForgotPass />
+   
+    
+          </>
+        } />
+
+<Route path="/changepass" element={
+          <>
+
+            <ChangePassword />
+   
+    
+          </>
+        } />
 
       <Route path="/" element={
           <>
@@ -214,12 +236,23 @@ const App = () => {
         }/>
 
 
-  
+<Route path='/order_receipt/:id' element={
+          <>
+          <OrderReceipt/>
+          </>
+        }/>
 
 
 <Route path='/manage_user' element={
           <>
           <Manage_User/>
+          </>
+        }/>
+
+
+<Route path='/manage_income' element={
+          <>
+          <Manage_IncomeAnalytics/>
           </>
         }/>
 

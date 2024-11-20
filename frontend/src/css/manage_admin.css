@@ -51,7 +51,7 @@
     border-radius: 5px;
 }
 
-.edit-btn, .delete-btn {
+.edit-btn, .delete-btn, .view-btn {
     padding: 8px 12px;
     border: none;
     border-radius: 5px;
@@ -71,6 +71,14 @@
 
 .delete-btn {
     background-color: #dc3545;
+}
+
+.view-btn {
+    background-color: orange;
+}
+
+.view-btn:hover{
+    background-color: orange;
 }
 
 .delete-btn:hover {

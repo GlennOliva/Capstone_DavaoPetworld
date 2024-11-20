@@ -9,6 +9,7 @@ import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import Sidebar from '../admin/Sidebar'
 import axios from 'axios';
+import PaymentMethodChart from './PaymentMethodChart';
 
 // Register Chart.js components
 ChartJS.register(
@@ -28,6 +29,8 @@ const Dashboard: React.FC = () => {
     const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
     const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
     const apiUrl = import.meta.env.VITE_API_URL;
+
+    
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -337,6 +340,10 @@ useEffect(() => {
 
     fetchCounts();
   }, []);
+
+
+
+  
   
 
   return (
@@ -411,68 +418,81 @@ useEffect(() => {
             <li><a href="#" className="active">Dashboard</a></li>
           </ul>
           <div className="info-data">
-          <div className="card">
-        <div className="head">
-          <div>
-            <h2>{counts.userCount}</h2>
-            <p>No of Users</p>
-          </div>
-          <i className='bx bx-user icon'></i>
-        </div>
-      </div>
-      <div className="card">
-        <div className="head">
-          <div>
-            <h2>{counts.productCount}</h2>
-            <p>No of Products</p>
-          </div>
-          <i className='bx bx-store-alt icon'></i>
-        </div>
-      </div>
-      <div className="card">
-        <div className="head">
-          <div>
-            <h2>{counts.orderCount}</h2>
-            <p>No of Orders</p>
-          </div>
-          <i className='bx bx-shopping-bag icon down'></i>
-        </div>
-      </div>
+                <div className="card">
+              <div className="head">
+                <div>
+                  <h2>{counts.userCount}</h2>
+                  <p>No of Users</p>
+                </div>
+                <i className='bx bx-user icon'></i>
+              </div>
+            </div>
+            <div className="card">
+              <div className="head">
+                <div>
+                  <h2>{counts.productCount}</h2>
+                  <p>No of Products</p>
+                </div>
+                <i className='bx bx-store-alt icon'></i>
+              </div>
+            </div>
+            <div className="card">
+              <div className="head">
+                <div>
+                  <h2>{counts.orderCount}</h2>
+                  <p>No of Orders</p>
+                </div>
+                <i className='bx bx-shopping-bag icon down'></i>
+              </div>
+            </div>
 
-      <div className="card">
-        <div className="head">
-          <div>
-            <h2>{counts.categoryCount}</h2>
-            <p>No of Categories</p>
-          </div>
-          <i className='bx bx-category icon'></i>
-        </div>
-      </div>
+            <div className="card">
+              <div className="head">
+                <div>
+                  <h2>{counts.categoryCount}</h2>
+                  <p>No of Categories</p>
+                </div>
+                <i className='bx bx-category icon'></i>
+              </div>
+            </div>
             
           </div>
 
           <div className="data">
-  <div className="content-data">
-    <div className="chart">
-      <Line data={chartDataPosts} options={chartOptionsPosts} />
-    </div>
-    <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Monthly counts of Post</h3>
-  </div>
+          <div className="content-data">
+            <div className="chart">
+              <Line data={chartDataPosts} options={chartOptionsPosts} />
+            </div>
+            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Monthly counts of Post</h3>
+          </div>
 
-  <div className="content-data">
-    <div className="chart">
-      <Line data={chartDataRevenue} options={chartOptionsRevenue} />
-    </div>
-    <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Revenue Sales Per Month</h3>
-  </div>
+          <div className="content-data">
+            <div className="chart">
+              <Line data={chartDataRevenue} options={chartOptionsRevenue} />
+            </div>
+            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Revenue Sales Per Month</h3>
+          </div>
 
-  <div className="content-data">
-    <div className="chart">
-    <Bar data={categoryData} options={chartComparisonOptionsCategories} />
+          <div className="content-data">
+            <div className="chart">
+            <Bar data={categoryData} options={chartComparisonOptionsCategories} />
+            </div>
+            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Comparison of Product Categories</h3>
+          </div>
+
+          <div className="content-data">
+      <div className="chart">
+        <PaymentMethodChart />
+      </div>
     </div>
-    <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Comparison of Three Categories</h3>
-  </div>
-</div>
+
+          </div>
+
+
+  
+
+
+
 
 
         </main>

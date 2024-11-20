@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../css/orders.css';
+import { Link } from 'react-router-dom';
 
 interface Order {
   id: number;
@@ -47,7 +48,7 @@ const Orders: React.FC = () => {
     <div className="orders-container">
       <h1>Track Orders</h1>
       <div className="table-responsive">
-        <table>
+        <table  className='admin-table'>
           <thead>
             <tr>
               <th>ID</th>
@@ -58,6 +59,7 @@ const Orders: React.FC = () => {
               <th>Payment Method</th>
               <th>Total Price</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -81,6 +83,15 @@ const Orders: React.FC = () => {
                     <span className="status-pending">{order.status}</span>
                   )}
                 </td>
+                <td style={{ width: '15%' }}>
+
+                      <Link 
+                        to={`/order_receipt/${order.id}`}
+                        className="view-btn" 
+                        style={{ textDecoration: 'none' }}>
+                        <i className="fas fa-eye"></i>View Order
+                      </Link>
+                    </td>
               </tr>
             ))}
           </tbody>

@@ -92,6 +92,10 @@ const Login = () => {
                     <hr style={{ width: '100%', margin: '7px auto', border: '1px solid #000000' }} />
                     
                     <button type="button" className="create-account-btn" onClick={() => navigate('/register')}>Create an Account</button>
+
+                    <hr style={{ width: '100%', margin: '7px auto', border: '1px solid #000000' }} />
+                    
+                    <button type="button" className="forgot-account-btn" onClick={() => navigate('/forgotpass')}>Forgot Password</button>
                 </form>
             </div>
         </div>

@@ -72,7 +72,7 @@ export const Register = () => {
         }
       });
     
-      fetch('https://capstone-davaopetworld.onrender.com/register_user', {
+      fetch('http://localhost:8081/register_user', {
         method: 'POST',
         body: formData,
       })

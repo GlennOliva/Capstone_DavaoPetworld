@@ -6,6 +6,9 @@ const multer = require('multer');
 const path = require('path');
 const { request } = require('http');
 const app = express();
+const nodemailer = require('nodemailer');
+
+
 
 
 app.use(bodyParser.json());
@@ -1272,6 +1275,31 @@ app.get('/api/orders', (req, res) => {
 });
 
 
+app.get('/manage_income', (request, response) => {
+    const sql = `
+        SELECT 
+            tbl_order.id, 
+            tbl_order.product_name, 
+            tbl_order.product_quantity, 
+            tbl_order.payment_method, 
+            tbl_order.total_price, 
+            tbl_order.status,
+            tbl_order.address,
+            tbl_order.shipping_fee,
+            tbl_user.first_name, 
+            tbl_user.last_name
+        FROM tbl_order
+        JOIN tbl_user ON tbl_order.user_id = tbl_user.id
+        WHERE tbl_order.status = 'Delivered';`; // Corrected WHERE clause placement and comparison with 'Delivered'
+
+    db.query(sql, (error, data) => {
+        if (error) return response.json(error);
+        return response.json(data);
+    });
+});
+
+
+
 
 
 
@@ -1342,8 +1370,175 @@ app.get('/revenue_sales', (request, response) => {
     });
 });
 
+app.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+  
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
+    }
+  
+    // Query the database to check if the email exists
+    const query = 'SELECT * FROM tbl_user WHERE email = ?';
+  
+    db.query(query, [email], async (err, results) => {
+      if (err) {
+        console.error('Database query error:', err);
+        return res.status(500).json({ error: 'Failed to check email. Please try again later.' });
+      }
+  
+      if (results.length === 0) {
+        // Email not found in the database
+        return res.status(404).json({ error: 'Email not recognized' });
+      }
+  
+      // Email exists, proceed with sending the reset link
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.EMAIL,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      });
+  
+      const resetLink = `https://davaopetworld.netlify.app/changepass?email=${encodeURIComponent(email)}`;
+  
+      const mailOptions = {
+        from: 'Davao Pet World',
+        to: email,
+        subject: 'Password Reset Request',
+        html: `
+          <h2>Password Reset</h2>
+          <p>Hello there,</p>
+          <p>This is from Davao Pet World. Click the link below to reset your password:</p>
+          <a href="${resetLink}">Reset Password</a>
+          <p>If you did not request this, please ignore this email.</p>
+        `,
+      };
+  
+      try {
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Password reset link sent successfully' });
+      } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ error: 'Failed to send email. Please try again later.' });
+      }
+    });
+  });
 
 
+  app.post('/change-password', (req, res) => {
+    const { email, password } = req.body;
+  
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required.' });
+    }
+  
+    // Check if the email exists
+    const query = 'SELECT * FROM tbl_user WHERE email = ?';
+    db.query(query, [email], (err, results) => {
+      if (err) {
+        console.error('Database query error:', err);
+        return res.status(500).json({ error: 'Failed to process the request. Please try again later.' });
+      }
+  
+      if (results.length === 0) {
+        // Email not found in the database
+        return res.status(404).json({ error: 'Email not found.' });
+      }
+  
+      // Update the password if the email exists
+      const updateQuery = 'UPDATE tbl_user SET password = ? WHERE email = ?';
+      db.query(updateQuery, [password, email], (updateErr) => {
+        if (updateErr) {
+          console.error('Failed to update password:', updateErr);
+          return res.status(500).json({ error: 'Failed to update password. Please try again later.' });
+        }
+  
+        res.status(200).json({ message: 'Password updated successfully.' });
+      });
+    });
+  });
+  
+
+
+  app.get('/api/payment-method-stats', (req, res) => {
+    const query = `
+      SELECT payment_method, COUNT(*) AS total_sales
+      FROM tbl_order
+      GROUP BY payment_method
+      ORDER BY total_sales DESC;
+    `;
+  
+    db.query(query, (err, results) => {
+      if (err) {
+        return res.status(500).json({ error: 'Database query failed' });
+      }
+  
+      const mostPreferred = results.length > 0 ? results[0] : null;
+      res.json({ data: results, mostPreferred });
+    });
+  });
+
+
+
+  // Fetch order details by ID
+app.get('/api/order/:id', (req, res) => {
+    const orderId = req.params.id;
+  
+    // Query to get order details along with user details
+    const query = `
+      SELECT 
+        o.id AS order_id, o.created_at, o.product_name, o.product_quantity, 
+        o.total_price, o.payment_method, o.shipping_fee, 
+        u.email, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.address
+      FROM 
+        tbl_order o
+      JOIN 
+        tbl_user u ON o.user_id = u.id
+      WHERE 
+        o.id = ?;
+    `;
+  
+    db.query(query, [orderId], (err, results) => {
+      if (err) {
+        console.error('Error fetching order details:', err);
+        res.status(500).json({ error: 'Failed to fetch order details' });
+      } else if (results.length === 0) {
+        res.status(404).json({ error: 'Order not found' });
+      } else {
+        res.status(200).json(results[0]); // Send the single order result
+      }
+    });
+  });
+
+  
+  // Fetch all orders for downloading receipts
+app.get('/api/manage_income_all', (req, res) => {
+    // Query to get all order details along with user details
+    const query = `
+      SELECT 
+        o.id AS order_id, o.created_at, o.product_name, o.product_quantity, 
+        o.total_price, o.payment_method, o.shipping_fee, 
+        u.email, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.address, o.status
+      FROM 
+        tbl_order o
+      JOIN 
+        tbl_user u ON o.user_id = u.id;
+    `;
+    
+    db.query(query, (err, results) => {
+      if (err) {
+        console.error('Error fetching all data:', err);
+        res.status(500).json({ error: 'Failed to fetch all order data' });
+      } else if (results.length === 0) {
+        res.status(404).json({ error: 'No order data found' });
+      } else {
+        res.status(200).json(results); // Send all order data
+      }
+    });
+  });
+  
+  
 
 
 

@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import '../css/landingpage.css';
-import fish1 from '../credentials/images/hero1.jpg';
-import fish2 from '../credentials/images/hero2.jpg';
-import fish3 from '../credentials/images/hero3.jpg';
-import fish4 from '../credentials/images/hero4.jpg';
+import fish1 from '../credentials/images/Japanese Koi 1 for 100 or 2 for 150.jpg';
+import fish2 from '../credentials/images/Siamese fighting fish 2 for 200.jpg';
+import fish3 from '../credentials/images/metalicblueskin150each.jpg';
+import fish4 from '../credentials/images/gold-fish.jpg';
+import fish5 from '../credentials/images/Rasbora trilineata 3 for 170.jpg';
 import client2 from '../credentials/images/petworld.jpg'
 import service1 from '../credentials/images/bullhorn.png'
 import service2 from '../credentials/images/online-store.png'
@@ -15,10 +16,11 @@ const LandingPage: React.FC = () => {
   const [slideIndex, setSlideIndex] = useState(1);
   
   const images = [
-    { src: fish1, alt: 'Betta Fish' },
-    { src: fish2, alt: 'Betta Fish' },
-    { src: fish3, alt: 'Ornamental Fish' },
-    { src: fish4, alt: 'Betta Fish' },
+    { src: fish1, alt: 'Japanese Koi' },
+    { src: fish2, alt: 'Betta Siamese' },
+    { src: fish3, alt: 'Metalic Blue skin guppy' },
+    { src: fish4, alt: 'Gold fish' },
+    { src: fish5, alt: 'Curl Corydoras' },
   ];
 
   // Handle next/previous slide controls
