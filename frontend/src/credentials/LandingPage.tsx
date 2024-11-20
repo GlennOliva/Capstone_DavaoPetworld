@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import '../css/landingpage.css';
-import fish1 from '../credentials/images/hero-bgnew1.jpg';
-import fish2 from '../credentials/images/hero-bgnew2.jpg';
-import fish3 from '../credentials/images/hero-bgnew3.jpg';
-import fish4 from '../credentials/images/hero-bgnew4.jpg';
-import fish5 from '../credentials/images/hero-bgnew5.jpg';
-import client2 from '../credentials/images/petworld.jpg'
+import fish1 from '../credentials/images/hero-bgnew1.png';
+import fish2 from '../credentials/images/hero-bgnew2.png';
+import fish3 from '../credentials/images/hero-bgnew3.png';
+import fish4 from '../credentials/images/hero-bgnew4.png';
+import fish5 from '../credentials/images/hero-bgnew5.png';
+import client2 from '../credentials/images/petworld.png'
 import service1 from '../credentials/images/bullhorn.png'
 import service2 from '../credentials/images/online-store.png'
 import service3 from '../credentials/images/magnifying-glass-and-fish.png'
