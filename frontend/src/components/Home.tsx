@@ -14,7 +14,7 @@ import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { Link } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -35,6 +35,8 @@ const Home = () =>{
     // Toggle reply input visibility for the clicked comment
     setShowReplyInput(showReplyInput?.commentId === commentId ? null : { postId, commentId });
   };
+
+  const navigate = useNavigate();
 
   const replyComment = () => {
     const userId = localStorage.getItem('user_id');
@@ -458,7 +460,10 @@ useEffect(() => {
 }, [comments]);
 
 
-
+const handleNavigation = (path: To) => {
+  navigate(path); // Navigate to the specified route
+  window.location.reload(); // Reload the page after navigation
+};
 
 
 
@@ -469,12 +474,27 @@ useEffect(() => {
     <div className="container">
     <div className="sidebar-lef1">
     <div className="imp-links">
-      <a href="/home"><img src={news} alt="News" />Latest News</a>
+       {/* Link to Home */}
+       <a
+                href="/home"
+                onClick={(e) => {
+                  e.preventDefault(); // Prevent default anchor behavior
+                  handleNavigation("/home"); // Navigate and reload
+                }}
+              >
+                <img src={news} alt="News" />
+                Latest News
+              </a>
 
-      <Link to={`/ecommerce/${userProfile?.id}`} className="link">
-        <img src={marketplace} alt="Fish Shopping" />
-        Store
-      </Link>
+              {/* Link to Store */}
+              <div
+                className="link"
+                onClick={() => handleNavigation(`/ecommerce/${userProfile?.id}`)}
+                style={{ cursor: "pointer" }}
+              >
+                <img src={marketplace} alt="Fish Shopping" />
+                Store
+              </div>
     </div>
       </div>
 
