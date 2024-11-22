@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../credentials/login.css';
 import { useNavigate } from 'react-router-dom';
+import { Alert, AlertColor, Snackbar } from '@mui/material';
 
 const Login = () => {
     const [role, setRole] = useState('user');
@@ -10,6 +11,10 @@ const Login = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const apiUrl = import.meta.env.VITE_API_URL;
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success');
+    const [, setSnackbarOpen] = useState(false);
 
 
 
@@ -29,12 +34,24 @@ const Login = () => {
                     localStorage.removeItem('user_id'); // Clear previous user ID
                     localStorage.setItem('admin_id', response.data.admin.id);
                     console.log('Admin ID:', response.data.admin.id); // Log admin ID
-                    navigate('/dashboard');
+                    setSnackbarMessage('Admin Login Successfully!');
+                    setSnackbarSeverity('success');
+                    setOpenSnackbar(true);
+            
+              setTimeout(() => {
+                      navigate('/dashboard');
+                    }, 2000); // 2 seconds delay
                 } else {
                     localStorage.removeItem('admin_id'); // Clear previous admin ID
                     localStorage.setItem('user_id', response.data.user.id);
                     console.log('User ID:', response.data.user.id); // Log user ID
-                    navigate('/home');
+                    setSnackbarMessage('User Login Successfully!');
+                    setSnackbarSeverity('success');
+                    setOpenSnackbar(true);
+            
+              setTimeout(() => {
+                      navigate('/home');
+                    }, 2000); // 2 seconds delay
                 }
             }
         } catch (error: any) { // Use 'any' to suppress the error type warning
@@ -43,12 +60,33 @@ const Login = () => {
     };
     
 
+    const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setSnackbarOpen(false);
+      };
+        
+
 
 
     return (
 
+        
 
         <div className="login-container">
+
+<Snackbar 
+    open={openSnackbar} 
+    autoHideDuration={2000}
+    onClose={() => setOpenSnackbar(false)}
+    anchorOrigin={{ vertical: 'top', horizontal: 'right' }} // Positioning
+>
+<Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }} variant='filled'>
+                    {snackbarMessage}
+                </Alert>
+</Snackbar>
+
             <div className="info">
                 <h1>Fishcom</h1>
                 <p>Connect all fish enthusiasts and vendors in the Philippines around you on Fishcom.</p>
