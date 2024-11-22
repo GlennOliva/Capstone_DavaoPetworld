@@ -14,7 +14,7 @@ import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { To, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -458,13 +458,8 @@ useEffect(() => {
 }, [comments]);
 
 
-const navigate = useNavigate();
-const handleNavigationWithDelay = (path: To) => {
-  setTimeout(() => {
-    navigate(path); // Navigate to the specified path
-    window.location.reload(); // Refresh the current page after navigation
-  }, 2000); // 2-second delay
-};
+
+
 
 
   return (
@@ -474,26 +469,12 @@ const handleNavigationWithDelay = (path: To) => {
     <div className="container">
     <div className="sidebar-lef1">
     <div className="imp-links">
-    <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault(); // Prevent default anchor behavior
-          handleNavigationWithDelay("/home");
-        }}
-      >
-        <img src={news} alt="News" />
-        Latest News
-      </a>
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault(); // Prevent default anchor behavior
-          handleNavigationWithDelay(`/ecommerce/${userProfile?.id}`);
-        }}
-      >
+      <a href="/home"><img src={news} alt="News" />Latest News</a>
+
+      <Link to={`/ecommerce/${userProfile?.id}`} className="link">
         <img src={marketplace} alt="Fish Shopping" />
         Store
-      </a>
+      </Link>
     </div>
       </div>
 
@@ -514,17 +495,17 @@ const handleNavigationWithDelay = (path: To) => {
         <div className="write-post-container">
           <div className="user-profile">
            
-{userProfile?.image ? (
-    <img
-      src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
-      alt="Profile"
-    />
-  ) : (
-    <img
-      src={profile_pic} // Fallback image if userProfile.image is not available
-      alt="Default Profile"
-    />
-  )}
+            {userProfile?.image ? (
+                <img
+                  src={`${apiUrl}uploads/${userProfile.image}`} // Use dynamic image
+                  alt="Profile"
+                />
+              ) : (
+                <img
+                  src={profile_pic} // Fallback image if userProfile.image is not available
+                  alt="Default Profile"
+                />
+              )}
             <div>
             <p style={{   fontSize: '17px',color: 'black', }}>{userProfile?.first_name + ' ' + userProfile?.last_name}</p>
             </div>
