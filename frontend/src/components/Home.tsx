@@ -14,7 +14,7 @@ import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { Link } from 'react-router-dom';
+import { Link, To, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -458,6 +458,13 @@ useEffect(() => {
 }, [comments]);
 
 
+const navigate = useNavigate();
+const handleNavigationWithDelay = (path: To) => {
+  setTimeout(() => {
+    navigate(path); // Navigate to the specified path
+    window.location.reload(); // Refresh the current page after navigation
+  }, 2000); // 2-second delay
+};
 
 
   return (
@@ -467,11 +474,26 @@ useEffect(() => {
     <div className="container">
     <div className="sidebar-lef1">
     <div className="imp-links">
-      <a href="/home"><img src={news} alt="News" />Latest News</a>
-      <Link to={`/ecommerce/${userProfile?.id}`} className="link">
+    <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault(); // Prevent default anchor behavior
+          handleNavigationWithDelay("/home");
+        }}
+      >
+        <img src={news} alt="News" />
+        Latest News
+      </a>
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault(); // Prevent default anchor behavior
+          handleNavigationWithDelay(`/ecommerce/${userProfile?.id}`);
+        }}
+      >
         <img src={marketplace} alt="Fish Shopping" />
         Store
-      </Link>
+      </a>
     </div>
       </div>
 
