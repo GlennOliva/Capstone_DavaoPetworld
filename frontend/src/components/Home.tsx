@@ -14,7 +14,7 @@ import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { Link, To, useNavigate } from 'react-router-dom';
+import { To, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
