@@ -14,7 +14,7 @@ import heart from '../images/heart.png';
 import angry from '../images/angry.png';
 import care from '../images/care.png';
 import betta from '../e-commerce/images/betta-siamese.png'
-import { To, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Alert, AlertColor, Snackbar } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
@@ -36,7 +36,7 @@ const Home = () =>{
     setShowReplyInput(showReplyInput?.commentId === commentId ? null : { postId, commentId });
   };
 
-  const navigate = useNavigate();
+  
 
   const replyComment = () => {
     const userId = localStorage.getItem('user_id');
@@ -460,10 +460,7 @@ useEffect(() => {
 }, [comments]);
 
 
-const handleNavigation = (path: To) => {
-  navigate(path); // Navigate to the specified route
-  window.location.reload(); // Reload the page after navigation
-};
+
 
 
 
@@ -474,27 +471,12 @@ const handleNavigation = (path: To) => {
     <div className="container">
     <div className="sidebar-lef1">
     <div className="imp-links">
-       {/* Link to Home */}
-       <a
-                href="/home"
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent default anchor behavior
-                  handleNavigation("/home"); // Navigate and reload
-                }}
-              >
-                <img src={news} alt="News" />
-                Latest News
-              </a>
+      <a href="/home"><img src={news} alt="News" />Latest News</a>
 
-              {/* Link to Store */}
-              <div
-                className="link"
-                onClick={() => handleNavigation(`/ecommerce/${userProfile?.id}`)}
-                style={{ cursor: "pointer" }}
-              >
-                <img src={marketplace} alt="Fish Shopping" />
-                Store
-              </div>
+      <Link to={`/ecommerce/${userProfile?.id}`} className="link">
+        <img src={marketplace} alt="Fish Shopping" />
+        Store
+      </Link>
     </div>
       </div>
 
