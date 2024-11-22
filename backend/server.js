@@ -833,7 +833,7 @@ app.get('/notifications/:user_id', (req, res) => {
     
     UNION
     
-    SELECT 'reaction' as type, r.reaction_type as content, u.first_name, u.image, NULL as created_at
+    SELECT 'reaction' as type, r.reaction_type as content, u.first_name, u.image, r.created_at
     FROM tbl_reaction r
     JOIN tbl_post p ON r.post_id = p.id
     JOIN tbl_user u ON r.user_id = u.id
