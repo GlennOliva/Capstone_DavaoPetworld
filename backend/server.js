@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const db = require('../backend/dbcon');  // Import the db connection
+const db = require('./dbcon');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
