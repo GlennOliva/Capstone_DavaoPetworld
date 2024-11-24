@@ -804,21 +804,22 @@ app.get('/no_products', (request, response) => {
 });
 
 
-//update_profile of admin
 app.put('/edit_adminprofile/:id', upload.single('image'), (request, response) => {
-    const id = request.params.id;
-    const { first_name, last_name, email, password, store_name } = request.body;
-    const image = request.file ? request.file.filename : null;
+  const id = request.params.id;
+  const { first_name, last_name, email, password, store_name } = request.body;
+  const image = request.file ? request.file.filename : null;
 
-    const sql = 'UPDATE tbl_admin SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ? image = ? WHERE id = ?';
+  const sql = 'UPDATE tbl_admin SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ?, image = ? WHERE id = ?';
 
-    db.query(sql, [first_name, last_name, email, password, store_name, image, id], (error, result) => {
-        if (error) {
-            return response.status(500).json({ error: 'Error updating admin' });
-        }
-        response.json({ message: 'Admin Successfully Updated!' });
-    });
+  db.query(sql, [first_name, last_name, email, password, store_name, image, id], (error, result) => {
+      if (error) {
+          console.error('Error updating admin:', error); // Log the error for better understanding
+          return response.status(500).json({ error: 'Error updating admin', details: error });
+      }
+      response.json({ message: 'Admin Successfully Updated!' });
+  });
 });
+
 
 
 //notificaiton
