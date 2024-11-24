@@ -90,15 +90,16 @@ const ProfileSettings = () => {
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
         setTimeout(() => {
-          navigate('/profile');
+            navigate('/profile');
+            window.location.reload();  // Reload the page after navigating to profile
         }, 2000);
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         setSnackbarMessage(error.message || 'Failed to update profile');
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
         console.log(error);  
-      });
+    });    
     }
   });
 
@@ -146,16 +147,18 @@ const ProfileSettings = () => {
     setOpenSnackbar(false);
   };
 
+  const [userProfile] = useState<{ image: string; first_name: string; last_name: string; id:number; } | null>(null);
+
 
   return (
     <div className="container">
       <div className="sidebar-lef1">
         <div className="imp-links">
           <a href="/home"><img src={news} alt="News" />Latest News</a>
-          <Link to="/ecommerce" className="link">
-            <img src={marketplace} alt="Fish Shopping" />
-            Store
-          </Link>
+          <Link to={`/ecommerce/${userProfile?.id}`} className="link">
+        <img src={marketplace} alt="Fish Shopping" />
+        Store
+      </Link>
         </div>
       </div>
 
