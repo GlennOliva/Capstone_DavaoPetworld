@@ -807,7 +807,7 @@ app.get('/no_products', (request, response) => {
 //update_profile of admin
 app.put('/edit_adminprofile/:id', upload.single('image'), (request, response) => {
     const id = request.params.id;
-    const { first_name, last_name, email, password, store_name, status } = request.body;
+    const { first_name, last_name, email, password, store_name } = request.body;
     const image = request.file ? request.file.filename : null;
 
     const sql = 'UPDATE tbl_admin SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ? image = ? WHERE id = ?';
