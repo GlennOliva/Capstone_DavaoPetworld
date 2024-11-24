@@ -188,7 +188,7 @@ const submitSharePost = (postId: number, shareDescription: string) => {
 
 
 
-const [userProfile, setUserProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
+const [userProfile, setUserProfile] = useState<{ image: string; first_name: string; last_name: string; id:number; } | null>(null);
 
 useEffect(() => {
       const userId = localStorage.getItem('user_id'); // Retrieve the admin ID from local storage
@@ -499,7 +499,8 @@ useEffect(() => {
     <div className="sidebar-lef1">
     <div className="imp-links">
     <Link to="/home" className="popup-link"><img src={news} alt="" />Latest News</Link>
-      <Link to="/ecommerce" className="link">
+  
+    <Link to={`/ecommerce/${userProfile?.id}`} className="link">
         <img src={marketplace} alt="Fish Shopping" />
         Store
       </Link>
