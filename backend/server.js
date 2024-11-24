@@ -1252,26 +1252,27 @@ app.get('/api/orders', (req, res) => {
 
 
 
-  app.get('/manage_order', (request, response) => {
-    const sql = `
-        SELECT 
-            tbl_order.id, 
-            tbl_order.product_name, 
-            tbl_order.product_quantity, 
-            tbl_order.payment_method, 
-            tbl_order.total_price, 
-            tbl_order.status,
-            tbl_order.address,
-            tbl_order.shipping_fee,
-            tbl_user.first_name, 
-            tbl_user.last_name
-        FROM tbl_order
-        JOIN tbl_user ON tbl_order.user_id = tbl_user.id`; // Assuming user_id in tbl_order and id in tbl_user
+app.get('/manage_order', (request, response) => {
+  const sql = `
+      SELECT 
+          tbl_order.id, 
+          tbl_order.product_name, 
+          tbl_order.product_quantity, 
+          tbl_order.payment_method, 
+          tbl_order.total_price, 
+          tbl_order.status,
+          tbl_order.address,
+          tbl_order.shipping_fee,
+          tbl_user.first_name, 
+          tbl_user.last_name
+      FROM tbl_order
+      JOIN tbl_user ON tbl_order.user_id = tbl_user.id
+      WHERE tbl_order.status != 'Delivered'`; // Exclude orders with status 'Delivered'
 
-    db.query(sql, (error, data) => {
-        if (error) return response.json(error);
-        return response.json(data);
-    });
+  db.query(sql, (error, data) => {
+      if (error) return response.json(error);
+      return response.json(data);
+  });
 });
 
 

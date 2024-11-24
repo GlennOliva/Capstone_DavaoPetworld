@@ -207,7 +207,7 @@ const Manage_IncomeAnalytics: React.FC = () => {
       ))
     ) : (
       <tr>
-        <td colSpan={11} style={{ textAlign: 'center' }}>No orders found</td>
+        <td colSpan={11} style={{ textAlign: 'center' }}>No Sales found</td>
       </tr>
     )}
   </tbody>
