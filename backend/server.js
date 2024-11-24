@@ -810,9 +810,9 @@ app.put('/edit_adminprofile/:id', upload.single('image'), (request, response) =>
     const { first_name, last_name, email, password, store_name, status } = request.body;
     const image = request.file ? request.file.filename : null;
 
-    const sql = 'UPDATE tbl_admin SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ?, status = ?, image = ? WHERE id = ?';
+    const sql = 'UPDATE tbl_admin SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ? image = ? WHERE id = ?';
 
-    db.query(sql, [first_name, last_name, email, password, store_name, status, image, id], (error, result) => {
+    db.query(sql, [first_name, last_name, email, password, store_name, image, id], (error, result) => {
         if (error) {
             return response.status(500).json({ error: 'Error updating admin' });
         }
