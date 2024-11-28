@@ -4,7 +4,7 @@ import '../css/manage_admin.css';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
-const Manage_Order: React.FC = () => {
+const Manage_IncomeAnalytics: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
   const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
@@ -15,10 +15,10 @@ const Manage_Order: React.FC = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch admin profile data
   useEffect(() => {
-    const adminId = localStorage.getItem('admin_id'); // Retrieve the admin ID from local storage
+    const sellerId = localStorage.getItem('seller_id'); // Retrieve the admin ID from local storage
 
-    if (adminId) {
-      fetch(`${apiUrl}admin/${adminId}`) // Adjusted endpoint to fetch by ID
+    if (sellerId) {
+      fetch(`${apiUrl}seller/${sellerId}`) // Adjusted endpoint to fetch by ID
         .then(res => {
           if (!res.ok) {
             throw new Error('Network response was not ok');
@@ -34,7 +34,7 @@ const Manage_Order: React.FC = () => {
 
   // Fetch order data
   useEffect(() => {
-    fetch(`${apiUrl}manage_order`)
+    fetch(`${apiUrl}manage_income`)
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch data');
@@ -130,7 +130,7 @@ const Manage_Order: React.FC = () => {
                     <h1 style={{ fontSize: '12px', margin: 0 }}>Welcome: {adminProfile.first_name}</h1>
                   </li>
                   <li style={{ marginBottom: '5px' }}>
-                    <Link to={`/admin_profile/${localStorage.getItem('admin_id')}`} style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
+                    <Link to={`/seller_profile/${localStorage.getItem('seller_id')}`} style={{ textDecoration: 'none', color: '#333', display: 'flex', alignItems: 'center' }}>
                       <i className='bx bxs-user-circle' style={{ marginRight: '5px' }}></i> Profile
                     </Link>
                   </li>
@@ -156,65 +156,78 @@ const Manage_Order: React.FC = () => {
         </nav>
 
         <main>
-          <h1 className="title1" style={{ marginBottom: '20px' }}>Manage Order</h1>
+          <h1 className="title1" style={{ marginBottom: '20px' }}>Manage Income Analytics</h1>
           <div className="container1" style={{ marginBottom: '20px' }}></div>
           <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Product Name</th>
-                <th>Product Quantity</th>
-                <th>Payment Method</th>
-                <th>Total Price</th>
-                <th>Address</th>
-                <th>Shipping Fee</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentOrders.length > 0 ? (
-                currentOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.first_name}</td>
-                    <td>{order.last_name}</td>
-                    <td>{order.product_name}</td>
-                    <td>{order.product_quantity}</td>
-                    <td>{order.payment_method}</td>
-                    <td>{order.total_price}</td>
-                    <td>{order.address}</td>
-                    <td>{order.shipping_fee}</td>
-                    <td data-label="Status">
-    {order.status === 'Delivered' ? (
-        <span className="status-delivered">{order.status}</span>
-    ) : order.status === 'Cancelled' ? (
-        <span className="status-cancelled">{order.status}</span>
-    ) : order.status === 'On delivery' ? (
-        <span className="status-ondelivery">{order.status}</span> // Correct class usage
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Product Name</th>
+      <th>Product Quantity</th>
+      <th>Payment Method</th>
+      <th>Total Price</th>
+      <th>Address</th>
+      <th>Shipping Fee</th>
+      <th>Status</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {currentOrders.length > 0 ? (
+      currentOrders.map((order) => (
+        <tr key={order.id}>
+          <td>{order.id}</td>
+          <td>{order.first_name}</td>
+          <td>{order.last_name}</td>
+          <td>{order.product_name}</td>
+          <td>{order.product_quantity}</td>
+          <td>{order.payment_method}</td>
+          <td>{order.total_price}</td>
+          <td>{order.address}</td>
+          <td>{order.shipping_fee}</td>
+          <td data-label="Status">
+            {order.status === 'Delivered' ? (
+              <span className="status-delivered">{order.status}</span>
+            ) : order.status === 'Cancelled' ? (
+              <span className="status-cancelled">{order.status}</span>
+            ) : order.status === 'On delivery' ? (
+              <span className="status-ondelivery">{order.status}</span> // Correct class usage
+            ) : (
+              <span className="status-pending">{order.status}</span>
+            )}
+          </td>
+          <td style={{ width: '20%' }}>
+            <Link to={`/order_receipt/${order.id}`} className="view-btn" style={{ textDecoration: 'none' }}>
+              <i className="fas fa-eye"></i>View Orders Receipt
+            </Link>
+          </td>
+        </tr>
+      ))
     ) : (
-        <span className="status-pending">{order.status}</span>
+      <tr>
+        <td colSpan={11} style={{ textAlign: 'center' }}>No Sales found</td>
+      </tr>
     )}
-</td>
-                    <td style={{ width: '15%' }}>
-                      <Link 
-                        to={`/edit_order/${order.id}`}
-                        className="edit-btn" 
-                        style={{ textDecoration: 'none' }}>
-                        <i className="bx bx-edit"></i>Edit
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={11} style={{ textAlign: 'center' }}>No orders found</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+  </tbody>
+</table>
+
+{/* Calculate and display the total revenue */}
+{currentOrders.length > 0 && (
+  <div className="revenue-summary">
+    <strong>Revenue Income Sales:</strong> ₱
+    {new Intl.NumberFormat('en-PH', { 
+      style: 'decimal', 
+      maximumFractionDigits: 2 
+    }).format(
+      currentOrders.reduce((total, order) => total + order.total_price, 0)
+    )}
+  </div>
+)}
+
+
+
 
        {/* Pagination Section */}
       <section className="pagination">
@@ -247,4 +260,4 @@ const Manage_Order: React.FC = () => {
   );
 }
 
-export default Manage_Order;
+export default Manage_IncomeAnalytics;

@@ -21,51 +21,61 @@ const Sidebar = () => {
       <ul className="side-menu">
         <li>
           <Link
-            to="/dashboard"
-            className={location.pathname === '/dashboard' ? 'active' : ''}
+            to="/seller/dashboard"
+            className={location.pathname === '/seller/dashboard' ? 'active' : ''}
           >
             <i className='bx bxs-dashboard icon'></i> Dashboard
           </Link>
         </li>
 
+
         <li>
           <Link
-            to="/manage_admin"
-            className={location.pathname === '/manage_admin' ? 'active' : ''}
+            to="/seller/manage_product"
+            className={location.pathname === '/seller/manage_product' ? 'active' : ''}
           >
-            <i className='bx bxs-user icon'></i> Manage Admin
+            <i className='bx bxs-box icon'></i> Manage Products
           </Link>
         </li>
 
         <li>
           <Link
-            to="/manage_user"
-            className={location.pathname === '/manage_user' ? 'active' : ''}
+            to="/seller/manage_category"
+            className={location.pathname === '/seller/manage_category' ? 'active' : ''}
           >
-            <i className='bx bxs-user-plus icon'></i> Manage User
+            <i className='bx bxs-category icon'></i> Manage Category
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            to="/seller/manage_order"
+            className={location.pathname === '/seller/manage_order' ? 'active' : ''}
+          >
+            <i className='bx bxs-cart icon'></i> Manage Orders
+          </Link>
+        </li>
+
+        <li>
+          <Link
+            to="/seller/manage_chat"
+            className={location.pathname === '/seller/manage_chat' ? 'active' : ''}
+          >
+            <i className='bx bxs-credit-card icon'></i> Manage Chats
+          </Link>
+        </li>
+
+
+        <li>
+          <Link
+            to="/seller/manage_income"
+            className={location.pathname === '/seller/manage_income' ? 'active' : ''}
+          >
+            <i className='bx bxs-credit-card icon'></i> Income Analytics
           </Link>
         </li>
 
         
-        <li>
-          <Link
-            to="/manage_user"
-            className={location.pathname === '/manage_seller' ? 'active' : ''}
-          >
-            <i className='bx bxs-user-plus icon'></i> Manage Seller
-          </Link>
-        </li>
-
-        <li>
-          <Link
-            to="/manage_post"
-            className={location.pathname === '/manage_post' ? 'active' : ''}
-          >
-            <i className='bx bxs-note icon'></i> Manage Post
-          </Link>
-        </li>
-
-       
 
         {/* Logout Link */}
         <li>

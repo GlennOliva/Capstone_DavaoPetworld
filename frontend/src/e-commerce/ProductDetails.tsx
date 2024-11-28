@@ -59,27 +59,27 @@ const ProductDetails = () => {
         setOpenSnackbar(true);
 
         // Delay navigation to product page
- 
         setTimeout(() => {
-          window.location.reload();
+            window.location.reload();
         }, 2000); // 2 seconds delay
     } catch (error: any) {
         // Check for specific error in response
-        if (error.response && error.response.data && error.response.data.error === 'Product is out of stock!') {
-            setSnackbarMessage('This product is out of stock!');
+        if (error.response && error.response.data && error.response.data.error === 'Sorry, insufficient stock available.') {
+            setSnackbarMessage('Sorry, insufficient stock');
         } else {
             setSnackbarMessage('Failed to add product to cart');
         }
-        
+
         setSnackbarSeverity('error');
         setOpenSnackbar(true);
-        
+
         // Optional: Delay navigation to product details if needed
         setTimeout(() => {
             navigate(`/product_details/${id}`);
         }, 2000); // 2 seconds delay
     }
 };
+
 
   
 

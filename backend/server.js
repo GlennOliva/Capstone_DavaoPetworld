@@ -50,6 +50,26 @@ app.get('/admin', (request , response) => {
 });
 
 
+
+app.get('/seller', (request , response) => {
+  const sql = "SELECT * FROM tbl_seller";
+  db.query(sql , (error, data) => {
+      if(error) return response.json(error);
+      return response.json(data);
+  });
+});
+
+app.get('/seller/:id', (request, response) => {
+  const id = request.params.id;
+  console.log("id: " + id);
+  const sql = "SELECT * FROM tbl_seller WHERE id = ?";
+  db.query(sql, [id], (error, data) => {
+      if (error) return response.json(error);
+      return response.json(data);
+  });
+});
+
+
 app.get('/admin/:id', (request, response) => {
     const id = request.params.id;
     console.log("id: " + id);
@@ -237,6 +257,40 @@ app.get('/search_users', (req, res) => {
       // Log any unexpected errors
       console.error('Error:', err);
       res.status(500).json({ message: 'Internal Server Error', error: err.message });
+    }
+  });
+
+
+  app.post('/register_seller', upload.fields([{ name: 'profile_pic' }, { name: 'valid_id' }]), (req, res) => {
+    try {
+      const { first_name, last_name, email, password, gender, terms } = req.body;
+      const profilePic = req.files['profile_pic']?.[0];
+      const validId = req.files['valid_id']?.[0];
+  
+      if (!first_name || !last_name || !email || !password || !terms) {
+        return res.status(400).json({ message: 'All required fields must be filled' });
+      }
+  
+      if (!profilePic || !validId) {
+        return res.status(400).json({ message: 'Profile picture and valid ID are required' });
+      }
+  
+      const profilePicUrl = profilePic.filename;
+      const validIdUrl = validId.filename;
+  
+      const query = 'INSERT INTO tbl_seller (first_name, last_name, email, password, gender, image, valid_id) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      const values = [first_name, last_name, email, password, gender, profilePicUrl, validIdUrl];
+  
+      db.query(query, values, (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Database error' });
+        }
+        res.status(201).json({ message: 'Seller registered successfully' });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
     }
   });
   
@@ -547,14 +601,14 @@ app.get('/reactions/:postId', (req, res) => {
 //category function
 // Add a new category
 app.post('/add_category',  upload.single('image'), (request, response) => {
-    const { category_name, admin_id } = request.body;
+    const { category_name, seller_id } = request.body;
     const image = request.file ? request.file.filename : null; // Get the filename from the uploaded file
 
     console.log('Received category_name:', category_name);
-    console.log('Received admin_id:', admin_id);
+    console.log('Received seller_id:', seller_id);
 
-    const sql = "INSERT INTO tbl_category (category_name, admin_id, image, status) VALUES (?, ?, ?, 'Active')";
-    db.query(sql, [category_name, admin_id, image], (error, result) => {
+    const sql = "INSERT INTO tbl_category (category_name, seller_id, image, status) VALUES (?, ?, ?, 'Active')";
+    db.query(sql, [category_name, seller_id, image], (error, result) => {
         if (error) {
             console.error('Error executing query:', error);
             return response.status(500).send('Error creating category');
@@ -613,12 +667,12 @@ app.put('/edit_category/:id', upload.single('image'), (request, response) => {
 
 //products function
 app.post('/add_product', upload.single('image'), (request, response) => {
-    const { admin_id, category_id, product_name, product_price, product_quantity, product_description } = request.body;
+    const { seller_id, category_id, product_name, product_price, product_quantity, product_description } = request.body;
     const image = request.file ? request.file.filename : null; // Get the filename from the uploaded file
 
-    const sql = "INSERT INTO tbl_product (admin_id, category_id, image, product_name, product_price, product_quantity, product_description, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Active')";
+    const sql = "INSERT INTO tbl_product (seller_id, category_id, image, product_name, product_price, product_quantity, product_description, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'Active')";
 
-    db.query(sql, [admin_id, category_id, image, product_name, product_price, product_quantity, product_description], (error, result) => {
+    db.query(sql, [seller_id, category_id, image, product_name, product_price, product_quantity, product_description], (error, result) => {
         if (error) {
             console.error('Error executing query:', error); // Log the error details
             return response.status(500).send('Error creating product'); // Update the error message
@@ -722,6 +776,31 @@ app.post('/admin/login', (request, response) => {
 });
 
 
+app.post('/seller/login', (request, response) => {
+  const { email, password } = request.body; // Extract email and password from the request body
+  const sql = `SELECT * FROM tbl_seller WHERE email = ?`;
+
+  db.query(sql, [email], (error, data) => {
+      if (error) return response.status(500).json({ error: 'Database error' });
+
+      // Check if seller exists
+      if (data.length === 0) {
+          return response.status(401).json({ error: 'Invalid email or password' });
+      }
+
+      const seller = data[0];
+
+      // Compare plain-text passwords
+      if (password !== seller.password) {
+          return response.status(401).json({ error: 'Invalid email or password' });
+      }
+
+      // If successful, return seller data (without password)
+      const { password: _, ...sellerData } = seller; // Exclude password from the response
+      return response.json({ message: 'Login successful', seller: sellerData });
+  });
+});
+
 
 
 
@@ -822,6 +901,29 @@ app.put('/edit_adminprofile/:id', upload.single('image'), (request, response) =>
 
 
 
+app.put('/edit_sellerprofile/:id', upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'valid_id', maxCount: 1 }
+]), (request, response) => {
+  const id = request.params.id;
+  const { first_name, last_name, email, password, store_name } = request.body;
+  const image = request.files['image'] ? request.files['image'][0].filename : null;
+  const valid_id = request.files['valid_id'] ? request.files['valid_id'][0].filename : null;
+
+  const sql = 'UPDATE tbl_seller SET first_name = ?, last_name = ?, email = ?, password = ?, store_name = ?, valid_id = ?, image = ? WHERE id = ?';
+
+  db.query(sql, [first_name, last_name, email, password, store_name, valid_id, image, id], (error, result) => {
+    if (error) {
+      console.error('Error updating seller:', error);
+      return response.status(500).json({ error: 'Error updating seller', details: error });
+    }
+    response.json({ message: 'Seller Successfully Updated!' });
+  });
+});
+
+
+
+
 //notificaiton
 app.get('/notifications/:user_id', (req, res) => {
     const userId = req.params.user_id;
@@ -887,10 +989,10 @@ app.get('/fetch_product_category/:category_id', (request, response) => {
     const sql = `
       SELECT tbl_product.*, 
              tbl_category.category_name, 
-             tbl_admin.store_name
+             tbl_seller.store_name
       FROM tbl_product
       JOIN tbl_category ON tbl_product.category_id = tbl_category.id
-      JOIN tbl_admin ON tbl_product.admin_id = tbl_admin.id  -- Join with tbl_admin
+      JOIN tbl_seller ON tbl_product.seller_id = tbl_seller.id  -- Join with tbl_admin
       WHERE tbl_product.category_id = ?;
     `;
     db.query(sql, [category_id], (error, data) => {
@@ -927,10 +1029,10 @@ app.get('/product_details/:id', (request, response) => {
     const sql = `
       SELECT tbl_product.*, 
              tbl_category.category_name, 
-             tbl_admin.store_name
+             tbl_seller.store_name
       FROM tbl_product
       JOIN tbl_category ON tbl_product.category_id = tbl_category.id
-      JOIN tbl_admin ON tbl_product.admin_id = tbl_admin.id  -- Join with tbl_admin
+      JOIN tbl_seller ON tbl_product.seller_id = tbl_seller.id  -- Join with tbl_admin
       WHERE tbl_product.id = ?;  -- Use the product ID here, not category ID
     `;
   
@@ -980,33 +1082,41 @@ ORDER BY post_month
 
 
 app.post('/addcart', (req, res) => {
-    const { product_id, user_id, quantity } = req.body;
+  const { product_id, user_id, quantity } = req.body;
+  
+  // First, check if the product is in stock
+  const checkStockQuery = 'SELECT product_quantity FROM tbl_product WHERE id = ?';
+  
+  db.query(checkStockQuery, [product_id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Failed to check product stock' });
+    }
     
-    // First, check if the product is in stock
-    const checkStockQuery = 'SELECT product_quantity FROM tbl_product WHERE id = ?';
+    // If no product found or product_quantity is 0, return error
+    if (result.length === 0) {
+      return res.status(404).json({ error: 'Product not found!' });
+    }
     
-    db.query(checkStockQuery, [product_id], (err, result) => {
+    const availableStock = result[0].product_quantity;
+
+    // Check if the requested quantity is greater than the available stock
+    if (quantity > availableStock) {
+      return res.status(400).json({ error: 'Sorry, insufficient stock available.' });
+    }
+
+    // If the product is in stock, add it to the cart
+    const addToCartQuery = 'INSERT INTO tbl_cart (product_id, user_id, quantity) VALUES (?, ?, ?)';
+    
+    db.query(addToCartQuery, [product_id, user_id, quantity], (err, result) => {
       if (err) {
-        return res.status(500).json({ error: 'Failed to check product stock' });
+        return res.status(500).json({ error: 'Failed to add to cart' });
       }
-      
-      // If no product found or product_quantity is 0, return error
-      if (result.length === 0 || result[0].product_quantity === 0) {
-        return res.status(400).json({ error: 'Product is out of stock!' });
-      }
-      
-      // If the product is in stock, add it to the cart
-      const addToCartQuery = 'INSERT INTO tbl_cart (product_id, user_id, quantity) VALUES (?, ?, ?)';
-      
-      db.query(addToCartQuery, [product_id, user_id, quantity], (err, result) => {
-        if (err) {
-          return res.status(500).json({ error: 'Failed to add to cart' });
-        }
-        res.status(200).json({ message: 'Item added to cart successfully' });
-      });
+      res.status(200).json({ message: 'Item added to cart successfully' });
     });
   });
-  
+});
+
+
 
 
   app.get('/products_cart', (req, res) => {
@@ -1017,7 +1127,7 @@ app.post('/addcart', (req, res) => {
         p.product_name,
         p.product_price,
         p.image,
-        a.store_name,
+        s.store_name,
         c.category_name,
         ca.quantity,
         ca.id,
@@ -1025,7 +1135,7 @@ app.post('/addcart', (req, res) => {
         (p.product_price * ca.quantity) AS subtotal
       FROM tbl_cart ca 
       JOIN tbl_product p ON ca.product_id = p.id
-      JOIN tbl_admin a ON p.admin_id = a.id
+      JOIN tbl_seller s ON p.seller_id = s.id
       JOIN tbl_category c ON p.category_id = c.id
       WHERE ca.user_id = ?;
     `;
@@ -1123,7 +1233,7 @@ app.get('/get_user/:id', (req, res) => {
 
 
 
-app.post('/checkout', (req, res) => {
+  app.post('/checkout', (req, res) => {
     console.log('Request body:', req.body); // Log the incoming request body
 
     const { 
@@ -1134,11 +1244,12 @@ app.post('/checkout', (req, res) => {
         total_price, 
         payment_method, 
         address, 
-        shipfee 
+        shipfee,
+        sub_total
     } = req.body;
 
     // Validate required fields
-    if (!user_id || !product_id || !product_name || !product_quantity || !total_price || !payment_method || !address || !shipfee) {
+    if (!user_id || !product_id || !product_name || !product_quantity || !total_price || !payment_method || !address || !shipfee || !sub_total) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -1153,101 +1264,150 @@ app.post('/checkout', (req, res) => {
         return res.status(400).json({ error: 'Mismatched product ID and quantity lengths' });
     }
 
-    // Insert order query
-    const query = `
-      INSERT INTO tbl_order (
-        user_id, 
-        product_id, 
-        product_name,
-        product_quantity,  
-        total_price, 
-        payment_method, 
-        address, 
-        shipping_fee, 
-        status
-      ) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    // Prepare quantities for insertion
-    const quantityToInsert = quantities.join(','); // Store as a comma-separated string
-
-    db.query(query, [
-        user_id, 
-        product_ids, 
-        product_name,
-        quantityToInsert, 
-        total_price, 
-        payment_method, 
-        address, 
-        shipfee, 
-        status
-    ], (err, result) => {
-        if (err) {
-            console.error('Error saving order:', err);
-            return res.status(500).json({ error: 'Failed to save order' });
-        }
-
-        // Deduct the product quantities from tbl_product
-        const updatePromises = product_id.map((id, index) => {
-            return new Promise((resolve, reject) => {
-                const updateQuery = `
-                    UPDATE tbl_product 
-                    SET product_quantity = product_quantity - ? 
-                    WHERE id = ?
-                `;
-
-                db.query(updateQuery, [quantities[index], id], (err, updateResult) => {
-                    if (err) {
-                        console.error(`Error updating product quantity for product ID ${id}:`, err);
-                        reject(err);
-                    } else {
-                        resolve(updateResult);
-                    }
-                });
+    // Function to get seller_id for each product
+    const getSellerIds = product_id.map(id => {
+        return new Promise((resolve, reject) => {
+            const sellerQuery = `
+                SELECT p.seller_id
+                FROM tbl_product p
+                WHERE p.id = ?
+            `;
+            db.query(sellerQuery, [id], (err, result) => {
+                if (err) {
+                    reject(`Error fetching seller ID for product ID ${id}: ${err}`);
+                }
+                if (result.length === 0) {
+                    reject(`Product with ID ${id} not found.`);
+                } else {
+                    resolve(result[0].seller_id);
+                }
             });
         });
-
-        // Execute all update promises
-        Promise.all(updatePromises)
-            .then(() => {
-                // Delete all items from tbl_cart for the user after successful order placement
-                const deleteQuery = 'DELETE FROM tbl_cart WHERE user_id = ?';
-                
-                db.query(deleteQuery, [user_id], (err) => {
-                    if (err) {
-                        console.error('Error deleting items from cart:', err);
-                        return res.status(500).json({ error: 'Failed to delete cart items' });
-                    }
-
-                    res.status(200).json({ message: 'Order placed and product quantities updated successfully, cart cleared' });
-                });
-            })
-            .catch(err => {
-                console.error('Error updating product quantities:', err);
-                res.status(500).json({ error: 'Failed to update product quantities' });
-            });
     });
+
+    // Handle multiple seller IDs concurrently
+    Promise.all(getSellerIds)
+        .then(seller_ids => {
+            if (new Set(seller_ids).size > 1) {
+                // If products belong to different sellers, decide how to proceed (split orders or handle differently)
+                return res.status(400).json({ error: 'Products belong to different sellers' });
+            }
+
+            // Now we can proceed with order insertion (assuming the seller IDs match)
+            const query = `
+                INSERT INTO tbl_order (
+                    user_id, 
+                    product_id, 
+                    product_name,
+                    product_quantity,  
+                    total_price, 
+                    payment_method, 
+                    address, 
+                    shipping_fee, 
+                    status,
+                    seller_id,
+                    sub_total
+                ) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
+            `;
+
+            const quantityToInsert = quantities.join(','); // Store as a comma-separated string
+
+            // Insert the order with seller_id (from the first seller_id, as all are assumed to be the same now)
+            db.query(query, [
+                user_id, 
+                product_ids, 
+                product_name,
+                quantityToInsert, 
+                total_price, 
+                payment_method, 
+                address, 
+                shipfee, 
+                status,
+                seller_ids[0], // Insert the seller_id (same for all products)
+                sub_total
+            ], (err, result) => {
+                if (err) {
+                    console.error('Error saving order:', err);
+                    return res.status(500).json({ error: 'Failed to save order' });
+                }
+
+                // Deduct the product quantities from tbl_product
+                const updatePromises = product_id.map((id, index) => {
+                    return new Promise((resolve, reject) => {
+                        const updateQuery = `
+                            UPDATE tbl_product 
+                            SET product_quantity = product_quantity - ? 
+                            WHERE id = ?
+                        `;
+
+                        db.query(updateQuery, [quantities[index], id], (err, updateResult) => {
+                            if (err) {
+                                console.error(`Error updating product quantity for product ID ${id}:`, err);
+                                reject(err);
+                            } else {
+                                resolve(updateResult);
+                            }
+                        });
+                    });
+                });
+
+                // Execute all update promises
+                Promise.all(updatePromises)
+                    .then(() => {
+                        // Delete all items from tbl_cart for the user after successful order placement
+                        const deleteQuery = 'DELETE FROM tbl_cart WHERE user_id = ?';
+                        
+                        db.query(deleteQuery, [user_id], (err) => {
+                            if (err) {
+                                console.error('Error deleting items from cart:', err);
+                                return res.status(500).json({ error: 'Failed to delete cart items' });
+                            }
+
+                            res.status(200).json({ message: 'Order placed and product quantities updated successfully, cart cleared' });
+                        });
+                    })
+                    .catch(err => {
+                        console.error('Error updating product quantities:', err);
+                        res.status(500).json({ error: 'Failed to update product quantities' });
+                    });
+            });
+        })
+        .catch(err => {
+            console.error('Error retrieving seller IDs:', err); // Log the error
+            res.status(500).json({ error: err });
+        });
 });
 
 
 app.get('/api/orders', (req, res) => {
-    const { user_id } = req.query;
-    let query = `
-      SELECT o.id, u.first_name, u.last_name, o.product_name, o.product_quantity, o.payment_method, o.total_price, o.status
+  const { user_id } = req.query;
+  let query = `
+      SELECT 
+          o.id, 
+          u.first_name, 
+          u.last_name, 
+          o.product_name, 
+          o.product_quantity, 
+          o.payment_method, 
+          o.total_price, 
+          o.status, 
+          o.shipping_fee, 
+          o.created_at, 
+          o.address
       FROM tbl_order AS o
       JOIN tbl_user AS u ON o.user_id = u.id
-    `;
+  `;
 
-    // Add a WHERE clause if user_id is provided
-    if (user_id) {
-        query += ` WHERE o.user_id = ?`;
-    }
+  // Add a WHERE clause if user_id is provided
+  if (user_id) {
+      query += ` WHERE o.user_id = ?`;
+  }
 
-    db.query(query, [user_id], (err, results) => {
+  db.query(query, [user_id], (err, results) => {
       if (err) throw err;
       res.json(results);
-    });
+  });
 });
 
 
@@ -1486,32 +1646,44 @@ app.post('/forgot-password', async (req, res) => {
   // Fetch order details by ID
 app.get('/api/order/:id', (req, res) => {
     const orderId = req.params.id;
-  
-    // Query to get order details along with user details
+
     const query = `
-      SELECT 
-        o.id AS order_id, o.created_at, o.product_name, o.product_quantity, 
-        o.total_price, o.payment_method, o.shipping_fee, 
-        u.email, CONCAT(u.first_name, ' ', u.last_name) AS full_name, u.address
-      FROM 
-        tbl_order o
-      JOIN 
-        tbl_user u ON o.user_id = u.id
-      WHERE 
-        o.id = ?;
-    `;
+    SELECT 
+      o.id AS order_id,
+      o.created_at,
+      o.product_name,
+      o.product_quantity,
+      o.product_id,   -- Add product_id to get the product IDs
+      o.total_price,
+      o.payment_method,
+      o.shipping_fee,
+      o.sub_total,    -- Include sub_total from the database
+      u.email,
+      CONCAT(u.first_name, ' ', u.last_name) AS full_name,
+      u.address,
+      p.product_price -- Fetch product_price from tbl_product
+    FROM 
+      tbl_order o
+    JOIN 
+      tbl_user u ON o.user_id = u.id
+    JOIN 
+      tbl_product p ON o.product_id = p.id -- Join with tbl_product based on product_id
+    WHERE 
+      o.id = ?;
+  `;
   
-    db.query(query, [orderId], (err, results) => {
+  db.query(query, [orderId], (err, results) => {
       if (err) {
-        console.error('Error fetching order details:', err);
-        res.status(500).json({ error: 'Failed to fetch order details' });
+          console.error('Error fetching order details:', err);
+          res.status(500).json({ error: 'Failed to fetch order details' });
       } else if (results.length === 0) {
-        res.status(404).json({ error: 'Order not found' });
+          res.status(404).json({ error: 'Order not found' });
       } else {
-        res.status(200).json(results[0]); // Send the single order result
+          res.status(200).json(results[0]); // Send the single order result
       }
-    });
   });
+  
+});
 
   
   // Fetch all orders for downloading receipts

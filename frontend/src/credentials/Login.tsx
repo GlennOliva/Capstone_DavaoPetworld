@@ -22,35 +22,53 @@ const Login = () => {
         e.preventDefault(); // Prevent form from reloading the page
     
         try {
-            const url = role === 'admin'
-            ? `${apiUrl}admin/login`
-            : `${apiUrl}user/login`;
-            const response = await axios.post(url, { email, password });
+            // Determine the API endpoint based on the role
+            const url = 
+                role === 'admin'
+                    ? `${apiUrl}admin/login`
+                    : role === 'seller'
+                    ? `${apiUrl}seller/login`
+                    : `${apiUrl}user/login`;
     
+            const response = await axios.post(url, { email, password });
     
             // If login is successful, redirect based on the role
             if (response.status === 200) {
                 if (role === 'admin') {
                     localStorage.removeItem('user_id'); // Clear previous user ID
+                    localStorage.removeItem('seller_id'); // Clear previous seller ID
                     localStorage.setItem('admin_id', response.data.admin.id);
                     console.log('Admin ID:', response.data.admin.id); // Log admin ID
                     setSnackbarMessage('Admin Login Successfully!');
                     setSnackbarSeverity('success');
                     setOpenSnackbar(true);
-            
-              setTimeout(() => {
-                      navigate('/dashboard');
+    
+                    setTimeout(() => {
+                        navigate('/admin/dashboard');
+                    }, 2000); // 2 seconds delay
+                } else if (role === 'seller') {
+                    localStorage.removeItem('user_id'); // Clear previous user ID
+                    localStorage.removeItem('admin_id'); // Clear previous admin ID
+                    localStorage.setItem('seller_id', response.data.seller.id);
+                    console.log('Seller ID:', response.data.seller.id); // Log seller ID
+                    setSnackbarMessage('Seller Login Successfully!');
+                    setSnackbarSeverity('success');
+                    setOpenSnackbar(true);
+    
+                    setTimeout(() => {
+                        navigate('/seller/dashboard');
                     }, 2000); // 2 seconds delay
                 } else {
                     localStorage.removeItem('admin_id'); // Clear previous admin ID
+                    localStorage.removeItem('seller_id'); // Clear previous seller ID
                     localStorage.setItem('user_id', response.data.user.id);
                     console.log('User ID:', response.data.user.id); // Log user ID
                     setSnackbarMessage('User Login Successfully!');
                     setSnackbarSeverity('success');
                     setOpenSnackbar(true);
-            
-              setTimeout(() => {
-                      navigate('/home');
+    
+                    setTimeout(() => {
+                        navigate('/home');
                     }, 2000); // 2 seconds delay
                 }
             }
@@ -100,8 +118,9 @@ const Login = () => {
                     
                     <label htmlFor="role">Select Role:</label>
                     <select id="role" name="role" value={role} onChange={(e) => setRole(e.target.value)}>
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                    <option value="seller">Seller</option>
                     </select>
     
                     <label htmlFor="email">Enter your email</label>

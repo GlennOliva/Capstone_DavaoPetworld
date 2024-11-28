@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../css/OrderReceipt.css'; // Import the CSS for 
-import davaopetworldlogo from  '../images/davao-petworld-logo.png'
+import '../css/OrderReceipt.css';
+import davaopetworldlogo from '../images/davao-petworld-logo.png';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,27 +8,30 @@ interface OrderDetails {
     order_id: number;
     created_at: string;
     product_name: string;
-    product_quantity: number;
+    product_quantity: string;
+    product_id: string; // Assuming product_id is part of the order details
     total_price: number;
     payment_method: string;
     shipping_fee: number;
     email: string;
     full_name: string;
     address: string;
+    product_price: number;
+    sub_total: number;
 }
 
 const OrderReceipt: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); // Get order ID from URL
+    const { id } = useParams<{ id: string }>();
     const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
     const [loading, setLoading] = useState(true);
     const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
-        // Fetch order details by ID
         axios
             .get(`${apiUrl}api/order/${id}`)
             .then((response) => {
-                setOrderDetails(response.data);
+                const fetchedOrderDetails = response.data;
+                setOrderDetails(fetchedOrderDetails);
                 setLoading(false);
             })
             .catch((error) => {
@@ -45,7 +48,23 @@ const OrderReceipt: React.FC = () => {
         return <div>No order details found.</div>;
     }
 
-    const { created_at, product_name, product_quantity, total_price, payment_method, shipping_fee, email, full_name, address } = orderDetails;
+    const {
+        created_at,
+        product_name,
+        product_quantity,
+        total_price,
+        payment_method,
+        shipping_fee,
+        email,
+        full_name,
+        address,
+        sub_total,
+        product_price
+    } = orderDetails;
+
+    // Split product names and quantities into arrays
+    const productNames = product_name.split(',');
+    const productQuantities = product_quantity.split(',').map((qty) => parseInt(qty.trim()));
 
     return (
         <div className="receipt-container">
@@ -72,7 +91,6 @@ const OrderReceipt: React.FC = () => {
                 </div>
             </header>
             <hr />
-
             <section className="customer-details">
                 <h3>CUSTOMER DETAILS</h3>
                 <p><strong>Full Name:</strong> {full_name}</p>
@@ -83,30 +101,61 @@ const OrderReceipt: React.FC = () => {
             <section className="order-details1">
                 <h3>ORDER DETAILS</h3>
                 <div className="receipt-table">
-    <table>
-        <thead>
-            <tr>
-                <th>Product Name</th>
-                <th>Quantity</th>
-                <th>Shipping Fee</th>
-                <th>Total Price</th>
-                <th>Payment Method</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{product_name}</td>
-                <td>{product_quantity}</td>
-                <td>₱{shipping_fee.toFixed(2)}</td>
-                <td>₱{new Intl.NumberFormat('en-PH', { minimumFractionDigits: 2 }).format(total_price)}</td>
-                <td>{payment_method}</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {productNames.map((name, index) => {
+                                const quantity = productQuantities[index];
+                                const totalProductPrice = product_price * quantity;
 
+                                return (
+                                    <tr key={index}>
+                                        <td>{name.trim()}</td>
+                                        <td>{quantity}</td>
+                                        <td>₱{product_price.toFixed(2)}</td>
+                                    </tr>
+                                );
+                            })}
+
+                            {/* Payment method Row */}
+                            <tr>
+                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Payment Method</strong></td>
+                                <td colSpan={1}>
+                                    <strong>{payment_method.trim()}</strong>
+                                </td>
+                            </tr>
+
+                            {/* Subtotal Row */}
+                            <tr>
+                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Subtotal</strong></td>
+                                <td colSpan={1}>
+                                    <strong>₱{sub_total ? sub_total.toFixed(2) : '0.00'}</strong>
+                                </td>
+                            </tr>
+
+                            {/* Optional: If you want to show the shipping fee separately */}
+                            <tr>
+                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Shipping Fee</strong></td>
+                                <td colSpan={1}><strong>₱{shipping_fee.toFixed(2)}</strong></td>
+                            </tr>
+
+                            {/* Adding Total Row */}
+                            <tr>
+                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Total</strong></td>
+                                <td colSpan={1}>
+                                    <strong>₱{total_price.toFixed(2)}</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </section>
-
             <footer>
                 <button className="print-button" onClick={() => window.print()}>
                     Print Receipt

@@ -9,7 +9,7 @@ import { Bar } from 'react-chartjs-2';
 import { Link } from 'react-router-dom';
 import Sidebar from '../admin/Sidebar'
 import axios from 'axios';
-import PaymentMethodChart from './PaymentMethodChart';
+
 
 // Register Chart.js components
 ChartJS.register(
@@ -482,7 +482,7 @@ useEffect(() => {
 
           <div className="content-data">
       <div className="chart">
-        <PaymentMethodChart />
+      
       </div>
     </div>
 

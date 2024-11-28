@@ -104,7 +104,8 @@ const [formData, setFormData] = useState(() => {
       totalprice: totalPrice.toFixed(2),
       paymentmethod: '',
       address: '',
-      shipfee: 0
+      shipfee: 0,
+      sub_total: totalPrice.toFixed(2),
   };
 });
 
@@ -172,7 +173,8 @@ useEffect(() => {
       total_price: totalPriceWithShipping, // Use the updated total price here
       payment_method: formData.paymentmethod,
       address: formData.address,
-      shipfee: shippingFee
+      shipfee: shippingFee,
+      sub_total: formData.sub_total
     };
   
     try {

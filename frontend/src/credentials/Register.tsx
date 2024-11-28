@@ -346,7 +346,11 @@ const handleSnackbarClose = (_event?: React.SyntheticEvent | Event, reason?: str
           <button type="submit" className="login-btn">
             REGISTER
           </button>
+
+          <hr style={{ width: '100%', margin: '7px auto', border: '1px solid #000000' }} />
+          <button type="button" className="create-account-btn" onClick={() => navigate('/seller_register')}>Seller Register</button>
         </form>
+        
       </div>
     </div>
   );

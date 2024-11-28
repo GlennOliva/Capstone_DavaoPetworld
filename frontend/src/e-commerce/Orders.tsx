@@ -25,12 +25,18 @@ const Orders: React.FC = () => {
     const fetchOrders = async () => {
       try {
         const response = await fetch(`${apiUrl}api/orders?user_id=${userId}`);
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
         setOrders(data);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
     };
+    
 
     fetchOrders();
   }, [userId]);

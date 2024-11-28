@@ -17,7 +17,7 @@ import ProfileSettings from './components/Profile_settings'
 import Friends from './components/Friends'
 import Profile from './components/Profile'
 import Orders from './e-commerce/Orders'
-import Dashboard from './admin/Dashboard'
+import Dashboard from './seller/Dashboard'
 import Manage_Admin from './admin/Manage_Admin'
 import Add_Admin from './admin/Add_Admin'
 import Edit_Admin from './admin/Edit_Admin'
@@ -25,15 +25,15 @@ import Manage_User from './admin/Manage_User'
 import Manage_Seller from './admin/Manage_Seller'
 import Manage_Post from './admin/Manage_Post'
 import Admin_Profile from './admin/Admin_Profile'
-import Manage_Product from './admin/Manage_Product'
-import Add_Product from './admin/Add_Product'
-import Edit_Product from './admin/Edit_Product'
-import Manage_Category from './admin/Manage_Category'
-import Add_Category from './admin/Add_Category'
-import Edit_Category from './admin/Edit_Category'
+import Manage_Product from './seller/Manage_Product'
+import Add_Product from './seller/Add_Product'
+import Edit_Product from './seller/Edit_Product'
+import Manage_Category from './seller/Manage_Category'
+import Add_Category from './seller/Add_Category'
+import Edit_Category from './seller/Edit_Category'
 import { Seller_Register } from './credentials/Seller_Register'
-import Manage_Order from './admin/Manage_Order'
-import Edit_Order from './admin/Edit_Order'
+import Manage_Order from './seller/Manage_Order'
+import Edit_Order from './seller/Edit_Order'
 import TermsCondition from './credentials/TermsCondition'
 import UserProfile from './components/UserProfile'
 import LandingPage from './credentials/LandingPage'
@@ -42,8 +42,11 @@ import Category from './e-commerce/Category'
 import Checkout from './e-commerce/Checkout'
 import ForgotPass from './credentials/ForgotPass'
 import ChangePassword from './credentials/ChangePassword'
-import Manage_IncomeAnalytics from './admin/Manage_IncomeAnalytics'
+import Manage_IncomeAnalytics from './seller/Manage_IncomeAnalytics'
 import OrderReceipt from './e-commerce/OrderReceipt'
+import Manage_Chat from './seller/Manage_Chat'
+import AdminDashboard from './admin/Dashboard'
+import Seller_Profile from './seller/Seller_Profile'
 
 
 
@@ -250,7 +253,7 @@ const App = () => {
         }/>
 
 
-<Route path='/manage_income' element={
+<Route path='/seller/manage_income' element={
           <>
           <Manage_IncomeAnalytics/>
           </>
@@ -277,6 +280,12 @@ const App = () => {
           </>
         }/>
 
+<Route path='/seller_profile/:id' element={
+          <>
+          <Seller_Profile/>
+          </>
+        }/>
+
 
         <Route path='/termscondition' element={
           <>
@@ -288,37 +297,37 @@ const App = () => {
 
 
 
-<Route path='/manage_product' element={
+<Route path='/seller/manage_product' element={
           <>
           <Manage_Product/>
           </>
         }/>
 
-<Route path='/add_product' element={
+<Route path='/seller/add_product' element={
           <>
           <Add_Product/>
           </>
         }/>
 
-<Route path='/edit_product/:id' element={
+<Route path='/seller/edit_product/:id' element={
           <>
           <Edit_Product/>
           </>
         }/>
 
-<Route path='/manage_category' element={
+<Route path='/seller/manage_category' element={
           <>
           <Manage_Category/>
           </>
         }/>
 
-<Route path='/add_category' element={
+<Route path='/seller/add_category' element={
           <>
           <Add_Category/>
           </>
         }/>
 
-<Route path='/edit_category/:id' element={
+<Route path='/seller/edit_category/:id' element={
           <>
           <Edit_Category/>
           </>
@@ -332,7 +341,7 @@ const App = () => {
         }/>
 
 
-<Route path='/manage_order' element={
+<Route path='/seller/manage_order' element={
           <>
           <Manage_Order/>
           </>
@@ -340,13 +349,32 @@ const App = () => {
 
 
 
-<Route path='/edit_order/:id' element={
+<Route path='/seller/edit_order/:id' element={
           <>
           <Edit_Order/>
           </>
         }/>
 
 
+<Route path='/seller/manage_chat' element={
+          <>
+          <Manage_Chat/>
+          </>
+        }/>
+
+
+<Route path='/seller/dashboard' element={
+          <>
+          <Dashboard/>
+          </>
+        }/>
+
+
+<Route path='/admin/dashboard' element={
+          <>
+          <AdminDashboard/>
+          </>
+        }/>
 
       </Routes>
     </div>

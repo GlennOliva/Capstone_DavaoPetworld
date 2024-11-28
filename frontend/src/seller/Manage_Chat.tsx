@@ -4,14 +4,11 @@ import '../css/manage_admin.css';
 import { Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
-const Manage_Order: React.FC = () => {
+const Manage_Chat: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
   const [menuDropdownVisible, setMenuDropdownVisible] = useState<Record<string, boolean>>({});
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
-  const [data, setData] = useState<Order[]>([]); // Use Order interface here
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const itemsPerPage = 5; // Set how many items per page you want
   const apiUrl = import.meta.env.VITE_API_URL;
   // Fetch admin profile data
   useEffect(() => {
@@ -32,33 +29,7 @@ const Manage_Order: React.FC = () => {
     }
   }, []);
 
-  // Fetch order data
-  useEffect(() => {
-    fetch(`${apiUrl}manage_order`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log('Fetched data:', data); // Check the data structure
-        setData(data); // Set the data with user information
-      })
-      .catch((err) => console.error('Error fetching data:', err));
-  }, []);
-
-  // Pagination Logic
-  const totalPages = Math.ceil(data.length / itemsPerPage); // Calculate total pages
-  const indexOfLastOrder = currentPage * itemsPerPage; // Last order index for current page
-  const indexOfFirstOrder = indexOfLastOrder - itemsPerPage; // First order index for current page
-  const currentOrders = data.slice(indexOfFirstOrder, indexOfLastOrder); // Current orders to display
-
-  // Handle page click
-  const handlePageClick = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-  };
-
+ 
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -79,19 +50,7 @@ const Manage_Order: React.FC = () => {
     };
   }, [profileDropdownVisible, menuDropdownVisible]);
 
-  interface Order {
-    id: number;
-    first_name: string;
-    last_name: string;
-    product_name: string;
-    product_quantity: number; // Assuming product quantity is a number
-    payment_method: string;
-    total_price: number; // Assuming total price is a number
-    address: string;
-    shipping_fee: number; // Assuming shipping fee is a number
-    status: string;
-  }
-
+ 
   return (
     <div>
       <section id="sidebar" className={sidebarHidden ? 'hide' : ''}>
@@ -156,90 +115,14 @@ const Manage_Order: React.FC = () => {
         </nav>
 
         <main>
-          <h1 className="title1" style={{ marginBottom: '20px' }}>Manage Order</h1>
+          <h1 className="title1" style={{ marginBottom: '20px' }}>Manage Chat</h1>
           <div className="container1" style={{ marginBottom: '20px' }}></div>
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Product Name</th>
-                <th>Product Quantity</th>
-                <th>Payment Method</th>
-                <th>Total Price</th>
-                <th>Address</th>
-                <th>Shipping Fee</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentOrders.length > 0 ? (
-                currentOrders.map((order) => (
-                  <tr key={order.id}>
-                    <td>{order.id}</td>
-                    <td>{order.first_name}</td>
-                    <td>{order.last_name}</td>
-                    <td>{order.product_name}</td>
-                    <td>{order.product_quantity}</td>
-                    <td>{order.payment_method}</td>
-                    <td>{order.total_price}</td>
-                    <td>{order.address}</td>
-                    <td>{order.shipping_fee}</td>
-                    <td data-label="Status">
-    {order.status === 'Delivered' ? (
-        <span className="status-delivered">{order.status}</span>
-    ) : order.status === 'Cancelled' ? (
-        <span className="status-cancelled">{order.status}</span>
-    ) : order.status === 'On delivery' ? (
-        <span className="status-ondelivery">{order.status}</span> // Correct class usage
-    ) : (
-        <span className="status-pending">{order.status}</span>
-    )}
-</td>
-                    <td style={{ width: '15%' }}>
-                      <Link 
-                        to={`/seller/edit_order/${order.id}`}
-                        className="edit-btn" 
-                        style={{ textDecoration: 'none' }}>
-                        <i className="bx bx-edit"></i>Edit
-                      </Link>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={11} style={{ textAlign: 'center' }}>No orders found</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        
 
-       {/* Pagination Section */}
-      <section className="pagination">
-        <div className="container1">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <span
-              key={index + 1}
-              onClick={() => handlePageClick(index + 1)}
-              style={{
-                cursor: 'pointer',
-                margin: '0 5px',
-                fontWeight: currentPage === index + 1 ? 'bold' : 'normal',
-                textDecoration: currentPage === index + 1 ? 'underline' : 'none',
-              }}
-            >
-              {index + 1}
-            </span>
-          ))}
-          {currentPage < totalPages && (
-            <span onClick={() => setCurrentPage(currentPage + 1)} style={{ cursor: 'pointer' }}>
-              <i className="bx bx-right-arrow-alt"></i>
-            </span>
-          )}
-        </div>
-      </section>
+
+
+
+     
           
         </main>
       </section>
@@ -247,4 +130,4 @@ const Manage_Order: React.FC = () => {
   );
 }
 
-export default Manage_Order;
+export default Manage_Chat;
