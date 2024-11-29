@@ -112,7 +112,6 @@ const OrderReceipt: React.FC = () => {
                         <tbody>
                             {productNames.map((name, index) => {
                                 const quantity = productQuantities[index];
-                                const totalProductPrice = product_price * quantity;
 
                                 return (
                                     <tr key={index}>

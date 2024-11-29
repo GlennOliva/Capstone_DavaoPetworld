@@ -90,6 +90,10 @@ const Navbar: React.FC = () => {
             <li className="nav-item">
               <Link to="/orders" className="nav-link">Orders</Link>
             </li>
+
+            <li className="nav-item">
+              <Link to="/chat" className="nav-link">Chat Support</Link>
+            </li>
           </div>
 
           <div className="icons d-flex">

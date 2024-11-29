@@ -1,0 +1,143 @@
+/* Add these styles in manage_seller_chat.css or a new CSS file */
+
+/* General layout */
+#seller-chat {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
+/* Customers List Sidebar */
+#seller-chat-sidebar {
+    width: 30%;
+    background-color: #1876F2;
+    padding: 15px;
+    overflow-y: auto;
+    border-radius: 12px;
+}
+
+#seller-chat-sidebar h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.seller-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #fff;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.seller-item:hover {
+    background-color: #e0e0e0;
+}
+
+.seller-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.seller-item span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Chat Section */
+#seller-chat-section {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #1876F2;
+    color: white;
+    padding: 20px;
+    margin-left: 1%;
+    border-radius: 12px;
+}
+
+#seller-chat-header {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#seller-chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.seller-message {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.seller-message.sent {
+    justify-content: flex-end;
+
+}
+
+.seller-message.received {
+    justify-content: flex-start;
+
+}
+
+.seller-message-bubble {
+    max-width: 40%;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: white;
+    color: black;
+    margin: 0 10px;
+}
+
+.seller-message-time {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+#seller-chat-input {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#seller-chat-input input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 14px;
+}
+
+#seller-chat-input button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 20%;
+
+}
+
+#seller-chat-input button:hover {
+    background-color: #0056b3;
+}
+
+.typing-indicator {
+    font-size: 14px;
+    color: #999;
+    font-style: italic;
+    margin-top: 10px;
+  }
+  

@@ -47,6 +47,7 @@ import OrderReceipt from './e-commerce/OrderReceipt'
 import Manage_Chat from './seller/Manage_Chat'
 import AdminDashboard from './admin/Dashboard'
 import Seller_Profile from './seller/Seller_Profile'
+import Chat from './e-commerce/Chat'
 
 
 
@@ -174,6 +175,14 @@ const App = () => {
           <>
             <EcommerceNavbar />
             <Orders/>
+            <EcommerceFooter/>
+          </>
+        } />
+
+<Route path="/chat" element={
+          <>
+            <EcommerceNavbar />
+            <Chat/>
             <EcommerceFooter/>
           </>
         } />

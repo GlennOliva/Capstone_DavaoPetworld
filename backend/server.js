@@ -5,9 +5,54 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
 const { request } = require('http');
-const app = express();
 const nodemailer = require('nodemailer');
+const http = require('http');
+const socketIo = require('socket.io');
+const app = express();
 
+
+// Enable CORS for all origins or restrict it to specific origin(s)
+app.use(cors({
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+  methods: ['GET', 'POST'],
+  credentials: true, // Allow cookies if needed
+}));
+
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:5173', // Allow your frontend origin
+    methods: ['GET', 'POST'],
+  },
+});
+
+io.on('connection', (socket) => {
+  console.log('A client connected');
+
+  // Handle joining a room
+  socket.on('joinRoom', ({ roomId }) => {
+    socket.join(roomId);
+    console.log(`Client joined room: ${roomId}`);
+  });
+
+  // Handle incoming messages
+  socket.on('message', (message) => {
+    console.log('Received message:', message);
+
+    // Broadcast the message to the specific room
+    io.to(message.roomId).emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('A client disconnected');
+  });
+});
+
+
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 
 
