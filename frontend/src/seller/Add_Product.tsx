@@ -85,18 +85,18 @@ const Add_Product: React.FC = () => {
   ]);
 
   // Define species types
-  const SPECIES_TYPE = {
-    'Betta fish': [
-      'Betaa raja', 'Betta Bellica', 'Betta Brownorum', 'Betta Ocellata', 'Betta coccina',
-      'Betta enisae', 'Betta imbellis', 'Betta mahachaiensis', 'Betta persephone', 'Betta picta',
-      'Betta smaragdina', 'Betta spilotgena', 'Betta splendens'
-    ],
-    'Ornamental fish': [
-      'Angelfish', 'Bluegill Sunfish', 'Cherry Barb', 'Clarias batrachus', 'Clown loach',
-      'Glosssogobious aurues', 'Guppy', 'Molly', 'Neon Tetra', 'Panda Corydoras', 'Sinarapan',
-      'Swordtail', 'Zebra Danio', 'Zebra pleco', 'Goldfish'
-    ]
-  };
+  // const SPECIES_TYPE = {
+  //   'Betta fish': [
+  //     'Betaa raja', 'Betta Bellica', 'Betta Brownorum', 'Betta Ocellata', 'Betta coccina',
+  //     'Betta enisae', 'Betta imbellis', 'Betta mahachaiensis', 'Betta persephone', 'Betta picta',
+  //     'Betta smaragdina', 'Betta spilotgena', 'Betta splendens'
+  //   ],
+  //   'Ornamental fish': [
+  //     'Angelfish', 'Bluegill Sunfish', 'Cherry Barb', 'Clarias batrachus', 'Clown loach',
+  //     'Glosssogobious aurues', 'Guppy', 'Molly', 'Neon Tetra', 'Panda Corydoras', 'Sinarapan',
+  //     'Swordtail', 'Zebra Danio', 'Zebra pleco', 'Goldfish'
+  //   ]
+  // };
 
   // Validation schema with Yup
   const validationSchema = Yup.object({
@@ -108,7 +108,7 @@ const Add_Product: React.FC = () => {
     image: Yup.mixed().required('Product Image is required'),
   });
 
-  const handleSubmit = async (values: any, { setSubmitting, setFieldValue }: any) => {
+  const handleSubmit = async (values: any, { setSubmitting }: any) => {
     const formData = new FormData();
 
     const sellerId = localStorage.getItem('seller_id') || '1'; // Default to '1' if not found
