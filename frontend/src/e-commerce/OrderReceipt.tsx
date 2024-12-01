@@ -18,6 +18,7 @@ interface OrderDetails {
     address: string;
     product_price: number;
     sub_total: number;
+    transaction_id: string;
 }
 
 const OrderReceipt: React.FC = () => {
@@ -59,7 +60,8 @@ const OrderReceipt: React.FC = () => {
         full_name,
         address,
         sub_total,
-        product_price
+        product_price,
+        transaction_id
     } = orderDetails;
 
     // Split product names and quantities into arrays
@@ -87,7 +89,7 @@ const OrderReceipt: React.FC = () => {
                 <hr />
                 <div className="order-info">
                     <p><strong>DATE:</strong> {new Date(created_at).toLocaleDateString()}</p>
-                    <p><strong>Order #:</strong> {id}</p>
+                    <p><strong>Transaction #:</strong> {transaction_id}</p>
                 </div>
             </header>
             <hr />
@@ -112,12 +114,13 @@ const OrderReceipt: React.FC = () => {
                         <tbody>
                             {productNames.map((name, index) => {
                                 const quantity = productQuantities[index];
+                                const price_quantity = (product_price * quantity).toFixed(2);
 
                                 return (
                                     <tr key={index}>
                                         <td>{name.trim()}</td>
                                         <td>{quantity}</td>
-                                        <td>₱{product_price.toFixed(2)}</td>
+                                        <td>₱{price_quantity}</td>
                                     </tr>
                                 );
                             })}

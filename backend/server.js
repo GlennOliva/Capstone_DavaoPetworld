@@ -13,18 +13,23 @@ const app = express();
 
 // Enable CORS for all origins or restrict it to specific origin(s)
 app.use(cors({
-  origin: 'http://localhost:5173', // Replace with your frontend URL
-  methods: ['GET', 'POST'],
+  origin: 'http://localhost:5173', // Replace with your frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Include PUT, DELETE, and OPTIONS
   credentials: true, // Allow cookies if needed
 }));
+
 
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:5173', // Allow your frontend origin
-    methods: ['GET', 'POST'],
+      origin: 'http://localhost:5173', // Allow your frontend origin
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Include PUT and DELETE
   },
 });
+
+app.options('*', cors()); // Respond to all preflight requests
+
+
 
 io.on('connection', (socket) => {
   console.log('A client connected');
@@ -367,6 +372,17 @@ app.delete('/post/:id', (request, response) => {
         }
         response.send('Post Successfully Deleted!');
     });
+});
+
+app.delete('/seller/:id', (request, response) => {
+  const id = request.params.id;
+  const sql = 'DELETE FROM tbl_seller WHERE id = ?';
+  db.query(sql, [id], (error, result) => {
+      if (error) {
+          return response.status(500).send('Error Deleting Seller');
+      }
+      response.send('Seller Successfully Deleted!');
+  });
 });
 
 
@@ -887,45 +903,143 @@ app.get('/no_user', (request , response) => {
     });
 });
 
-// Backend API to count products
-app.get('/no_product', (request , response) => {
-    const sql = "SELECT COUNT(*) AS product_count FROM tbl_product";
-    db.query(sql , (error, data) => {
-        if(error) return response.json(error);
-        return response.json(data[0]);  // Return the count of products
-    });
+
+//counts of users, products , orders , categories
+// Backend API to count users
+app.get('/no_seller', (request , response) => {
+  const sql = "SELECT COUNT(*) AS seller_count FROM tbl_seller";
+  db.query(sql , (error, data) => {
+      if(error) return response.json(error);
+      return response.json(data[0]);  // Return the count of users
+  });
 });
 
+
+
 // Backend API to count orders
-app.get('/no_order', (request , response) => {
-    const sql = "SELECT COUNT(*) AS order_count FROM tbl_order";
+app.get('/no_post', (request , response) => {
+    const sql = "SELECT COUNT(*) AS post_count FROM tbl_post";
     db.query(sql , (error, data) => {
         if(error) return response.json(error);
         return response.json(data[0]);  // Return the count of orders
     });
 });
 
-// Backend API to count categories
-app.get('/no_category', (request , response) => {
-    const sql = "SELECT COUNT(*) AS category_count FROM tbl_category";
-    db.query(sql , (error, data) => {
-        if(error) return response.json(error);
-        return response.json(data[0]);  // Return the count of categories
-    });
+
+app.get('/no_order', (request, response) => {
+  const { seller_id } = request.query;
+
+  if (!seller_id) {
+    return response.status(400).json({ error: "Seller ID is required" });
+  }
+
+  const sql = "SELECT COUNT(*) AS order_count FROM tbl_order WHERE seller_id = ?";
+  db.query(sql, [seller_id], (error, data) => {
+    if (error) {
+      return response.status(500).json({ error: "Database query error", details: error });
+    }
+    return response.json(data[0]);
+  });
 });
 
-app.get('/no_products', (request, response) => {
-    const sql = `
-      SELECT c.category_name, COUNT(p.id) AS count
-      FROM tbl_product p
-      JOIN tbl_category c ON p.category_id = c.id
-      GROUP BY c.category_name;
-    `;
-    db.query(sql, (error, data) => {
-        if (error) return response.json(error);
-        return response.json(data);  // Return the counts of each product category
-    });
+
+app.get('/no_category', (request, response) => {
+  const { seller_id } = request.query;
+
+  if (!seller_id) {
+    return response.status(400).json({ error: "Seller ID is required" });
+  }
+
+  const sql = "SELECT COUNT(*) AS category_count FROM tbl_category WHERE seller_id = ?";
+  db.query(sql, [seller_id], (error, data) => {
+    if (error) {
+      return response.status(500).json({ error: "Database query error", details: error });
+    }
+    return response.json(data[0]);
+  });
 });
+
+
+
+app.get('/no_product', (request, response) => {
+  const { seller_id } = request.query; // Extract seller_id from the query parameters
+
+  if (!seller_id) {
+    return response.status(400).json({ error: "Seller ID is required" });
+  }
+
+  const sql = "SELECT COUNT(*) AS product_count FROM tbl_product WHERE seller_id = ?";
+  db.query(sql, [seller_id], (error, data) => {
+    if (error) {
+      return response.status(500).json({ error: "Database query error", details: error });
+    }
+    return response.json(data[0]); // Return the count of products for the seller
+  });
+});
+
+
+app.get('/no_seller_user', (request, response) => {
+  const sql = `
+    SELECT 'Users' AS type, COUNT(*) AS count FROM tbl_user
+    UNION ALL
+    SELECT 'Sellers' AS type, COUNT(*) AS count FROM tbl_seller;
+  `;
+
+  db.query(sql, (error, results) => {
+    if (error) {
+      console.error('Error fetching user and seller counts:', error);
+      return response.status(500).json({ error: 'Internal Server Error' });
+    }
+
+    // Format the data for the frontend
+    const data = results.reduce((acc, row) => {
+      acc[row.type.toLowerCase()] = row.count;
+      return acc;
+    }, {});
+
+    return response.json(data);
+  });
+});
+
+
+app.get('/no_products', (request, response) => {
+  const sql = `
+    SELECT c.category_name, COUNT(p.id) AS count
+    FROM tbl_product p
+    JOIN tbl_category c ON p.category_id = c.id
+    GROUP BY c.category_name;
+  `;
+  db.query(sql, (error, data) => {
+      if (error) return response.json(error);
+      return response.json(data);  // Return the counts of each product category
+  });
+});
+
+
+app.get('/no_revenue', (request, response) => {
+  const { seller_id } = request.query; // Extract seller_id from the query parameters
+
+  if (!seller_id) {
+    return response.status(400).json({ error: "Seller ID is required" });
+  }
+
+  const sql = `
+    SELECT 
+      SUM(total_price) AS total_revenue
+    FROM 
+      tbl_order
+    WHERE 
+      seller_id = ?
+  `;
+  
+  db.query(sql, [seller_id], (error, data) => {
+    if (error) {
+      return response.status(500).json({ error: "Database query error", details: error });
+    }
+    return response.json({ total_revenue: data[0].total_revenue || 0 }); // Return the total revenue for the seller
+  });
+});
+
 
 
 app.put('/edit_adminprofile/:id', upload.single('image'), (request, response) => {
@@ -1290,12 +1404,19 @@ app.get('/get_user/:id', (req, res) => {
         payment_method, 
         address, 
         shipfee,
-        sub_total
+        sub_total,
+        transaction_id // Add transaction_id here
     } = req.body;
 
     // Validate required fields
     if (!user_id || !product_id || !product_name || !product_quantity || !total_price || !payment_method || !address || !shipfee || !sub_total) {
         return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // If the payment method is COD, generate a random transaction_id
+    let generatedTransactionId = transaction_id;
+    if (payment_method === "cod") {
+        generatedTransactionId = `COD-${Math.floor(Math.random() * 1000000)}`; // Random ID prefixed with "COD"
     }
 
     const status = 'Pending';
@@ -1340,42 +1461,44 @@ app.get('/get_user/:id', (req, res) => {
 
             // Now we can proceed with order insertion (assuming the seller IDs match)
             const query = `
-                INSERT INTO tbl_order (
-                    user_id, 
-                    product_id, 
-                    product_name,
-                    product_quantity,  
-                    total_price, 
-                    payment_method, 
-                    address, 
-                    shipping_fee, 
-                    status,
-                    seller_id,
-                    sub_total
-                ) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)
-            `;
+            INSERT INTO tbl_order (
+                user_id, 
+                product_id, 
+                product_name,
+                product_quantity,  
+                total_price, 
+                payment_method, 
+                address, 
+                shipping_fee, 
+                status,
+                seller_id,
+                sub_total,
+                transaction_id
+            ) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
 
             const quantityToInsert = quantities.join(','); // Store as a comma-separated string
 
             // Insert the order with seller_id (from the first seller_id, as all are assumed to be the same now)
             db.query(query, [
-                user_id, 
-                product_ids, 
-                product_name,
-                quantityToInsert, 
-                total_price, 
-                payment_method, 
-                address, 
-                shipfee, 
-                status,
-                seller_ids[0], // Insert the seller_id (same for all products)
-                sub_total
-            ], (err, result) => {
-                if (err) {
-                    console.error('Error saving order:', err);
-                    return res.status(500).json({ error: 'Failed to save order' });
-                }
+              user_id, 
+              product_ids, 
+              product_name,
+              quantityToInsert, 
+              total_price, 
+              payment_method, 
+              address, 
+              shipfee, 
+              status,
+              seller_ids[0], // Insert the seller_id (same for all products)
+              sub_total,
+              generatedTransactionId  // Use the generated transaction_id
+          ], (err, result) => {
+              if (err) {
+                  console.error('Error saving order:', err);
+                  return res.status(500).json({ error: 'Failed to save order' });
+              }
 
                 // Deduct the product quantities from tbl_product
                 const updatePromises = product_id.map((id, index) => {
@@ -1425,11 +1548,14 @@ app.get('/get_user/:id', (req, res) => {
 });
 
 
+
+
 app.get('/api/orders', (req, res) => {
   const { user_id } = req.query;
   let query = `
       SELECT 
           o.id, 
+          o.transaction_id,
           u.first_name, 
           u.last_name, 
           o.product_name, 
@@ -1450,9 +1576,11 @@ app.get('/api/orders', (req, res) => {
   }
 
   db.query(query, [user_id], (err, results) => {
-      if (err) throw err;
-      res.json(results);
-  });
+    if (err) throw err;
+    console.log(results); // Log the results to see the returned data
+    res.json(results);
+});
+
 });
 
 
@@ -1462,6 +1590,7 @@ app.get('/manage_order', (request, response) => {
   const sql = `
       SELECT 
           tbl_order.id, 
+          tbl_order.transaction_id,
           tbl_order.product_name, 
           tbl_order.product_quantity, 
           tbl_order.payment_method, 
@@ -1554,28 +1683,36 @@ app.put('/edit_order/:id', (request, response) => {
 
 
 app.get('/revenue_sales', (request, response) => {
-    const sql = `
-        SELECT 
-            YEAR(created_at) AS year,
-            MONTH(created_at) AS month,
-            SUM(total_price) AS total_revenue
-        FROM 
-            tbl_order
-        WHERE 
-            status = 'Delivered'
-        GROUP BY 
-            YEAR(created_at), MONTH(created_at)
-        ORDER BY 
-            year, month
-    `;
+  const { seller_id } = request.query; // Get seller_id from query parameters
 
-    db.query(sql, (error, result) => {
-        if (error) {
-            return response.status(500).json({ error: 'Error fetching revenue sales' });
-        }
-        response.json(result); // Sending back the aggregated results
-    });
+  if (!seller_id) {
+      return response.status(400).json({ error: 'Seller ID is required' });
+  }
+
+  const sql = `
+      SELECT 
+          YEAR(created_at) AS year,
+          MONTH(created_at) AS month,
+          SUM(total_price) AS total_revenue
+      FROM 
+          tbl_order
+      WHERE 
+          status = 'Delivered'
+          AND seller_id = ?
+      GROUP BY 
+          YEAR(created_at), MONTH(created_at)
+      ORDER BY 
+          year, month
+  `;
+
+  db.query(sql, [seller_id], (error, result) => {
+      if (error) {
+          return response.status(500).json({ error: 'Error fetching revenue sales', details: error });
+      }
+      response.json(result); // Send the aggregated revenue sales data
+  });
 });
+
 
 app.post('/forgot-password', async (req, res) => {
     const { email } = req.body;
@@ -1669,14 +1806,21 @@ app.post('/forgot-password', async (req, res) => {
 
 
   app.get('/api/payment-method-stats', (req, res) => {
+    const { seller_id } = req.query;  // Extract seller_id from the query parameters
+    
+    if (!seller_id) {
+        return res.status(400).json({ error: "Seller ID is required" });
+    }
+
     const query = `
       SELECT payment_method, COUNT(*) AS total_sales
       FROM tbl_order
+      WHERE seller_id = ? AND status = 'Delivered'
       GROUP BY payment_method
       ORDER BY total_sales DESC;
     `;
   
-    db.query(query, (err, results) => {
+    db.query(query, [seller_id], (err, results) => {
       if (err) {
         return res.status(500).json({ error: 'Database query failed' });
       }
@@ -1684,7 +1828,7 @@ app.post('/forgot-password', async (req, res) => {
       const mostPreferred = results.length > 0 ? results[0] : null;
       res.json({ data: results, mostPreferred });
     });
-  });
+});
 
 
 
@@ -1695,6 +1839,7 @@ app.get('/api/order/:id', (req, res) => {
     const query = `
     SELECT 
       o.id AS order_id,
+      o.transaction_id,
       o.created_at,
       o.product_name,
       o.product_quantity,

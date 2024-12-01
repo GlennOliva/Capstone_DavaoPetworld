@@ -19,8 +19,12 @@ const PaymentMethodChart: React.FC = () => {
   });
 
   useEffect(() => {
-    axios.get(`${apiUrl}api/payment-method-stats`)
-      .then((response) => {
+    const sellerId = localStorage.getItem('seller_id');  // Replace with actual sellerId, possibly from context or props
+
+    axios.get(`${apiUrl}api/payment-method-stats`, {
+        params: { seller_id: sellerId }
+    })
+    .then((response) => {
         const { data } = response.data;
 
         const labels = data.map((item: { payment_method: string }) => item.payment_method);
@@ -30,22 +34,24 @@ const PaymentMethodChart: React.FC = () => {
         const borderColor = backgroundColor;
 
         setPaymentData({
-          labels,
-          datasets: [
-            {
-              label: 'Total Sales',
-              data: salesData,
-              backgroundColor,
-              borderColor,
-              borderWidth: 1,
-            },
-          ],
+            labels,
+            datasets: [
+                {
+                    label: 'Total Sales',
+                    data: salesData,
+                    backgroundColor,
+                    borderColor,
+                    borderWidth: 1,
+                },
+            ],
         });
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         console.error('Error fetching payment method stats:', error);
-      });
-  }, []);
+    });
+}, []);
+
+
 
   const chartPreferredPaymentMethods: ChartOptions<'bar'> = {
     responsive: true,

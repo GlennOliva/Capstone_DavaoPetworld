@@ -57,6 +57,20 @@ const FishIdentify: React.FC = () => {
     'Zebra Pleco'
   ]);
 
+  // Define species types
+  const SPECIES_TYPE = {
+    'Betta fish': [
+      'Betaa raja', 'Betta Bellica', 'Betta Brownorum', 'Betta Ocellata', 'Betta coccina',
+      'Betta enisae', 'Betta imbellis', 'Betta mahachaiensis', 'Betta persephone', 'Betta picta',
+      'Betta smaragdina', 'Betta spilotgena', 'Betta splendens'
+    ],
+    'Ornamental fish': [
+      'Angelfish', 'Bluegill Sunfish', 'Cherry Barb', 'Clarias batrachus', 'Clown loach',
+      'Glosssogobious aurues', 'Guppy', 'Molly', 'Neon Tetra', 'Panda Corydoras', 'Sinarapan',
+      'Swordtail', 'Zebra Danio', 'Zebra pleco', 'Goldfish'
+    ]
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     const image = imageRef.current;
@@ -77,62 +91,68 @@ const FishIdentify: React.FC = () => {
   const modelUrl = import.meta.env.VITE_MODEL_URL;
 
   const identifyFish = async () => {
-    // const imageElement = imageRef.current;
-  
     if (!imageFileRef.current) {
       setResult(<p>No image uploaded!</p>);
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('file', imageFileRef.current);
-  
+
     setLoading(true);
-  
+
     try {
       const response = await axios.post(`${modelUrl}predict`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-  
+
       console.log(response.data); // Log the entire response
       if (response.data && typeof response.data.predicted_class_index === 'number') {
         const predictedSpecies = FISH_LABELS[response.data.predicted_class_index]; // Get the fish species from FISH_LABELS
         
+        // Determine the species type (Betta fish or Ornamental fish)
+        let speciesType = '';
+        for (const [type, speciesList] of Object.entries(SPECIES_TYPE)) {
+          if (speciesList.includes(predictedSpecies)) {
+            speciesType = type;
+            break;
+          }
+        }
+
         // Determine if the predicted species is endangered
         const isEndangered = ENDANGERED_SPECIES.has(predictedSpecies);
 
         setResult(
-          <p style={{ textAlign: 'justify',color: '#000', fontSize: '16px', fontWeight: 'bold' }} >
-  Species Name: <span style={{fontSize: '14px', fontWeight:'normal'}}>{predictedSpecies}</span><br />
-  Species Type: <span style={{fontSize: '14px', fontWeight:'normal'}}>{isEndangered ? 'Endangered Species' : 'Not Endangered Species'}</span><br />
-  {isEndangered ? (
-    <span>
-      Description: <strong style={{ color: 'red',fontSize: '14px', fontWeight:'normal' }}>This species is prohibited from being bought or sold due to its endangered status. Engaging in such activities can contribute to the decline of its population in the wild.</strong>
-    </span>
-  ) : (
-    <span>
-      Description: <strong style={{ color: 'green',fontSize: '14px', fontWeight:'normal' }}>This species is not endangered and can be bought, sold, or kept as a pet. Proper care and responsible ownership are encouraged to ensure its well-being.</strong>
-    </span>
-  )}
-</p>
-
-        
-        
+          <p style={{ textAlign: 'justify', color: '#000', fontSize: '16px', fontWeight: 'bold' }} >
+            Species Name: <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{predictedSpecies}</span><br />
+            Species Type: <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{speciesType}</span><br />
+            Species Status: <span style={{ fontSize: '14px', fontWeight: 'normal' }}>{isEndangered ? 'Endangered' : 'Not Endangered'}</span><br />
+            {isEndangered ? (
+              <span>
+                Description: <strong style={{ color: 'red', fontSize: '14px', fontWeight: 'normal' }}>
+                  This species is prohibited from being bought or sold due to its endangered status. Engaging in such activities can contribute to the decline of its population in the wild.
+                </strong>
+              </span>
+            ) : (
+              <span>
+                Description: <strong style={{ color: 'green', fontSize: '14px', fontWeight: 'normal' }}>
+                  This species is not endangered and can be bought, sold, or kept as a pet. Proper care and responsible ownership are encouraged to ensure its well-being.
+                </strong>
+              </span>
+            )}
+          </p>
         );
-      } else {
-        console.log('Invalid response:', response.data);
-        setResult(<p>Invalid response from server. Please try again.</p>);
-      }
+      } 
     } catch (error) {
       console.error('Error during prediction:', error);
-      setResult(<p>Error during prediction. Please try again.</p>);
+      // If prediction is invalid or no species detected
+      setResult(<p style={{ color: 'red' }}>Sorry, this image is not allowed. Please upload an image containing fish.</p>);
     } finally {
       setLoading(false);
     }
   };
-  
 
   return (
     <div
@@ -206,18 +226,15 @@ const FishIdentify: React.FC = () => {
               padding: '12px',
               borderRadius: '5px',
               margin: '0 auto',
-              marginTop: '50px',
+              marginTop: '10px',
             }}
           >
-           IDENTIFY
+            {loading ? 'Identifying...' : 'Identify Fish'}
           </button>
         </div>
-        {loading && (
-          <p style={{ marginTop: '20px', color: '#6c757d' }}>
-            Loading, please wait...
-          </p>
-        )}
-        <div style={{ marginTop: '20px', color: '#17a2b8' }}>{result}</div>
+        <div style={{ marginTop: '20px' }}>
+          {result}
+        </div>
       </div>
     </div>
   );

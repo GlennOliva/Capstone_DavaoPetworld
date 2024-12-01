@@ -162,14 +162,10 @@ const Manage_IncomeAnalytics: React.FC = () => {
   <thead>
     <tr>
       <th>Id</th>
-      <th>First Name</th>
-      <th>Last Name</th>
+      <th>Full Name</th>
       <th>Product Name</th>
       <th>Product Quantity</th>
       <th>Payment Method</th>
-      <th>Total Price</th>
-      <th>Address</th>
-      <th>Shipping Fee</th>
       <th>Status</th>
       <th>Action</th>
     </tr>
@@ -179,14 +175,10 @@ const Manage_IncomeAnalytics: React.FC = () => {
       currentOrders.map((order) => (
         <tr key={order.id}>
           <td>{order.id}</td>
-          <td>{order.first_name}</td>
-          <td>{order.last_name}</td>
+          <td>{order.first_name} {order.last_name}</td>
           <td>{order.product_name}</td>
           <td>{order.product_quantity}</td>
           <td>{order.payment_method}</td>
-          <td>{order.total_price}</td>
-          <td>{order.address}</td>
-          <td>{order.shipping_fee}</td>
           <td data-label="Status">
             {order.status === 'Delivered' ? (
               <span className="status-delivered">{order.status}</span>

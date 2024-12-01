@@ -141,119 +141,42 @@ const Dashboard: React.FC = () => {
 
 
   
+
+
+
+
   
-  const [chartDataRevenue, setChartDataRevenue] = useState<ChartData<'line'>>({
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-        {
-            label: 'Revenue',
-            data: [],
-            borderColor: '#FF5733',
-            backgroundColor: 'rgba(255, 87, 51, 0.2)',
-            fill: true,
-        }
-    ]
-});
-
-const chartOptionsRevenue: ChartOptions<'line'> = {
-    responsive: true,
-    plugins: {
-        legend: {
-            position: 'top',
-        },
-        tooltip: {
-            callbacks: {
-                label: function (context) {
-                    return `${context.dataset.label}: ${context.raw}`;
-                }
-            }
-        }
-    },
-    scales: {
-        x: {
-            type: 'category',
-            title: {
-                display: true,
-                text: 'Month'
-            }
-        },
-        y: {
-            title: {
-                display: true,
-                text: 'Cash Value'
-            }
-        }
-    }
-};
-
-useEffect(() => {
-    const fetchRevenueData = async () => {
-        try {
-            const response = await fetch(`${apiUrl}revenue_sales`); // Adjust the URL based on your API path
-            const data = await response.json();
-
-            // Prepare the revenue data for the chart
-            const revenueData = new Array(12).fill(0); // Initialize an array with 0s for each month
-
-            data.forEach((item: { month: number; total_revenue: any; }) => {
-                const monthIndex = item.month - 1; // Month is 1-based in SQL, adjust to 0-based
-                revenueData[monthIndex] = item.total_revenue; // Assign total revenue to the respective month index
-            });
-
-            // Update the chart data
-            setChartDataRevenue((prev) => ({
-                ...prev,
-                datasets: [{
-                    ...prev.datasets[0],
-                    data: revenueData,
-                }]
-            }));
-        } catch (error) {
-            console.error('Error fetching revenue data:', error);
-        }
-    };
-
-    fetchRevenueData();
-}, []);
-  
-  const [categoryData, setCategoryData] = useState<ChartData<'bar'>>({
-    labels: [],
+  const [sellerUserData, setSellerUserData] = useState<ChartData<'bar'>>({
+    labels: ['Users', 'Sellers'], // Predefined labels for categories
     datasets: [{
       label: 'Count',
-      data: [],
-      backgroundColor: [],
-      borderColor: [],
+      data: [], // Data will be dynamically set
+      backgroundColor: ['#4caf50', '#ff9800'], // Green for Users, Orange for Sellers
+      borderColor: ['#388e3c', '#f57c00'], // Darker shades for borders
       borderWidth: 1
     }]
   });
+  
 
   useEffect(() => {
-    axios.get(`${apiUrl}no_products`)
+    axios.get(`${apiUrl}no_seller_user`)
       .then(response => {
-        const labels = response.data.map((item: { category_name: any; }) => item.category_name);  // Extract category names
-        const data = response.data.map((item: { count: any; }) => item.count);            // Extract counts
-
-        // Generate random colors for each category dynamically
-        const backgroundColor = labels.map(() => `#${Math.floor(Math.random()*16777215).toString(16)}`);
-        const borderColor = backgroundColor;
-
-        setCategoryData({
-          labels: labels,
+        const { users, sellers } = response.data; // Destructure counts from the API response
+        setSellerUserData(prevState => ({
+          ...prevState,
           datasets: [{
-            label: 'Count',
-            data: data,
-            backgroundColor: backgroundColor,
-            borderColor: borderColor,
-            borderWidth: 1
+            ...prevState.datasets[0],
+            data: [users, sellers] // Set counts for Users and Sellers
           }]
-        });
+        }));
       })
       .catch(error => {
-        console.error('There was an error fetching the category data:', error);
+        console.error('Error fetching user and seller counts:', error);
       });
   }, []);
+  
 
-  const chartComparisonOptionsCategories: ChartOptions<'bar'> = {
+  const chartComparisonOptions: ChartOptions<'bar'> = {
     responsive: true,
     plugins: {
       legend: {
@@ -271,19 +194,18 @@ useEffect(() => {
       x: {
         title: {
           display: true,
-          text: 'Categories'
+          text: 'Roles (Users and Sellers)'
         },
-        stacked: false,
       },
       y: {
         title: {
           display: true,
           text: 'Count'
         },
-        stacked: false,
       }
     }
   };
+  
 
 
   const [adminProfile, setAdminProfile] = useState<{ image: string; first_name: string; last_name: string } | null>(null);
@@ -311,27 +233,24 @@ useEffect(() => {
 
   const [counts, setCounts] = useState({
     userCount: 0,
-    productCount: 0,
-    orderCount: 0,
-    categoryCount: 0,
+    sellerCount: 0,
+    postCount: 0,
   });
 
   useEffect(() => {
     // Fetching all the counts from the server
     const fetchCounts = async () => {
       try {
-        const [users, products, orders, categories] = await Promise.all([
+        const [users, products, orders] = await Promise.all([
           axios.get(`${apiUrl}no_user`),
-          axios.get(`${apiUrl}no_product`),
-          axios.get(`${apiUrl}no_order`),
-          axios.get(`${apiUrl}no_category`)
+          axios.get(`${apiUrl}no_seller`),
+          axios.get(`${apiUrl}no_post`),
         ]);
         
         setCounts({
           userCount: users.data.user_count,
-          productCount: products.data.product_count,
-          orderCount: orders.data.order_count,
-          categoryCount: categories.data.category_count,
+          sellerCount: products.data.seller_count,
+          postCount: orders.data.post_count,
         });
       } catch (error) {
         console.error("Error fetching counts", error);
@@ -430,31 +349,22 @@ useEffect(() => {
             <div className="card">
               <div className="head">
                 <div>
-                  <h2>{counts.productCount}</h2>
-                  <p>No of Products</p>
+                  <h2>{counts.sellerCount}</h2>
+                  <p>No of Sellers</p>
                 </div>
-                <i className='bx bx-store-alt icon'></i>
+                <i className='bx bx-user-plus icon'></i>
               </div>
             </div>
             <div className="card">
               <div className="head">
                 <div>
-                  <h2>{counts.orderCount}</h2>
-                  <p>No of Orders</p>
+                  <h2>{counts.postCount}</h2>
+                  <p>No of Post</p>
                 </div>
                 <i className='bx bx-shopping-bag icon down'></i>
               </div>
             </div>
 
-            <div className="card">
-              <div className="head">
-                <div>
-                  <h2>{counts.categoryCount}</h2>
-                  <p>No of Categories</p>
-                </div>
-                <i className='bx bx-category icon'></i>
-              </div>
-            </div>
             
           </div>
 
@@ -466,25 +376,17 @@ useEffect(() => {
             <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Monthly counts of Post</h3>
           </div>
 
-          <div className="content-data">
-            <div className="chart">
-              <Line data={chartDataRevenue} options={chartOptionsRevenue} />
-            </div>
-            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Revenue Sales Per Month</h3>
-          </div>
+     
 
           <div className="content-data">
-            <div className="chart">
-            <Bar data={categoryData} options={chartComparisonOptionsCategories} />
-            </div>
-            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Comparison of Product Categories</h3>
-          </div>
+  <div className="chart">
+    <Bar data={sellerUserData} options={chartComparisonOptions} />
+  </div>
+  <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>
+    Comparison of Users and Sellers
+  </h3>
+</div>
 
-          <div className="content-data">
-      <div className="chart">
-      
-      </div>
-    </div>
 
           </div>
 

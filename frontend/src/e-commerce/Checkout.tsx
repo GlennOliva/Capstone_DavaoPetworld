@@ -105,7 +105,7 @@ const [formData, setFormData] = useState(() => {
       paymentmethod: '',
       address: '',
       shipfee: 0,
-      sub_total: totalPrice.toFixed(2),
+      sub_total: totalPrice.toFixed(2)
   };
 });
 
@@ -311,50 +311,52 @@ useEffect(() => {
                 try {
                   const order = await actions.order.capture();
                   console.log('Order successful:', order);
-                  
-                  
-                  // Prepare order data to send to the database
+            
+                  // Safely extract the transaction ID
+                  const transactionID =
+                    order?.purchase_units?.[0]?.payments?.captures?.[0]?.id ?? 'Unknown';
+            
+                  // Prepare order data to send to the backend
                   const orderData = {
                     user_id: userProfile?.id,
                     product_name: formData.productname,
                     product_id: formData.product_id,
                     product_quantity: formData.productquantity.split(',').map(Number), // Convert quantities to an array of numbers
-                    total_price: (parseFloat(formData.totalprice) + formData.shipfee).toFixed(2), // Calculate total price including shipping
-                    payment_method: 'paypal', // Set payment method to PayPal
+                    total_price: (parseFloat(formData.totalprice) + formData.shipfee).toFixed(2),
+                    payment_method: 'paypal',
                     address: formData.address,
-                    shipfee: formData.shipfee
+                    shipfee: formData.shipfee,
+                    sub_total: formData.sub_total,
+                    transaction_id: transactionID, // Include transaction ID in the order data
                   };
             
-                  // Send order data to the backend for insertion
+                  // Send order data to the backend
                   const response = await axios.post(`${apiUrl}checkout`, orderData);
-                  console.log('Order inserted into database:', response.data);
-                  // Update Snackbar state
-      setSnackbarMessage('Thankyou for your order!');
-      setSnackbarSeverity('success');
-      setOpenSnackbar(true);
-
-      // Delay navigation to allow Snackbar to show
-      setTimeout(() => {
-          navigate('/orders');
-      }, 2000);
+                  console.log('Order submitted successfully:', response.data);
             
-                  // Optionally, handle successful response (e.g., navigate to a success page)
+                  // Update Snackbar state
+                  setSnackbarMessage('Thank you for your order!');
+                  setSnackbarSeverity('success');
+                  setOpenSnackbar(true);
+            
+                  // Delay navigation to allow Snackbar to show
+                  setTimeout(() => {
+                    navigate('/orders');
+                  }, 2000); // 2 seconds delay
                 } catch (error) {
-                  console.error('Error capturing order or inserting to database:', error);
-                  // Update Snackbar state for error
-                  setSnackbarMessage('Order is failed!');
+                  console.error('Error submitting order:', error);
+                  setSnackbarMessage('Order failed!');
                   setSnackbarSeverity('error');
                   setOpenSnackbar(true);
-
-                  // Delay navigation in case of error too, if needed
+            
                   setTimeout(() => {
-                      navigate('/checkout');
+                    navigate('/checkout');
                   }, 2000);
                 }
-              } else {
-                console.error('Order actions not defined');
               }
             }}
+            
+            
             
             onError={(err) => {
               console.error('PayPal Checkout onError', err);

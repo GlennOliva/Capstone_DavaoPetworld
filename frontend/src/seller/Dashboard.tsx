@@ -51,94 +51,8 @@ const Dashboard: React.FC = () => {
     };
   }, [profileDropdownVisible, menuDropdownVisible]);
 
-  const [chartDataPosts, setChartDataPosts] = useState<ChartData<'line'>>({
-    labels: [],
-    datasets: [
-      {
-        label: 'Post Count',
-        data: [],
-        borderColor: '#FF5733',
-        backgroundColor: 'rgba(255, 87, 51, 0.2)',
-        fill: true,
-      }
-    ]
-  });
+ 
 
-  // Array of month names
-  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  // Fetch data using useEffect
-  useEffect(() => {
-    axios.get(`${apiUrl}fetch_post`)
-      .then((response) => {
-        console.log("Response data:", response.data); // Debugging
-        const data = response.data;
-        
-        // Create an object to store the post count by month (ignoring year)
-        const postCountByMonth: number[] = Array(12).fill(0); // Array with 12 zeros for each month
-
-        data.forEach((item: any) => {
-          // Extract the month from created_at
-          const date = new Date(item.created_at);
-          const month = date.getMonth(); // Month index (0-11)
-
-          // Increment the count for this month
-          postCountByMonth[month] += 1;
-        });
-
-        // Prepare labels (months) and post counts
-        const labels = monthNames; // "Jan", "Feb", etc.
-        const postCounts = postCountByMonth; // Array with counts for each month
-
-        // Set the chart data
-        setChartDataPosts({
-          labels: labels,
-          datasets: [
-            {
-              label: 'Post Count',
-              data: postCounts,
-              borderColor: '#FF5733',
-              backgroundColor: 'rgba(255, 87, 51, 0.2)',
-              fill: true,
-            }
-          ]
-        });
-      })
-      .catch((error) => {
-        console.error('Error fetching post data:', error);
-      });
-  }, []);
-
-  const chartOptionsPosts: ChartOptions<'line'> = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            return `${context.dataset.label}: ${context.raw}`;
-          }
-        }
-      }
-    },
-    scales: {
-      x: {
-        type: 'category',
-        title: {
-          display: true,
-          text: 'Month'
-        }
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Post Count'
-        }
-      }
-    }
-  };
 
 
   
@@ -189,14 +103,17 @@ const chartOptionsRevenue: ChartOptions<'line'> = {
 
 useEffect(() => {
     const fetchRevenueData = async () => {
+      const sellerId = localStorage.getItem('seller_id'); // Retrieve the admin ID from local storage
+
         try {
-            const response = await fetch(`${apiUrl}revenue_sales`); // Adjust the URL based on your API path
+            const response = await fetch(`${apiUrl}revenue_sales?seller_id=${sellerId}`); // Include seller_id in query parameters
             const data = await response.json();
 
             // Prepare the revenue data for the chart
             const revenueData = new Array(12).fill(0); // Initialize an array with 0s for each month
 
-            data.forEach((item: { month: number; total_revenue: any; }) => {
+            // Populate revenueData based on the fetched data
+            data.forEach((item: { year: number; month: number; total_revenue: number }) => {
                 const monthIndex = item.month - 1; // Month is 1-based in SQL, adjust to 0-based
                 revenueData[monthIndex] = item.total_revenue; // Assign total revenue to the respective month index
             });
@@ -216,6 +133,7 @@ useEffect(() => {
 
     fetchRevenueData();
 }, []);
+
   
   const [categoryData, setCategoryData] = useState<ChartData<'bar'>>({
     labels: [],
@@ -311,37 +229,41 @@ useEffect(() => {
 
 
   const [counts, setCounts] = useState({
-    userCount: 0,
+    revenueCount: 0,
     productCount: 0,
     orderCount: 0,
     categoryCount: 0,
   });
 
   useEffect(() => {
-    // Fetching all the counts from the server
     const fetchCounts = async () => {
+      const sellerId = localStorage.getItem('seller_id'); // Replace with dynamic seller ID logic if necessary
       try {
-        const [users, products, orders, categories] = await Promise.all([
-          axios.get(`${apiUrl}no_user`),
-          axios.get(`${apiUrl}no_product`),
-          axios.get(`${apiUrl}no_order`),
-          axios.get(`${apiUrl}no_category`)
+        const [revenue, products, orders, categories] = await Promise.all([
+          axios.get(`${apiUrl}no_revenue`, { params: { seller_id: sellerId } }),
+          axios.get(`${apiUrl}no_product`, { params: { seller_id: sellerId } }),
+          axios.get(`${apiUrl}no_order`, { params: { seller_id: sellerId } }),
+          axios.get(`${apiUrl}no_category`, { params: { seller_id: sellerId } }),
         ]);
-        
+      
         setCounts({
-          userCount: users.data.user_count,
-          productCount: products.data.product_count,
-          orderCount: orders.data.order_count,
-          categoryCount: categories.data.category_count,
+          revenueCount: revenue.data.total_revenue || 0,
+          productCount: products.data.product_count || 0,
+          orderCount: orders.data.order_count || 0,
+          categoryCount: categories.data.category_count || 0,
         });
       } catch (error) {
-        console.error("Error fetching counts", error);
+        if (error instanceof Error) {
+          console.error('Error message:', error.message);
+        } else {
+          console.error('An unknown error occurred:', error);
+        }
       }
+      
     };
 
     fetchCounts();
-  }, []);
-
+}, []);
 
 
   
@@ -422,10 +344,10 @@ useEffect(() => {
                 <div className="card">
               <div className="head">
                 <div>
-                  <h2>{counts.userCount}</h2>
-                  <p>No of Users</p>
+                  <h2>₱{counts.revenueCount}</h2>
+                  <p>Revenue Income</p>
                 </div>
-                <i className='bx bx-user icon'></i>
+                <i className='bx bx-money icon'></i>
               </div>
             </div>
             <div className="card">
@@ -460,12 +382,7 @@ useEffect(() => {
           </div>
 
           <div className="data">
-          <div className="content-data">
-            <div className="chart">
-              <Line data={chartDataPosts} options={chartOptionsPosts} />
-            </div>
-            <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '3%' }}>Monthly counts of Post</h3>
-          </div>
+    
 
           <div className="content-data">
             <div className="chart">

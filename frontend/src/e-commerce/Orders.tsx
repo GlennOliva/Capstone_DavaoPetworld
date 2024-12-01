@@ -12,6 +12,7 @@ interface Order {
   payment_method: string;
   total_price: number;
   status: string;
+  transaction_id: string;
 }
 
 const Orders: React.FC = () => {
@@ -58,8 +59,8 @@ const Orders: React.FC = () => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Transaction Id</th>
+              <th>Full Name</th>
               <th>Product Name</th>
               <th>Product Qty</th>
               <th>Payment Method</th>
@@ -72,8 +73,8 @@ const Orders: React.FC = () => {
             {currentOrders.map((order) => (
               <tr key={order.id}>
                 <td data-label="ID">{order.id}</td>
-                <td data-label="First Name">{order.first_name}</td>
-                <td data-label="Last Name">{order.last_name}</td>
+                <td data-label="ID">{order.transaction_id}</td>
+                <td data-label="Full Name">{order.first_name} {order.last_name}</td>
                 <td data-label="Product Name">{order.product_name}</td>
                 <td data-label="Product Qty">{order.product_quantity}</td>
                 <td data-label="Payment Method">{order.payment_method}</td>

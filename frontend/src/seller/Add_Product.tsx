@@ -6,12 +6,14 @@ import { Alert, AlertColor, Snackbar } from '@mui/material';
 import Sidebar from './Sidebar';
 import { Formik, Form, Field,} from 'formik';
 import * as Yup from 'yup';
+import axios from 'axios';
 
 const Add_Product: React.FC = () => {
   const [sidebarHidden, setSidebarHidden] = useState<boolean>(false);
   const [profileDropdownVisible, setProfileDropdownVisible] = useState<boolean>(false);
   const [categories, setCategories] = useState<any[]>([]);
   const apiUrl = import.meta.env.VITE_API_URL;
+  const modelUrl = import.meta.env.VITE_MODEL_URL;
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -32,6 +34,70 @@ const Add_Product: React.FC = () => {
   // const [snackbarOpen, setSnackbarOpen] = useState(false);
 
 
+   // Define the fish classes in a separate constant
+   const FISH_LABELS: { [key: number]: string } = {
+    0: 'Angelfish',
+    1: 'Betaa raja',
+    2: 'Betta Bellica',
+    3: 'Betta Brownorum',
+    4: 'Betta Ocellata',
+    5: 'Betta coccina',
+    6: 'Betta enisae',
+    7: 'Betta imbellis',
+    8: 'Betta mahachaiensis',
+    9: 'Betta persephone',
+    10: 'Betta picta',
+    11: 'Betta smaragdina',
+    12: 'Betta spilotgena',
+    13: 'Betta splendens',
+    14: 'Bluegill Sunfish',
+    15: 'Cherry Barb',
+    16: 'Clarias batrachus',
+    17: 'Clown loach',
+    18: 'Glosssogobious aurues',
+    19: 'Guppy',
+    20: 'Molly',
+    21: 'Neon Tetra',
+    22: 'Panda Corydoras',
+    23: 'Sinarapan',
+    24: 'Swordtail',
+    25: 'Zebra Danio',
+    26: 'Zebra pleco',
+    27: 'Goldfish'
+  };
+
+  // Define endangered species
+  const ENDANGERED_SPECIES = new Set([
+    'Betta spilotgena',
+    'Betta enisae',
+    'Betta picta',
+    'Betta bellica',
+    'Betaa raja',
+    'Betta ocellata',
+    'Betta brownorum',
+    'Philippine Goby',
+    'Philippine Catfish',
+    'Sinarapan',
+    'Clown loach',
+    'Panda Corydoras',
+    'Bluegill Sunfish',
+    'Zebra Pleco'
+  ]);
+
+  // Define species types
+  const SPECIES_TYPE = {
+    'Betta fish': [
+      'Betaa raja', 'Betta Bellica', 'Betta Brownorum', 'Betta Ocellata', 'Betta coccina',
+      'Betta enisae', 'Betta imbellis', 'Betta mahachaiensis', 'Betta persephone', 'Betta picta',
+      'Betta smaragdina', 'Betta spilotgena', 'Betta splendens'
+    ],
+    'Ornamental fish': [
+      'Angelfish', 'Bluegill Sunfish', 'Cherry Barb', 'Clarias batrachus', 'Clown loach',
+      'Glosssogobious aurues', 'Guppy', 'Molly', 'Neon Tetra', 'Panda Corydoras', 'Sinarapan',
+      'Swordtail', 'Zebra Danio', 'Zebra pleco', 'Goldfish'
+    ]
+  };
+
   // Validation schema with Yup
   const validationSchema = Yup.object({
     product_name: Yup.string().required('Product Name is required'),
@@ -42,10 +108,10 @@ const Add_Product: React.FC = () => {
     image: Yup.mixed().required('Product Image is required'),
   });
 
-  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+  const handleSubmit = async (values: any, { setSubmitting, setFieldValue }: any) => {
     const formData = new FormData();
- 
-    const sellerId = localStorage.getItem('seller_id') || '1'; // Use '1' as a default if not found
+
+    const sellerId = localStorage.getItem('seller_id') || '1'; // Default to '1' if not found
     formData.append('seller_id', sellerId);
     formData.append('category_id', values.category_id);
     formData.append('product_name', values.product_name);
@@ -55,6 +121,46 @@ const Add_Product: React.FC = () => {
     formData.append('image', values.image);
 
     try {
+        // Image prediction and endangered species check
+        let isEndangered = false;
+        let predictedSpecies = '';
+
+        try {
+            const predictionFormData = new FormData();
+            predictionFormData.append('file', values.image); // Assuming 'image' is a File object
+
+            const response = await axios.post(`${modelUrl}predict`, predictionFormData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+
+            if (response.data && typeof response.data.predicted_class_index === 'number') {
+                predictedSpecies = FISH_LABELS[response.data.predicted_class_index];
+                isEndangered = ENDANGERED_SPECIES.has(predictedSpecies);
+
+                if (isEndangered) {
+                    setSnackbarMessage(`Species ${predictedSpecies} is endangered and cannot be added.`);
+                    setSnackbarSeverity('error');
+                    setOpenSnackbar(true);
+                } else {
+                    setSnackbarMessage(`Species ${predictedSpecies} is valid.`);
+                    setSnackbarSeverity('success');
+                    setOpenSnackbar(true);
+                }
+            }
+        } catch (error) {
+            console.error('Error during prediction:', error);
+            setSnackbarMessage('Error identifying the species. Please upload a valid image.');
+            setSnackbarSeverity('error');
+            setOpenSnackbar(true);
+        }
+
+        // Prevent submission if species is endangered
+        if (isEndangered) {
+            setSubmitting(false);
+            return; // Exit submission
+        }
+
+        // Proceed with product creation
         const response = await fetch(`${apiUrl}add_product`, {
             method: 'POST',
             body: formData,
@@ -64,8 +170,7 @@ const Add_Product: React.FC = () => {
             throw new Error('Network response was not ok');
         }
 
-
-        // Show success snackbar
+        // Success feedback
         setSnackbarMessage('Product Successfully Created!');
         setSnackbarSeverity('success');
         setOpenSnackbar(true);
@@ -84,6 +189,8 @@ const Add_Product: React.FC = () => {
         setSubmitting(false);
     }
 };
+
+
 
 const handleSnackbarClose = () => {
     setOpenSnackbar(false);
@@ -270,19 +377,21 @@ useEffect(() => {
             </div>
           )}
         </div>
-        <div className="form-group">
+         {/* Product Image */}
+         <div className="form-group">
           <label htmlFor="image">Product Image</label>
           <input
-            type="file"
-            id="image"
-            name="image"
-            accept="image/*"
-            className="file-input"
-            onChange={(event) => {
-              const file = event.currentTarget.files ? event.currentTarget.files[0] : null;
-              setFieldValue("image", file);
-            }}
-          />
+  type="file"
+  id="image"
+  name="image"
+  accept="image/*"
+  className="file-input"
+  onChange={(event) => {
+    const file = event.currentTarget.files?.[0] || null;
+    setFieldValue('image', file);
+  }}
+/>
+
           {touched.image && errors.image && (
             <div className="error" style={{ color: 'red', fontSize: '12px' }}>
               {errors.image}

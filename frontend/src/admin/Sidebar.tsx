@@ -21,8 +21,8 @@ const Sidebar = () => {
       <ul className="side-menu">
         <li>
           <Link
-            to="/dashboard"
-            className={location.pathname === '/dashboard' ? 'active' : ''}
+            to="/admin/dashboard"
+            className={location.pathname === '/admin/dashboard' ? 'active' : ''}
           >
             <i className='bx bxs-dashboard icon'></i> Dashboard
           </Link>
@@ -49,7 +49,7 @@ const Sidebar = () => {
         
         <li>
           <Link
-            to="/manage_user"
+            to="/manage_seller"
             className={location.pathname === '/manage_seller' ? 'active' : ''}
           >
             <i className='bx bxs-user-plus icon'></i> Manage Seller
