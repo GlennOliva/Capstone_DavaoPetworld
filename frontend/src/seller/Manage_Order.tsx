@@ -91,7 +91,14 @@ const Manage_Order: React.FC = () => {
     shipping_fee: number; // Assuming shipping fee is a number
     status: string;
     transaction_id: string;
+    created_at: string;
   }
+
+
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US'); // Formats the date as MM/DD/YYYY
+  };
 
   return (
     <div>
@@ -165,6 +172,7 @@ const Manage_Order: React.FC = () => {
                 <th>Id</th>
                 <th>Transaction Id</th>
                 <th>Full Name</th>
+                <th>Order Date</th>
                 <th>Product Name</th>
                 <th>Product Quantity</th>
                 <th>Payment Method</th>
@@ -179,6 +187,7 @@ const Manage_Order: React.FC = () => {
                     <td>{order.id}</td>
                     <td>{order.transaction_id}</td>
                     <td>{order.first_name} {order.last_name}</td>
+                    <td>{formatDate(order.created_at)}</td>
                     <td>{order.product_name}</td>
                     <td>{order.product_quantity}</td>
                     <td>{order.payment_method}</td>

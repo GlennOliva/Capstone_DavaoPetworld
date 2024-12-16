@@ -256,6 +256,10 @@ useEffect(() => {
       <input type="number" name="subtotal" value={formData.totalprice} className="form-control" readOnly />
     </div>
     <div className="form-group">
+      <label>Shipping fee</label>
+      <input type="number" name="shipfee" value={formData.shipfee} className="form-control" readOnly />
+    </div>
+    <div className="form-group">
     <label>Total price</label>
     <input type="number" name="totalprice" value={(parseFloat(formData.totalprice) + formData.shipfee).toFixed(2)} className="form-control" readOnly />
 </div>
@@ -279,10 +283,7 @@ useEffect(() => {
         </ul>
       )}
     </div>
-    <div className="form-group">
-      <label>Shipping fee</label>
-      <input type="number" name="shipfee" value={formData.shipfee} className="form-control" readOnly />
-    </div>
+
     <div className="form-group">
       <label>Payment method</label>
       <select name="paymentmethod" className="form-control" onChange={handleChange}>

@@ -125,13 +125,7 @@ const OrderReceipt: React.FC = () => {
                                 );
                             })}
 
-                            {/* Payment method Row */}
-                            <tr>
-                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Payment Method</strong></td>
-                                <td colSpan={1}>
-                                    <strong>{payment_method.trim()}</strong>
-                                </td>
-                            </tr>
+                        
 
                             {/* Subtotal Row */}
                             <tr>
@@ -152,6 +146,14 @@ const OrderReceipt: React.FC = () => {
                                 <td colSpan={2} style={{ textAlign: 'right' }}><strong>Total</strong></td>
                                 <td colSpan={1}>
                                     <strong>₱{total_price.toFixed(2)}</strong>
+                                </td>
+                            </tr>
+
+                                {/* Payment method Row */}
+                                <tr>
+                                <td colSpan={2} style={{ textAlign: 'right' }}><strong>Payment Method</strong></td>
+                                <td colSpan={1}>
+                                    <strong>{payment_method.trim()}</strong>
                                 </td>
                             </tr>
                         </tbody>

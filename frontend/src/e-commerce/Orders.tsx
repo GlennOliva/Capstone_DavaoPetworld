@@ -13,6 +13,7 @@ interface Order {
   total_price: number;
   status: string;
   transaction_id: string;
+  created_at: string;
 }
 
 const Orders: React.FC = () => {
@@ -51,6 +52,11 @@ const Orders: React.FC = () => {
     setCurrentPage(pageNumber);
   };
 
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US'); // Formats the date as MM/DD/YYYY
+  };
+
   return (
     <div className="orders-container">
       <h1>Track Orders</h1>
@@ -61,10 +67,11 @@ const Orders: React.FC = () => {
               <th>ID</th>
               <th>Transaction Id</th>
               <th>Full Name</th>
+              <th>Order date</th>
               <th>Product Name</th>
               <th>Product Qty</th>
               <th>Payment Method</th>
-              <th>Total Price</th>
+              <th>Order Total</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -75,6 +82,7 @@ const Orders: React.FC = () => {
                 <td data-label="ID">{order.id}</td>
                 <td data-label="ID">{order.transaction_id}</td>
                 <td data-label="Full Name">{order.first_name} {order.last_name}</td>
+                <td data-label="Order Date">{formatDate(order.created_at)}</td>
                 <td data-label="Product Name">{order.product_name}</td>
                 <td data-label="Product Qty">{order.product_quantity}</td>
                 <td data-label="Payment Method">{order.payment_method}</td>

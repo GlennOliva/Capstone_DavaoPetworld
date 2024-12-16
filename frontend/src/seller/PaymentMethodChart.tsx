@@ -3,8 +3,13 @@ import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { ChartData, ChartOptions } from 'chart.js';
 
-const PaymentMethodChart: React.FC = () => {
-    const apiUrl = import.meta.env.VITE_API_URL;
+interface PaymentMethodProps {
+  startDate: Date | null;
+  endDate: Date | null;
+}
+
+const PaymentMethodChart: React.FC<PaymentMethodProps> = ({ startDate, endDate }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [paymentData, setPaymentData] = useState<ChartData<'bar'>>({
     labels: [],
     datasets: [
@@ -19,12 +24,18 @@ const PaymentMethodChart: React.FC = () => {
   });
 
   useEffect(() => {
-    const sellerId = localStorage.getItem('seller_id');  // Replace with actual sellerId, possibly from context or props
+    const sellerId = localStorage.getItem('seller_id'); // Replace with actual sellerId, possibly from context or props
 
-    axios.get(`${apiUrl}api/payment-method-stats`, {
-        params: { seller_id: sellerId }
-    })
-    .then((response) => {
+    const fetchPaymentData = async () => {
+      try {
+        const params: { [key: string]: string } = { seller_id: sellerId || '' };
+
+        // Use startDate and endDate directly from props
+        if (startDate) params.start_date = startDate.toISOString().split('T')[0];
+        if (endDate) params.end_date = endDate.toISOString().split('T')[0];
+
+        const response = await axios.get(`${apiUrl}api/payment-method-stats`, { params });
+
         const { data } = response.data;
 
         const labels = data.map((item: { payment_method: string }) => item.payment_method);
@@ -34,24 +45,24 @@ const PaymentMethodChart: React.FC = () => {
         const borderColor = backgroundColor;
 
         setPaymentData({
-            labels,
-            datasets: [
-                {
-                    label: 'Total Sales',
-                    data: salesData,
-                    backgroundColor,
-                    borderColor,
-                    borderWidth: 1,
-                },
-            ],
+          labels,
+          datasets: [
+            {
+              label: 'Total Sales',
+              data: salesData,
+              backgroundColor,
+              borderColor,
+              borderWidth: 1,
+            },
+          ],
         });
-    })
-    .catch((error) => {
+      } catch (error) {
         console.error('Error fetching payment method stats:', error);
-    });
-}, []);
+      }
+    };
 
-
+    fetchPaymentData();
+  }, [startDate, endDate]); // Use startDate and endDate directly from props
 
   const chartPreferredPaymentMethods: ChartOptions<'bar'> = {
     responsive: true,
@@ -84,6 +95,7 @@ const PaymentMethodChart: React.FC = () => {
       <div className="chart">
         <Bar data={paymentData} options={chartPreferredPaymentMethods} />
       </div>
+
       <h3 style={{ textAlign: 'center', fontSize: '16px', paddingTop: '1%' }}>
         Preferred Payment Methods
       </h3>

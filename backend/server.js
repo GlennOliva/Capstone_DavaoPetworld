@@ -1003,18 +1003,75 @@ app.get('/no_seller_user', (request, response) => {
 
 
 app.get('/no_products', (request, response) => {
-  const sql = `
+  const { startDate, endDate } = request.query; // Get startDate and endDate from query params
+
+  // Create the SQL query with a filter for the date range if provided
+  let sql = `
     SELECT c.category_name, COUNT(p.id) AS count
     FROM tbl_product p
     JOIN tbl_category c ON p.category_id = c.id
-    GROUP BY c.category_name;
   `;
-  db.query(sql, (error, data) => {
-      if (error) return response.json(error);
-      return response.json(data);  // Return the counts of each product category
+
+  // Add the date filter if startDate and endDate are provided
+  if (startDate && endDate) {
+    sql += ` WHERE p.created_at BETWEEN ? AND ?`;  // Assuming `created_at` is the field to filter by
+  }
+
+  sql += ` GROUP BY c.category_name;`;
+
+  // Execute the query
+  db.query(sql, [startDate, endDate], (error, data) => {
+    if (error) return response.json({ error: error.message });
+    return response.json(data);  // Return the counts of each product category
   });
 });
 
+
+
+
+app.get('/no_revenues', (request, response) => {
+  const { seller_id, start_date, end_date } = request.query; // Extract seller_id, start_date, and end_date from the query parameters
+
+  if (!seller_id) {
+    return response.status(400).json({ error: "Seller ID is required" });
+  }
+
+  // Start with a basic SQL query
+  let sql = `
+    SELECT 
+      MONTH(created_at) AS month, 
+      YEAR(created_at) AS year,
+      SUM(total_price) AS total_revenue
+    FROM 
+      tbl_order
+    WHERE 
+      seller_id = ?
+  `;
+
+  // Add date filtering if provided
+  if (start_date) {
+    sql += ` AND created_at >= ?`;
+  }
+  if (end_date) {
+    sql += ` AND created_at <= ?`;
+  }
+
+  sql += ` GROUP BY YEAR(created_at), MONTH(created_at) ORDER BY YEAR(created_at), MONTH(created_at)`;
+
+  // Run the query with appropriate parameters
+  const params = [seller_id];
+  if (start_date) params.push(start_date);
+  if (end_date) params.push(end_date);
+
+  db.query(sql, params, (error, data) => {
+    if (error) {
+      return response.status(500).json({ error: "Database query error", details: error });
+    }
+
+    // Return an array of data with month, year, and total_revenue
+    response.json(data); // This will return an array of objects like [{year: 2024, month: 1, total_revenue: 495}, ...]
+  });
+});
 
 app.get('/no_revenue', (request, response) => {
   const { seller_id } = request.query; // Extract seller_id from the query parameters
@@ -1039,6 +1096,8 @@ app.get('/no_revenue', (request, response) => {
     return response.json({ total_revenue: data[0].total_revenue || 0 }); // Return the total revenue for the seller
   });
 });
+
+
 
 
 
@@ -1599,7 +1658,8 @@ app.get('/manage_order', (request, response) => {
           tbl_order.address,
           tbl_order.shipping_fee,
           tbl_user.first_name, 
-          tbl_user.last_name
+          tbl_user.last_name,
+          tbl_order.created_at
       FROM tbl_order
       JOIN tbl_user ON tbl_order.user_id = tbl_user.id
       WHERE tbl_order.status != 'Delivered'`; // Exclude orders with status 'Delivered'
@@ -1806,29 +1866,47 @@ app.post('/forgot-password', async (req, res) => {
 
 
   app.get('/api/payment-method-stats', (req, res) => {
-    const { seller_id } = req.query;  // Extract seller_id from the query parameters
-    
+    const { seller_id, start_date, end_date } = req.query;  // Extract seller_id and date filters
+
     if (!seller_id) {
         return res.status(400).json({ error: "Seller ID is required" });
     }
 
-    const query = `
+    // Start building the query
+    let query = `
       SELECT payment_method, COUNT(*) AS total_sales
       FROM tbl_order
       WHERE seller_id = ? AND status = 'Delivered'
+    `;
+
+    // Add date filters if provided
+    const params = [seller_id];
+    if (start_date) {
+        query += ` AND created_at >= ?`;
+        params.push(start_date);
+    }
+    if (end_date) {
+        query += ` AND created_at <= ?`;
+        params.push(end_date);
+    }
+
+    // Group by payment method and order by total sales
+    query += `
       GROUP BY payment_method
       ORDER BY total_sales DESC;
     `;
-  
-    db.query(query, [seller_id], (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: 'Database query failed' });
-      }
-  
-      const mostPreferred = results.length > 0 ? results[0] : null;
-      res.json({ data: results, mostPreferred });
+
+    // Execute the query
+    db.query(query, params, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        const mostPreferred = results.length > 0 ? results[0] : null;
+        res.json({ data: results, mostPreferred });
     });
 });
+
 
 
 
