@@ -737,7 +737,7 @@ Hero Media Query
   display: inline-block; /* Allows elements to be placed next to each other */
   vertical-align: top; /* Aligns the items to the top */
   transition: transform 0.2s; /* Optional: Smooth hover effect */
-  height: 95vh;
+  height: 98vh;
 }
 
 .product_container:hover {

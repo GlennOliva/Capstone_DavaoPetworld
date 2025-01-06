@@ -36,11 +36,19 @@ const Manage_Product: React.FC = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetch(`${apiUrl}product`)
-    .then((res) => res.json())
-    .then((data) => setData(data))
-    .then((err) => console.log(err));
-  }, []);
+    const sellerId = localStorage.getItem('seller_id'); // Get the seller_id from localStorage
+
+    if (!sellerId) {
+        console.error('Seller ID not found in localStorage.');
+        return; // Exit if seller_id is not found
+    }
+
+    fetch(`${apiUrl}product?seller_id=${sellerId}`)
+        .then((res) => res.json())
+        .then((data) => setData(data))
+        .catch((err) => console.error('Error fetching products:', err));
+}, []);
+
 
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');

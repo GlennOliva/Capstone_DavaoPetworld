@@ -744,17 +744,20 @@ app.post('/add_product', upload.single('image'), (request, response) => {
 
 
 app.get('/product', (request, response) => {
-    const sql = `
-        SELECT p.*, c.category_name 
-        FROM tbl_product p
-        JOIN tbl_category c ON p.category_id = c.id
-    `;
-
-    db.query(sql, (error, data) => {
-        if (error) return response.json(error);
-        return response.json(data);
-    });
+  const sellerId = request.query.seller_id; // Assuming seller_id is passed as a query parameter
+  const sql = `
+      SELECT p.*, c.category_name
+      FROM tbl_product p
+      JOIN tbl_category c ON p.category_id = c.id
+      WHERE p.seller_id = ?
+  `;
+  
+  db.query(sql, [sellerId], (error, data) => {
+      if (error) return response.json(error);
+      return response.json(data);
+  });
 });
+
 
 
 app.delete('/product/:id', (request, response) => {
@@ -1045,7 +1048,8 @@ app.get('/no_revenues', (request, response) => {
     FROM 
       tbl_order
     WHERE 
-      seller_id = ?
+      seller_id = ? AND
+      status = 'Delivered'
   `;
 
   // Add date filtering if provided
@@ -1073,6 +1077,8 @@ app.get('/no_revenues', (request, response) => {
   });
 });
 
+
+
 app.get('/no_revenue', (request, response) => {
   const { seller_id } = request.query; // Extract seller_id from the query parameters
 
@@ -1086,7 +1092,8 @@ app.get('/no_revenue', (request, response) => {
     FROM 
       tbl_order
     WHERE 
-      seller_id = ?
+      seller_id = ? AND
+      status = 'Delivered'
   `;
   
   db.query(sql, [seller_id], (error, data) => {
@@ -1096,6 +1103,7 @@ app.get('/no_revenue', (request, response) => {
     return response.json({ total_revenue: data[0].total_revenue || 0 }); // Return the total revenue for the seller
   });
 });
+
 
 
 
@@ -1220,11 +1228,11 @@ app.get('/fetch_product_category/:category_id', (request, response) => {
 });
 
 // Fetch products from eCommerce side
-app.get('/product', (request, response) => {
+app.get('/ecommerce_product', (request, response) => {
     const sql = `
-        SELECT p.*, a.store_name
+        SELECT p.*, s.store_name
         FROM tbl_product p
-        JOIN tbl_admin a ON p.admin_id = a.id
+        JOIN tbl_seller s ON p.seller_id = s.id
         LIMIT 6;
     `;
     
@@ -1238,6 +1246,26 @@ app.get('/product', (request, response) => {
         console.log("Fetched Products: ", data); // Log fetched data
         return response.json(data);  // Return the list of products with store names
     });
+});
+
+// Fetch products from eCommerce side
+app.get('/ecommerce_products', (request, response) => {
+  const sql = `
+      SELECT p.*, s.store_name
+      FROM tbl_product p
+      JOIN tbl_seller s ON p.seller_id = s.id
+  `;
+  
+  // Execute the SQL query
+  db.query(sql, (error, data) => {
+      if (error) {
+          console.error("Database Query Error: ", error); // Log error for debugging
+          return response.status(500).json({ error: error.message }); // Return error with 500 status
+      }
+      
+      console.log("Fetched Products: ", data); // Log fetched data
+      return response.json(data);  // Return the list of products with store names
+  });
 });
 
 
@@ -1646,35 +1674,11 @@ app.get('/api/orders', (req, res) => {
 
 
 app.get('/manage_order', (request, response) => {
-  const sql = `
-      SELECT 
-          tbl_order.id, 
-          tbl_order.transaction_id,
-          tbl_order.product_name, 
-          tbl_order.product_quantity, 
-          tbl_order.payment_method, 
-          tbl_order.total_price, 
-          tbl_order.status,
-          tbl_order.address,
-          tbl_order.shipping_fee,
-          tbl_user.first_name, 
-          tbl_user.last_name,
-          tbl_order.created_at
-      FROM tbl_order
-      JOIN tbl_user ON tbl_order.user_id = tbl_user.id
-      WHERE tbl_order.status != 'Delivered'`; // Exclude orders with status 'Delivered'
-
-  db.query(sql, (error, data) => {
-      if (error) return response.json(error);
-      return response.json(data);
-  });
-});
-
-
-app.get('/manage_income', (request, response) => {
+    const sellerId = request.query.seller_id; // Assume seller_id is passed as a query parameter
     const sql = `
         SELECT 
             tbl_order.id, 
+            tbl_order.transaction_id,
             tbl_order.product_name, 
             tbl_order.product_quantity, 
             tbl_order.payment_method, 
@@ -1683,12 +1687,14 @@ app.get('/manage_income', (request, response) => {
             tbl_order.address,
             tbl_order.shipping_fee,
             tbl_user.first_name, 
-            tbl_user.last_name
+            tbl_user.last_name,
+            tbl_order.created_at
         FROM tbl_order
         JOIN tbl_user ON tbl_order.user_id = tbl_user.id
-        WHERE tbl_order.status = 'Delivered';`; // Corrected WHERE clause placement and comparison with 'Delivered'
+        WHERE tbl_order.status != 'Delivered'
+        AND tbl_order.seller_id = ?`; // Filter by seller_id
 
-    db.query(sql, (error, data) => {
+    db.query(sql, [sellerId], (error, data) => {
         if (error) return response.json(error);
         return response.json(data);
     });
@@ -1696,7 +1702,30 @@ app.get('/manage_income', (request, response) => {
 
 
 
+app.get('/manage_income', (request, response) => {
+  const sellerId = request.query.seller_id; // Assume seller_id is passed as a query parameter
+  const sql = `
+      SELECT 
+          tbl_order.id, 
+          tbl_order.product_name, 
+          tbl_order.product_quantity, 
+          tbl_order.payment_method, 
+          tbl_order.total_price, 
+          tbl_order.status,
+          tbl_order.address,
+          tbl_order.shipping_fee,
+          tbl_user.first_name, 
+          tbl_user.last_name
+      FROM tbl_order
+      JOIN tbl_user ON tbl_order.user_id = tbl_user.id
+      WHERE tbl_order.status = 'Delivered'
+      AND tbl_order.seller_id = ?;`; // Filter by seller_id
 
+  db.query(sql, [sellerId], (error, data) => {
+      if (error) return response.json(error);
+      return response.json(data);
+  });
+});
 
 
 

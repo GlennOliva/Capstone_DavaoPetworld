@@ -40,7 +40,7 @@ const Product = () => {
     const fetchProducts = async () => {
       setLoading(true); // Set loading true at the start
       try {
-        const response = await axios.get(`${apiUrl}product`);
+        const response = await axios.get(`${apiUrl}ecommerce_products`);
         setProducts(response.data);
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -87,8 +87,8 @@ const Product = () => {
                   </Link>
                 </div>
                 <div className="product-info" style={{ textAlign: 'justify', padding: '10px' }}>
-                  <span style={{fontSize:'15px',fontWeight:'bold', color:'#000'}}>Category:</span> 
-                  <span style={{fontSize:'14px', color:'#000'}}>{product.category_name}</span>
+                  {/* <span style={{fontSize:'15px',fontWeight:'bold', color:'#000'}}>Category:</span> 
+                  <span style={{fontSize:'14px', color:'#000'}}>{product.category_name}</span> */}
                   <h1 style={{ fontSize: '15px' }}>{product.product_name}</h1>
                   <span style={{fontSize:'14px', color:'#000'}}>{product.store_name}</span>
                   <h4 style={{fontSize:'15px',fontWeight:'bold', color:'#000'}}>Price:  

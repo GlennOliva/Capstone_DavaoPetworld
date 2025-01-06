@@ -33,20 +33,27 @@ const Manage_Order: React.FC = () => {
   }, []);
 
   // Fetch order data
-  useEffect(() => {
-    fetch(`${apiUrl}manage_order`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log('Fetched data:', data); // Check the data structure
-        setData(data); // Set the data with user information
-      })
-      .catch((err) => console.error('Error fetching data:', err));
-  }, []);
+useEffect(() => {
+  const sellerId = localStorage.getItem('seller_id'); // Get seller_id from localStorage
+
+  if (!sellerId) {
+    console.error('Seller ID not found in localStorage.');
+    return; // Exit if seller_id is not found
+  }
+
+  fetch(`${apiUrl}manage_order?seller_id=${sellerId}`)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      return res.json();
+    })
+    .then((data) => {
+      console.log('Fetched data:', data); // Check the data structure
+      setData(data); // Set the data with user information
+    })
+    .catch((err) => console.error('Error fetching data:', err));
+}, []);
 
   // Pagination Logic
   const totalPages = Math.ceil(data.length / itemsPerPage); // Calculate total pages

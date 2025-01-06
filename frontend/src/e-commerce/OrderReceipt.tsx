@@ -118,9 +118,9 @@ const OrderReceipt: React.FC = () => {
 
                                 return (
                                     <tr key={index}>
-                                        <td>{name.trim()}</td>
+                                        <td >{name.trim()}</td>
                                         <td>{quantity}</td>
-                                        <td>₱{price_quantity}</td>
+                                        <td >₱{price_quantity}</td>
                                     </tr>
                                 );
                             })}

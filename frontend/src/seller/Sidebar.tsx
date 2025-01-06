@@ -61,7 +61,7 @@ const Sidebar = () => {
             to="/seller/manage_chat"
             className={location.pathname === '/seller/manage_chat' ? 'active' : ''}
           >
-            <i className='bx bxs-credit-card icon'></i> Manage Chats
+            <i className='bx bxs-message icon'></i> Manage Chats
           </Link>
         </li>
 
