@@ -1833,7 +1833,7 @@ app.post('/forgot-password', async (req, res) => {
         },
       });
   
-      const resetLink = `https://davaopetworld.netlify.app/changepass?email=${encodeURIComponent(email)}`;
+      const resetLink = `http://localhost:5173/changepass?email=${encodeURIComponent(email)}`;
   
       const mailOptions = {
         from: 'Davao Pet World',
