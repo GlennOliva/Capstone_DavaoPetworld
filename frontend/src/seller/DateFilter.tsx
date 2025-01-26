@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker'; // Install react-datepicker if not already installed
 import 'react-datepicker/dist/react-datepicker.css';
-import '../css/Datefilter.css'; // Import custom CSS for styling
+import '../css/DateFilter.css'; // Import custom CSS for styling
 
 const DateFilter: React.FC<{ onFilterChange: (startDate: Date | null, endDate: Date | null) => void }> = ({ onFilterChange }) => {
     const [startDate, setStartDate] = useState<Date | null>(null);
